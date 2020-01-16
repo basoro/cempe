@@ -4,7 +4,7 @@ import sys,web,io,os
 global panelPath
 panelPath = '/opt/slemp/server/panel/';
 os.chdir(panelPath)
-import common,public,data,db
+import common,public,db
 
 from collections import OrderedDict
 web.config.debug = False
