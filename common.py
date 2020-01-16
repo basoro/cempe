@@ -18,9 +18,7 @@ class panelAdmin(panelSetup):
         web.ctx.session.logsPath = web.ctx.session.rootPath+'/wwwlogs'
         setupPath = web.ctx.session.setupPath
         web.ctx.session.webserver = 'nginx'
-        filename = setupPath+'/data/phpmyadminDirName.pl'
-        web.ctx.session.phpmyadminDir = public.readFile(filename).strip()
-
+        
         try:
             if not web.ctx.session.login:
                 raise web.seeother('/login')
