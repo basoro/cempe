@@ -94,7 +94,7 @@ $def with (data)
 		    <div class="bw zun-updata">
 		      <div class="bg">
 		      <div class="bw-title">Perangkat Lunak</div>
-			<div class="divtable_softlist" style="padding:0; height:442px; overflow:auto">
+			      <div class="divtable_softlist" style="padding:0; height:442px; overflow:auto">
 		        <table class="table table-hover" width="100%" cellspacing="0" cellpadding="0" border="0">
 		          <thead>
 		            <tr>
@@ -105,19 +105,41 @@ $def with (data)
 		            </tr>
 		          </thead>
 		          <tbody id="softList">
-				<tr>
-					<td style="padding-left:18px">nginx 1.16.0
-</td>
-					<td class="visible-lg visible-md visible-sm"><a class="link" href="javascript:GetConfigFile('nginx');">Config</a> |
-						<a class="link" href="javascript:ServiceAdmin('nginx','reload');">Reload</a>
-																	 | <a class="link" href="javascript:GetNginxStatus();">Status</a></td>
-																</td>
-					<td><span class="ico-start glyphicon glyphicon-play"></span></td>
-					<td style="text-align: right;padding-right:18px"><a class="link" href="javascript:ServiceAdmin('nginx','restart');">Restart</a>
-				</tr>
-			  </tbody>
+				        <tr>
+					        <td style="padding-left:18px">nginx 1.16.0</td>
+					        <td class="visible-lg visible-md visible-sm">
+                    <a class="link" href="javascript:GetConfigFile('nginx');">Config</a> |
+						        <a class="link" href="javascript:ServiceAdmin('nginx','reload');">Reload</a> | 
+                    <a class="link" href="javascript:GetNginxStatus();">Status</a>
+                  </td>
+					        <td><span class="ico-start glyphicon glyphicon-play"></span></td>
+					        <td style="text-align: right;padding-right:18px"><a class="link" href="javascript:ServiceAdmin('nginx','restart');">Restart</a></td>
+				        </tr>
+								<tr>
+									<td style="padding-left:18px">MySQL 5.7.19</td>
+									<td class="visible-lg visible-md visible-sm"><a class="link" href="javascript:GetConfigFile('mysql');">Config</a> | <a class="link" href="javascript:ServiceAdmin('mysqld','reload');">Reload</a></td>
+									<td><span class="ico-start glyphicon glyphicon-play"></span></td>
+									<td style="text-align: right;padding-right:18px">
+                    <a class="link" href="javascript:ServiceAdmin('mysqld','restart');">Restart</a> | 
+                    <a class="link" href="javascript:ServiceAdmin('mysqld','stop');">Stop</a>
+                  </td>
+								</tr>
+								<tr>
+									<td style="padding-left:18px">PHP version：54 </td>
+									<td class="visible-lg visible-md visible-sm">
+                    <a class="link" href="javascript:GetConfigFile('54');">Config</a> | 
+                    <a class="link" href="javascript:ServiceAdmin('php-fpm-54','reload');">Reload</a> | 
+                    <a class="link" href="javascript:GetPHPStatus('54');">Status</a>
+                  </td>
+									<td><span class="ico-start glyphicon glyphicon-play"></span></td>
+									<td style="text-align: right;padding-right:18px">
+                    <a class="link" href="javascript:ServiceAdmin('php-fpm-54','restart');">Restart</a> | 
+                    <a class="link" href="javascript:stopPHP('54');">Stop</a>
+                  </td> 
+								</tr>				
+			        </tbody>
 		        </table>
-			</div>
+			      </div>
 		      </div>
 		    </div>
 		  </div>
