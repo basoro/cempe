@@ -44,9 +44,6 @@ render = web.template.render(panelPath + 'templates/',base='template',globals={'
 class panelIndex(common.panelAdmin):
     def GET(self):
         import system
-        data = system.system().GetConcifInfo()
-        data['siteCount'] = public.M('sites').count()
-        data['databaseCount'] = public.M('databases').count()
         return render.index(data)
 
 class panelLogin(common.panelSetup):
@@ -180,7 +177,7 @@ class panelSystem(common.panelAdmin):
         import system,json
         get = web.input()
         sysObject = system.system()
-        defs = ('GetNetWork','GetDiskInfo','GetCpuInfo','GetBootTime','GetSystemVersion','GetMemInfo','GetSystemTotal','GetConcifInfo','RestartServer')
+        defs = ('GetNetWork','GetDiskInfo','GetCpuInfo','GetBootTime','GetSystemVersion','GetMemInfo','GetSystemTotal','RestartServer')
         for key in defs:
             if key == get.action:
                 fun = 'sysObject.'+key+'()'
