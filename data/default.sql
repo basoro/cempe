@@ -1,16 +1,8 @@
-
-CREATE TABLE IF NOT EXISTS `config` (
-  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
-  `webserver` TEXT,
-  `backup_path` TEXT,
-  `sites_path` TEXT,
-  `status` INTEGER,
-  `mysql_root` TEXT
+CREATE TABLE "sessions" (
+	"session_id" VARCHAR PRIMARY KEY NOT NULL UNIQUE,
+	"atime" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	"data" TEXT
 );
-
-INSERT INTO `config` (`id`, `webserver`, `backup_path`, `sites_path`, `status`, `mysql_root`) VALUES
-(1, 'nginx', '/opt/slemp/backup', '/opt/slemp/wwwroot', 0, 'admin');
-
 
 CREATE TABLE IF NOT EXISTS `users` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,
