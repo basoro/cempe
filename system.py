@@ -85,30 +85,10 @@ class system:
         tmp['status'] = os.path.exists('/tmp/mysql.sock')
         data['mysql'] = tmp
 
-        data['panel'] = self.GetPanelInfo()
         data['systemdate'] = public.ExecShell('date +"%Y-%m-%d %H:%M:%S %Z %z"')[0];
 
 
         return data
-
-    def GetPanelInfo(self):
-        address = public.GetLocalIp()
-        try:
-            port = web.ctx.host.split(':')[1]
-        except:
-            port = '80';
-        domain = ''
-        if os.path.exists('data/domain.conf'):
-           domain = public.readFile('data/domain.conf')
-
-        autoUpdate = ''
-        if os.path.exists('data/autoUpdate.pl'): autoUpdate = 'checked';
-        limitip = ''
-        if os.path.exists('data/limitip.conf'): limitip = public.readFile('data/limitip.conf');
-
-        check502 = ''
-        if os.path.exists('data/502Task.pl'): check502 = 'checked';
-        return {'port':port,'address':address,'domain':domain,'auto':autoUpdate,'502':check502,'limitip':limitip}
 
     def GetPHPConfig(self,version):
         file = self.setupPath + "/php/"+version+"/etc/php.ini"
