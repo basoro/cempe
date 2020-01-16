@@ -26,8 +26,8 @@ web.config.session_parameters['ignore_expiry'] = True
 web.config.session_parameters['ignore_change_ip'] = True
 web.config.session_parameters['secret_key'] = 'slemp.basoro.id'
 web.config.session_parameters['expired_message'] = 'Session expired'
-dbfile = '/dev/shm/session.db';
-src_sessiondb = '/opt/slemp/server/panel/data/session.db';
+dbfile = '/dev/shm/default.db';
+src_sessiondb = '/opt/slemp/server/panel/data/default.db';
 if not os.path.exists(src_sessiondb):
     print db.Sql().dbfile('session').create('session');
 if not os.path.exists('/dev/shm'): os.system('mkdir -p /dev/shm');
