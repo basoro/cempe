@@ -273,7 +273,6 @@ class system:
 
             #return result
             if result[1].find('successful') == -1:
-                public.WriteLog("Pengaturan ", "Execution failed: "+str(result));
                 return public.returnMsg(False,'Nginx configuration rule error: <br><a style="color:red;">'+result[1].replace("\n",'<br>')+'</a>');
 
         execStr = "/etc/init.d/"+get.name+" "+get.type
@@ -286,22 +285,9 @@ class system:
             public.ExecShell('pkill -9 nginx && sleep 1');
             public.ExecShell('/etc/init.d/nginx start');
         if get.type != 'test':
-            public.WriteLog("Pengaturan ", execStr+" execution succeed!");
         return public.returnMsg(True,'execution succeed');
 
     def RestartServer(self):
         if not public.IsRestart(): return public.returnMsg(False,'Please wait for all installation tasks to complete before executing!');
         public.ExecShell("/etc/init.d/slemp stop && init 6 &");
         return public.returnMsg(True,'Command sent successfully!');
-
-    def ReMemory(self):
-        scriptFile = 'script/rememory.sh'
-        if not os.path.exists(scriptFile):
-            public.downloadFile('https://basoro.id/downloads/slemp/rememory.sh',scriptFile);
-        public.ExecShell("/bin/bash " + self.setupPath + '/panel/' + scriptFile);
-        return self.GetMemInfo();
-
-    def ReWeb(self):
-        if not public.IsRestart(): return public.returnMsg(False,'Please wait for all installation tasks to complete before executing!');
-        public.ExecShell('/etc/init.d/slemp restart &')
-        return True
