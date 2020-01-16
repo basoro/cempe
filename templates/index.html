@@ -1,0 +1,365 @@
+$def with (data)
+  <div class="main-content">
+		<div class="container-fluid">
+		  <div class="pos-ser">
+		    <div class="position">
+		      <a href="/">Beranda</a>/<span>Status server</span>
+		    </div>
+		  </div>
+		  <div class="danger-tips">
+		    <div class="alert alert-warning" id="messageError" style="display: none;">
+		    </div>
+		  </div>
+		  <div class="system-info">
+		    <div class="tips">
+		      Informasi Sistem
+		    </div>
+		    <div class="list-serve" style="padding:0 15px;">
+		      <div class="row">
+		        <div class="col-md-3 col-sm-6 col-xs-12">
+		          <div class="info-box">
+		            <span class="info-box-icon bg-aqua"><i class="glyphicon glyphicon-hdd"></i></span>
+		            <div class="info-box-content">
+		              <span class="info-box-text">Sistem Operasi</span>
+		              <span class="info-box-number" id="info">Getting</span>
+		            </div>
+		          </div>
+		        </div>
+		        <div class="col-md-3 col-sm-6 col-xs-12">
+		          <div class="info-box">
+		            <span class="info-box-icon bg-red"><i class="glyphicon glyphicon-time"></i></span>
+		            <div class="info-box-content">
+		              <span class="info-box-text">Uptime Server</span>
+		              <span class="info-box-number" id="running"></span>
+		            </div>
+		          </div>
+		        </div>
+		        <div class="clearfix visible-sm-block"></div>
+		      </div>
+		    </div>
+		  </div>
+		  <div class="server">
+		    <div class="s-title">
+		      <h3>Status Server</h3>
+		    </div>
+		    <div class="server-circle">
+		      <ul class="row" id="systemInfoList">
+		        <li class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+		          <h3>CPU</h3>
+		          <div class="circle">
+		            <div class="pie_left">
+		              <div class="left"></div>
+		            </div>
+		            <div class="pie_right">
+		              <div class="right"></div>
+		            </div>
+		            <div class="mask"><span id="state">0</span>%</div>
+		          </div>
+		          <h4 id="core">Memeriksa</h4>
+		        </li>
+		        <li class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
+		          <h3>RAM</h3>
+		          <div class="circle">
+		            <div class="pie_left">
+		              <div class="left"></div>
+		            </div>
+		            <div class="pie_right">
+		              <div class="right"></div>
+		            </div>
+		            <div class="mask"><span id="left">0</span>%</div>
+		          </div>
+		          <h4 id="memory">Memeriksa</h4>
+		        </li>
+
+		      </ul>
+		    </div>
+		  </div>
+		  <div class="span6">
+		    <div class="bw">
+		    <div class="bg">
+		    <div class="bw-title">Jaringan</div>
+		      <div class="bw-info">
+		        <ul>
+		          <li class="bi-line"><span>Unggahan</span><a id="upSpeed">Memeriksa</a></li>
+		          <li class="bi-line"><span>Unduhan</span><a id="downSpeed">Memeriksa</a></li>
+		          <li><span>Total</span><a id="upAll" title="">Memeriksa</a></li>
+		          <li><span>Total</span><a id="downAll" title="">Memeriksa</a></li>
+		        </ul>
+		      </div>
+		      <div id="NetImg" style="width:100%;height:330px;"></div>
+		    </div>
+		    </div>
+		  </div>
+		  <div class="span6">
+		    <div class="bw zun-updata">
+		      <div class="bg">
+		      <div class="bw-title">Perangkat Lunak</div>
+					<div class="divtable_softlist" style="padding:0; height:442px; overflow:auto">
+		        <table class="table table-hover" width="100%" cellspacing="0" cellpadding="0" border="0">
+		          <thead>
+		            <tr>
+		              <th>Aplikasi</th>
+		              <th class="visible-lg visible-md visible-sm">Jenis</th>
+		              <th width="50px">Status</th>
+		              <th style="text-align: right;" width="100px">Aksi</th>
+		            </tr>
+		          </thead>
+		          <tbody id="softList"></tbody>
+		        </table>
+					</div>
+		      </div>
+		    </div>
+		  </div>
+		</div>
+	</div>
+	</div>
+	<script type="text/javascript" src="/static/js/echarts.min.js"></script>
+	<script type="text/javascript">
+		setTimeout(function(){
+			GetDiskInfo();
+		},500)
+
+		setTimeout(function(){
+			getInfo();
+		},1500);
+
+
+		function GetPercent(num, total){
+			num = parseFloat(num);
+			total = parseFloat(total);
+			if (isNaN(num) || isNaN(total)) {
+				return "-";
+			}
+			return total <= 0 ? "0%" : (Math.round(num / total * 10000) / 100.00);
+		}
+		function GetDiskInfo(){
+			$$.get('/system?action=GetDiskInfo',function(rdata){
+				var dBody
+				for(var i=0;i<rdata.length;i++){
+					if(rdata[i].path == '/' || rdata[i].path == '/opt/slemp'){
+						if(rdata[i].size[2].indexOf('M') != -1){
+							$$("#messageError").show();
+							$$("#messageError").append('<p><span class="glyphicon glyphicon-alert" style="color: #f39c12; margin-right: 10px;"></span>Disk partition ['+rdata[i].path+'], the available capacity is less than 1GB, which may cause MySQL to stop automatically, the panel can not be accessed, etc. Please clean up in time!</p>')
+						}
+					}
+					dBody = '<li class="col-xs-6 col-sm-3 col-md-3 col-lg-2">'
+								+'<h3>'+rdata[i].path+'</h3>'
+								+'<div class="circle">'
+									+'<div class="pie_left">'
+										+'<div class="left"></div>'
+									+'</div>'
+									+'<div class="pie_right">'
+										+'<div class="right"></div>'
+									+'</div>'
+									+'<div class="mask"><span>'+rdata[i].size[3].replace('%','')+'</span>%</div>'
+								+'</div>'
+								+'<h4>'+rdata[i].size[1]+'/'+rdata[i].size[0]+'</h4>'
+							+'</li>'
+					$$("#systemInfoList").append(dBody)
+					setImg();
+				}
+
+			});
+
+		}
+
+		function getInfo() {
+			$$.get("/system?action=GetSystemTotal", function(info) {
+				$$("#memory").html(parseInt((info.memRealUsed))+'/'+info.memTotal+' (MB)');
+				$$("#left").html(Math.floor(info.memRealUsed / (info.memTotal / 100)));
+				$$("#info").html(info.system);
+				$$("#running").html(info.time);
+				$$("#core").html(info.cpuNum + " Inti");
+				$$("#state").html(info.cpuRealUsed);
+				var memFree = info.memTotal - info.memRealUsed;
+
+				if(memFree < 64){
+					$$("#messageError").show();
+					$$("#messageError").append('<p><span class="glyphicon glyphicon-alert" style="color: #f39c12; margin-right: 10px;"></span> Currently available physical memory is less than 64M, which may cause MySQL to automatically stop, site 502 and other errors, please try to free the memory!</p>')
+				}
+				setImg();
+			});
+		}
+
+
+		function getNet(){
+			var up;
+			var down;
+			$$.ajax({
+				type:"get",
+				url:"/system?action=GetNetWork",
+				async:true,
+				success:function(net){
+					$$("#InterfaceSpeed").html("Interface rate 1.0Gbps");
+					$$("#upSpeed").html(net.up+' KB');
+					$$("#downSpeed").html(net.down+' KB');
+					$$("#downAll").html(ToSize(net.downTotal));
+					$$("#downAll").attr('title','Number of messages:'+net.downPackets)
+					$$("#upAll").html(ToSize(net.upTotal));
+					$$("#upAll").attr('title','Number of messages:'+net.upPackets)
+					$$("#core").html(net.cpu[1] + " Inti");
+					$$("#state").html(net.cpu[0]);
+					setCookie("upNet",net.up);
+					setCookie("downNet",net.down);
+					setImg();
+				}
+			});
+		}
+
+		function NetImg(){
+			var myChartNetwork = echarts.init(document.getElementById('NetImg'));
+			var xData = [];
+			var yData = [];
+			var zData = [];
+			function getTime(){
+				var now = new Date();
+				var hour=now.getHours();
+				var minute=now.getMinutes();
+				var second=now.getSeconds();
+				if(minute<10){
+					minute = "0"+minute;
+				}
+				if(second<10){
+					second = "0"+second;
+				}
+				var nowdate = hour+":"+minute+":"+second;
+				return nowdate;
+			}
+			function ts(m){return m<10?'0'+m:m }
+			function format(sjc){
+				var time = new Date(sjc);
+				var h = time.getHours();
+				var mm = time.getMinutes();
+				var s = time.getSeconds();
+				return ts(h)+':'+ts(mm)+':'+ts(s);
+			}
+			function addData(shift) {
+				xData.push(getTime());
+				yData.push(getCookie("upNet"));
+				zData.push(getCookie("downNet"));
+				if (shift) {
+					xData.shift();
+					yData.shift();
+					zData.shift();
+				}
+			}
+			for (var i = 8; i >= 0; i--){
+				var time = (new Date()).getTime();
+				xData.push(format(time - (i * 3 * 1000)));
+				yData.push(0);
+				zData.push(0);
+			}
+
+      var option = {
+				title: {
+					text: 'Real Time',
+					left: 'center',
+					textStyle:{
+						color:'#888888',
+						fontStyle: 'normal',
+						fontFamily: 'Helvetica Neue',
+						fontSize: 16,
+					}
+				},
+				tooltip: {
+					trigger: 'axis'
+				},
+				legend: {
+					data:['Unggah','Unduh'],
+					bottom:'2%'
+				},
+				xAxis: {
+					type: 'category',
+					boundaryGap: false,
+					data: xData,
+					axisLine:{
+						lineStyle:{
+							color:"#666"
+						}
+					}
+				},
+				yAxis: {
+					name: 'KB/s',
+					splitLine:{
+						lineStyle:{
+							color:"#eee"
+						}
+					},
+					axisLine:{
+						lineStyle:{
+							color:"#666"
+						}
+					}
+				},
+				series: [{
+					name: 'Unggah',
+					type: 'line',
+					data: yData,
+					smooth:true,
+					symbol: 'none',
+					stack: 'a',
+					areaStyle: {
+						normal: {}
+					},
+					itemStyle: {
+						normal: {
+							color: 'rgba(255, 140, 0, 0.7)'
+						}
+					}
+				},{
+					name: 'Unduh',
+					type: 'line',
+					data: zData,
+					smooth:true,
+					symbol: 'none',
+					stack: 'a',
+					areaStyle: {
+						normal: {}
+					},
+					itemStyle: {
+						normal: {
+							color: 'rgba(30, 144, 255, 0.7)'
+						}
+					}
+				}]
+			};
+			setInterval(function () {
+				getNet();
+				addData(true);
+				myChartNetwork.setOption({
+					xAxis: {
+						data: xData
+					},
+					series: [{
+						name:'Unggah',
+						data: yData
+					},{
+						name:'Unduh',
+						data: zData
+					}]
+				});
+			}, 3000);
+
+			myChartNetwork.setOption(option);
+			window.addEventListener("resize",function(){
+				myChartNetwork.resize();
+			});
+		}
+		NetImg();
+		function setImg() {
+			$$('.circle').each(function(index, el) {
+				var num = $$(this).find('span').text() * 3.6;
+				if (num <= 180) {
+					$$(this).find('.left').css('transform', "rotate(0deg)");
+					$$(this).find('.right').css('transform', "rotate(" + num + "deg)");
+				} else {
+					$$(this).find('.right').css('transform', "rotate(180deg)");
+					$$(this).find('.left').css('transform', "rotate(" + (num - 180) + "deg)");
+				};
+			});
+
+		}
+		setImg();
+
+	</script>
+

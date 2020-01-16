@@ -1,0 +1,48 @@
+$def with (content)
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="renderer" content="webkit">
+		<title>$web.ctx.session.webname</title>
+		<link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon" />
+		<link href="/static/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet">
+		<link href="/static/css/reset.css?$web.ctx.session.version" rel="stylesheet">
+		<link href="/static/css/site.css?$web.ctx.session.version" rel="stylesheet">
+		<script src="/static/js/jquery-1.10.2.min.js"></script>
+		<script src="/static/js/base64.js"></script>
+		<script src="/static/js/bootstrap.min.js"></script>
+		<script src="/static/layer/layer.js"></script>
+		<script src="/static/js/script.js?$web.ctx.session.version"></script>
+		<!--[if lte IE 9]>
+		<script src="/static/js/requestAnimationFrame.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="/" style="margin-right:20px;">$web.ctx.session.webname</a>
+			</div>
+			<div id="navbar" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav navbar-right" style="margin-right:10px;">
+					<li class="nav-item"><a href="/">Beranda</a></li>
+				</ul>
+			</div><!--/.nav-collapse -->
+		</nav>
+		<div class="bt-warp">
+			<div id="container" class="container-fluid">
+				$:content
+				<div class="footer">$web.ctx.session.brand $web.ctx.session.version © 2018-2019 By <a href="https://slemp.basoro.id" target="_blank">Ataaka</a></div></div>
+			</div>
+		</div>
+	</body>
+</html>
+

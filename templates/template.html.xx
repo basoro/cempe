@@ -1,0 +1,374 @@
+$def with (content)
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="renderer" content="webkit">
+		<title>$web.ctx.session.webname</title>
+		<link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon" />
+		<link href="/static/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet">
+		<link href="//bootswatch.com/3/cerulean/bootstrap.min.css" rel="stylesheet">
+		<link href="/static/css/reset.css?$web.ctx.session.version" rel="stylesheet">
+		<link href="/static/css/site.css?$web.ctx.session.version" rel="stylesheet">
+		<link href="/static/css/file.css?$web.ctx.session.version" rel="stylesheet">
+		<script src="/static/js/jquery-1.10.2.min.js"></script>
+		<script src="/static/js/base64.js"></script>
+		<script src="/static/js/bootstrap.min.js"></script>
+		<!--<script src="/static/js/jquery-ui-1.10.4.custom.min.js"></script>
+		<script src="/static/js/jquery.zclip.min.js"></script>-->
+		<script src="/static/layer/layer.js"></script>
+		<script src="/static/js/public.js?$web.ctx.session.version"></script>
+		<!--[if lte IE 9]>
+		<script src="/static/js/requestAnimationFrame.js"></script>
+		<![endif]-->
+	</head>
+	<body>
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="/" style="margin-right:20px;">$web.ctx.session.webname</a>
+			</div>
+			<div id="navbar" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav navbar-right" style="margin-right:10px;">
+					<li class="nav-item"><a href="/">Beranda</a></li>
+				</ul>
+			</div><!--/.nav-collapse -->
+		</nav>
+		<div class="bt-warp">
+			<div id="container" class="container-fluid">
+				<a style="display: none;" id="defaultPath">$web.ctx.session.config['sites_path']</a>
+				$:content
+				<div class="footer">$web.ctx.session.brand $web.ctx.session.product $web.ctx.session.version © 2018-2019 By <a href="https://slemp.basoro.id" target="_blank">Ataaka</a></div></div>
+				<script>
+					isAction()
+					function isAction(){
+						hrefs =	window.location.href.split('/')
+						name = hrefs[hrefs.length -1]
+						if(!name){
+							$$("#memuA").addClass('current')
+							return
+						}
+
+						$$("#memuA"+name).addClass('current')
+					}
+
+					var W_window = $$(window).width();
+					if(W_window <= 980){
+						$$(window).scroll(function (){
+							var top = $$(window).scrollTop();
+							$$(".sidebar-scroll").css({"position":"absolute","top":top});
+						})
+					}
+					else{
+						$$(".sidebar-scroll").css({"position":"fixed","top":"0"});
+					}
+					$$(function(){
+						$$(".fb-ico").hover(function(){
+							$$(".fb-text").css({"left":"36px","top":0,"width":"80px"})
+						},function(){
+							$$(".fb-text").css({"left":0,"width":"36px"})
+						}).click(function(){
+							$$(".fb-text").css({"left":0,"width":"36px"});
+							$$(".zun-feedback-suggestion").show();
+						});
+						$$(".fb-close").click(function(){
+							$$(".zun-feedback-suggestion").hide();
+						});
+						$$(".fb-attitudes li").click(function(){
+							$$(this).addClass("fb-selected").siblings().removeClass("fb-selected");
+						});
+					});
+
+					$$("#dologin").click(function(){
+						layer.confirm('Apakah Anda benar-benar ingin keluar dari panel?',{closeBtn:2},function(){
+							window.location.href = '/login?dologin=True';
+						});
+						return false;
+					});
+
+
+					function setPassword(to){
+						if(to == 1){
+							p1 = $$("#p1").val();
+							p2 = $$("#p2").val();
+							if(p1 == '' || p1.length < 5){
+								layer.msg('Kata sandi baru kosong atau kurang dari 5 digit!',{icon:2});
+								return;
+							}
+							if(p1 != p2){
+								layer.msg('Kata sandi yang dimasukkan dua kali tidak sama!',{icon:2});
+								return;
+							}
+
+							$$.post('/config?action=setPassword','password1='+p1+'&password2='+p2,function(rdata){
+								if(rdata.status){
+									layer.closeAll();
+									layer.msg(rdata.msg,{icon:1});
+								}else{
+									layer.msg(rdata.msg,{icon:2});
+								}
+							})
+							return;
+						}
+
+						layer.open({
+							type: 1,
+							area: '290px',
+							title: 'Ubah kata sandi',
+							closeBtn: 2,
+							shift: 5,
+							shadeClose: false,
+							content: "<div class='zun-form-new'>\
+									<div class='line'>\
+									<label><span>Kata sandi</span></label>\
+									<div class='info-r'><input type='password' name='password1' id='p1' value='' placeholder='Kata sandi baru'/></div></div>\
+									<div class='line'>\
+									<label><span>Ulangi</span></label>\
+									<div class='info-r'><input type='password' name='password2' id='p2' value='' placeholder='Ulangi lagi'/></div></div>\
+									<div class='submit-btn'><button type='button' class='btn btn-danger btn-sm' onclick=\"layer.closeAll()\">Batal</button>\
+									<button type='button' class='btn btn-info btn-sm' onclick=\"setPassword(1)\">Simpan</button></div>\
+								</div>"
+						});
+					}
+
+
+					function setUserName(to){
+						if(to == 1){
+							p1 = $$("#p1").val();
+							p2 = $$("#p2").val();
+							if(p1 == '' || p1.length < 3){
+								layer.msg('Nama pengguna kosong atau kurang dari 3 karakter!',{icon:2});
+								return;
+							}
+							if(p1 != p2){
+								layer.msg('Nama pengguna yang dimasukkan dua kali tidak sama!',{icon:2});
+								return;
+							}
+
+							$$.post('/config?action=setUsername','username1='+p1+'&username2='+p2,function(rdata){
+								if(rdata.status){
+									layer.closeAll();
+									layer.msg(rdata.msg,{icon:1});
+									$$("input[name='username_']").val(p1)
+								}else{
+									layer.msg(rdata.msg,{icon:2});
+								}
+							})
+							return;
+						}
+
+						layer.open({
+							type: 1,
+								area: '290px',
+								title: 'Ubah nama pengguna panel',
+								closeBtn: 2,
+								shift: 5,
+								shadeClose: false,
+								content: "<div class='zun-form-new'>\
+										<div class='line'>\
+										<label><span>Pengguna</span></label>\
+										<div class='info-r'><input type='text' name='password1' id='p1' value='' placeholder='Nama pengguna baru'/></div></div>\
+										<div class='line'>\
+										<label><span>Ulangi</span></label>\
+										<div class='info-r'><input type='text' name='password2' id='p2' value='' placeholder='Ulangi lagi'/></div></div>\
+										<div class='submit-btn'><button type='button' class='btn btn-danger btn-sm' onclick=\"layer.closeAll()\">Batal</button>\
+										<button type='button' class='btn btn-info btn-sm' onclick=\"setUserName(1)\">Simpan</button></div>\
+									</div>"
+						});
+					}
+
+
+					var openWindow = null;
+					var downLoad = null;
+					var speed = null;
+					function GetReloads(){
+						var count = 0
+						speed = setInterval(function(){
+							if($$("#taskList").html() != 'Daftar task'){
+								clearInterval(speed);
+								count = 0
+								return
+							}
+
+							count++
+							$$.post('/files?action=GetTaskSpeed','',function(rdata){
+								if(rdata.task == undefined) {
+									$$("#srunning").html('Saat ini tidak ada task!');
+									divcenter();
+									return;
+								}
+								var sRunning = ""
+								var sWait = ""
+								for(var i=0;i<rdata.task.length;i++){
+									if(rdata.task[i].status == '-1'){
+										if(rdata.task[i].type != 'download'){
+											var vBody = ""
+											var tmp = rdata.msg.split("\n");
+											for(var j=0;j<tmp.length;j++){
+												vBody += tmp[j] + '<br>'
+											}
+											sRunning = "<li><span class='titlename'>"+rdata.task[i].name+"</span><span class='state'>Menginstal <img src='/static/img/ing.gif'></span><span class='opencmd'></span><div class='cmd'>"+vBody+"</div></li>"
+										}else{
+											sRunning = "<li><div class='line-progress' style='width:"+rdata.msg.pre+"%'></div><span class='titlename'>"
+														+ rdata.task[i].name+"<a style='margin-left:130px;'>"
+														+ (ToSize(rdata.msg.used)+'/'+ToSize(rdata.msg.total))
+														+ "</a></span><span class='com-progress'>"+rdata.msg.pre
+														+ "%</span><span class='state'>Mengunduh <img src='/static/img/ing.gif'></span></li>"
+										}
+
+
+									}else{
+										sWait += "<li><span class='titlename'>"+rdata.task[i].name+"</span><span class='state'>Menunggu | <a style='color:#3498DB' href=\"javascript:RemoveTask("+rdata.task[i].id+")\">Hapus</a></span></li>"
+									}
+								}
+
+								$$("#srunning").html(sRunning+sWait);
+								divcenter();
+								$$(".cmd").scrollTop($$('.cmd')[0].scrollHeight);
+							}).error(function(){
+								//clearInterval(speed);
+							});
+						},1000)
+					}
+					//GetReloads();
+					//任务列表
+					function task(){
+							layer.open({
+								type: 1,
+								title: "<a id='taskList'>Daftar task</a>",
+								area: '600px',
+								closeBtn: 2,
+								shadeClose: false,
+								content:"<div class='tasklist'>"
+									+"<div class='tab-nav'><span class='on'>Pengolahan</span><span>Selesai</span><a href='javascript:ActionTask();' class='btn btn-default btn-sm' style='float: right;margin-top: -3px;' title='Jika tugas Anda tidak berlanjut untuk waktu yang lama, silakan coba tombol ini!'>Antrian aktivasi</a></div>"
+									+"<div class='tab-con'>"
+										+"<ul id='srunning'></ul>"
+										+"<ul id='sbody' style='display:none'></ul>"
+									+"</div>"
+								+"</div>"
+							});
+
+							GetTaskList();
+							GetReloads();
+							$$(".tab-nav span").click(function(){
+								var i = $$(this).index();
+								$$(this).addClass("on").siblings().removeClass("on");
+								$$(".tab-con ul").hide().eq(i).show();
+								GetTaskList();
+								divcenter();
+							});
+
+					}
+
+					function ActionTask(){
+						var loadT = layer.msg('Menghapus...',{icon:16,time:0,shade: [0.3, '#000']});
+						$$.post('/files?action=ActionTask','',function(rdata){
+							layer.close(loadT);
+							layer.msg(rdata.msg,{icon:rdata.status?1:5});
+						});
+					}
+
+					function RemoveTask(id){
+						var loadT = layer.msg('Menghapus...',{icon:16,time:0,shade: [0.3, '#000']});
+						$$.post('/files?action=RemoveTask','id='+id,function(rdata){
+							layer.close(loadT);
+							layer.msg(rdata.msg,{icon:rdata.status?1:5});
+						});
+					}
+
+					function GetTaskList(p){
+						p = p == undefined ? 1:p;
+						$$.post('/data?action=getData','tojs=GetTaskList&table=tasks&limit=10&p='+p,function(rdata){
+							var sBody = ''
+							var sRunning = ''
+							var sWait = ''
+							var isRunning = false
+							for(var i=0;i<rdata.data.length;i++){
+								switch(rdata.data[i].status){
+									case '-1':
+										isRunning = true
+										if(rdata.data[i].type != 'download'){
+											sRunning = "<li><span class='titlename'>"+rdata.data[i].name+"</span><span class='state'>Menginstal <img src='/static/img/ing.gif'></span><span class='opencmd'></span><pre class='cmd'></pre></li>"
+										}else{
+											sRunning = "<li><div class='line-progress' style='width:0%'></div><span class='titlename'>"+rdata.data[i].name+"<a id='speed' style='margin-left:130px;'>0.0M/12.5M</a></span><span class='com-progress'>0%</span><span class='state'>Mengunduh <img src='/static/img/ing.gif'></span></li>"
+										}
+										break;
+									case '0':
+										sWait += "<li><span class='titlename'>"+rdata.data[i].name+"</span><span class='state'>Menunggu</span> | <a href=\"javascript:RemoveTask("+rdata.data[i].id+")\">Hapus</a></li>"
+										break;
+									case '1':
+										sBody += "<li><span class='titlename'>"+rdata.data[i].name+"</span><span class='state'>"+rdata.data[i].addtime+"  selesai dalam waktu"+(rdata.data[i].end - rdata.data[i].start)+" detik</span></li>"
+								}
+							}
+
+							$$("#srunning").html(sRunning+sWait);
+							$$("#sbody").html(sBody);
+							return isRunning
+						});
+					}
+
+					function setSelectChecked(selectId, checkValue){
+					    var select = document.getElementById(selectId);
+					    for(var i=0; i<select.options.length; i++){
+					        if(select.options[i].innerHTML == checkValue){
+					            select.options[i].selected = true;
+					            break;
+					        }
+					    }
+					};
+
+					GetTaskCount()
+
+				function jump(){
+					layer.closeAll();
+					window.location.href="/";
+				}
+
+				function InstallTips(){
+					$$('.fangshi label').mouseover(function(){
+						var title = $$(this).attr("data-title");
+						layer.tips(title, this, {
+							tips: [1, '#787878'],
+							time:0
+						})
+					}).mouseout(function(){
+						$$(".layui-layer-tips").remove();
+					})
+				}
+
+				function fly(name){
+					var offset = $$("#task").offset();
+					$$("."+name).click(function(event){
+						var dlok = $$(this);
+						var flyer = $$('<span class="yuandian"></span>');
+						flyer.fly({
+							start: {
+								left: event.pageX,
+								top: event.pageY
+							},
+							end: {
+								left: offset.left+10,
+								top: offset.top+10,
+								width: 0,
+								height: 0
+							},
+							onEnd: function(){
+								layer.closeAll();
+								layer.msg('Ditambahkan ke antrian',{icon:1});
+								GetTaskCount();
+							}
+						});
+					});
+				}
+				</script>
+			</div>
+		</div>
+	</body>
+</html>

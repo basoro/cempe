@@ -1,0 +1,57 @@
+$def with (tData)
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<link rel="icon" href="favicon.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+<title>$session.webname</title>
+<link rel="stylesheet" type="text/css" href="/static/css/reset.css">
+<link rel="stylesheet" type="text/css" href="/static/css/login.css">
+
+</head>
+
+<body>
+<div class="main">
+<div class="login">
+	<form class="loginform" method="post" action="/login" onsubmit="return false;">
+	<div class="rlogo">$session.webname</div>
+	<div class="line"><input class="inputtxt" value="" name="username" datatype="*" nullmsg="Please fill in the username" errormsg="Wrong format" placeholder="Username" type="text"><div class="Validform_checktip"></div></div>
+	<div class="line"><input class="inputtxt" name="password" value="" datatype="*" nullmsg="Please fill in the password" errormsg="Please fill in the password" placeholder="Password" type="password"><div class="Validform_checktip"></div></div>
+	<div class="login_btn"><input id="login-button" value="Login" type="submit"></div>
+	</form>
+</div>
+</div>
+<script type="text/javascript" src="/static/js/jquery-1.10.2.min.js"></script>
+<script type="text/javascript" src="/static/layer/layer.js"></script>
+	<script type="text/javascript">
+	$$('#login-button').click(function(){
+		var username = $$("input[name='username']").val();
+		var password = $$("input[name='password']").val();
+		if(username == '' || password == ''){
+			layer.msg('Form error, please re-enter!',{icon:2});
+			return;
+		}
+
+		var data = 'username='+username+'&password='+password;
+		var loadT = layer.msg('Logging in...',{icon:16,time:0,shade: [0.3, '#000']});
+		$$.post('/login',data,function(rdata){
+			layer.close(loadT);
+			if(!rdata.status){
+				$$("#errorStr").html(rdata.msg);
+				$$("input[name='password']").val('');
+				num = rdata.msg.substring(rdata.msg.indexOf('[')+1,rdata.msg.indexOf(']'))
+				layer.msg(rdata.msg,{icon:2});
+				return;
+			}
+
+			layer.msg(rdata.msg,{icon:16,time:0,shade: [0.3, '#000']});
+			window.location.href = '/';
+		});
+	});
+
+</script>
+</body>
+</html>
