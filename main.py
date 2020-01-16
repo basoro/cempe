@@ -44,7 +44,7 @@ render = web.template.render(panelPath + 'templates/',base='template',globals={'
 class panelIndex(common.panelAdmin):
     def GET(self):
         import system
-        return render.index(data)
+        return render.index()
 
 class panelLogin(common.panelSetup):
     def GET(self):
