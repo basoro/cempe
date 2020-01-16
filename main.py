@@ -27,13 +27,11 @@ web.config.session_parameters['ignore_change_ip'] = True
 web.config.session_parameters['secret_key'] = 'slemp.basoro.id'
 web.config.session_parameters['expired_message'] = 'Session expired'
 dbfile = '/dev/shm/default.db';
-src_sessiondb = '/opt/slemp/server/panel/data/default.db';
-if not os.path.exists(src_sessiondb):
-    print db.Sql().dbfile('session').create('session');
+src_dbfile = '/opt/slemp/server/panel/data/default.db';
 if not os.path.exists('/dev/shm'): os.system('mkdir -p /dev/shm');
-if not os.path.exists(dbfile): os.system("\\cp -a -r "+src_sessiondb+" " + dbfile);
+if not os.path.exists(dbfile): os.system("\\cp -a -r "+src_dbfile+" " + dbfile);
 sessionDB = web.database(dbn='sqlite', db=dbfile)
-session = web.session.Session(app, web.session.DBStore(sessionDB,'sessions'), initializer={'login': False});
+session = web.session.Session(app, web.session.DBStore(sessionDB,'default'), initializer={'login': False});
 def session_hook():
     session.panelPath = os.path.dirname(__file__);
     web.ctx.session = session
