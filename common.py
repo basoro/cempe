@@ -3,8 +3,6 @@ import web,os,public
 class panelSetup:
     def __init__(self):
         web.ctx.session.webname = 'SLEMP Panel'
-        if os.path.exists('data/title.pl'):
-            web.ctx.session.webname = public.readFile('data/title.pl');
 
 class panelAdmin(panelSetup):
     def __init__(self):
@@ -28,13 +26,13 @@ class panelAdmin(panelSetup):
         web.ctx.session.server_os = self.GetOS();
 
     def GetOS(self):
-        filename = "/opt/slemp/server/panel/data/osname.pl";
+        filename = web.ctx.session.setupPath+"/panel/data/osname.pl";
         if not os.path.exists(filename):
             scriptFile = 'GetOS.sh'
             if not os.path.exists(scriptFile):
-                public.downloadFile('https://basoro.id/downloads/slemp/GetOS.sh',scriptFile);
-            os.system("bash /opt/slemp/server/panel/GetOS.sh")
-            public.ExecShell("rm -f /opt/slemp/server/panel/GetOS.sh");
+                public.downloadFile(web.ctx.session.downloadUrl+'/GetOS.sh',scriptFile);
+            os.system("bash "+web.ctx.session.setupPath+"/panel/GetOS.sh")
+            public.ExecShell("rm -f "+web.ctx.session.setupPath+"/panel/GetOS.sh");
         tmp = {}
         tmp['x'] = 'RHEL';
         tmp['osname'] = public.readFile(filename).strip();
