@@ -13,6 +13,14 @@ function getCookie(name) {
 		return null;
 }
 
+function getLocalTime(tm) {
+	tm  = tm.toString();
+	if(tm.length > 10){
+		tm = tm.substring(0,10);
+	}
+	return new Date(parseInt(tm) * 1000).format("yyyy/MM/dd hh:mm:ss");
+}
+
 function ToSize(bytes){
 	var unit = [' B',' KB',' MB',' GB'];
 	var c = 1024;
