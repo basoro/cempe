@@ -11,13 +11,12 @@ $def with (content)
 		<link href="/static/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet">
 		<link href="/static/css/reset.css?$web.ctx.session.version" rel="stylesheet">
 		<link href="/static/css/site.css?$web.ctx.session.version" rel="stylesheet">
+		<link href="/static/css/file.css?$web.ctx.session.version" rel="stylesheet">
 		<script src="/static/js/jquery-1.10.2.min.js"></script>
 		<script src="/static/js/base64.js"></script>
 		<script src="/static/js/bootstrap.min.js"></script>
-		<script src="/static/js/jquery-ui-1.10.4.custom.min.js"></script>
 		<script src="/static/layer/layer.js"></script>
 		<script src="/static/js/script.js?$web.ctx.session.version"></script>
-		<script src="/static/codemirror/lib/codemirror.js"></script>
 		<!--[if lte IE 9]>
 		<script src="/static/js/requestAnimationFrame.js"></script>
 		<![endif]-->
@@ -45,7 +44,6 @@ $def with (content)
 		</nav>
 		<div class="bt-warp">
 			<div id="container" class="container-fluid">
-				<a style="display: none;" id="defaultPath">$web.ctx.session.configPath</a>
 				$:content
 				<div class="footer">$web.ctx.session.brand $web.ctx.session.version © 2018-2019 By <a href="https://slemp.basoro.id" target="_blank">Ataaka</a></div></div>
 			</div>
