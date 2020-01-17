@@ -91,11 +91,6 @@ function GetFiles(Path) {
 			if(cnametext.length>20){
 				cnametext = cnametext.substring(0,20)+'...'
 			}
-			if(isChineseChar(cnametext)){
-				if(cnametext.length>10){
-					cnametext = cnametext.substring(0,10)+'...'
-				}
-			}
 			var timetext ='--';
 			if(rdata.PATH + "/" + rdata.DIR[i] == "/opt/slemp/wwwroot/default"){
 				timetext="SLEMP Panel directory";
@@ -138,11 +133,6 @@ function GetFiles(Path) {
 			var cnametext =fmp[0];
 			if(cnametext.length>48){
 				cnametext = cnametext.substring(0,48)+'...'
-			}
-			if(isChineseChar(cnametext)){
-				if(cnametext.length>16){
-					cnametext = cnametext.substring(0,16)+'...'
-				}
 			}
 			if(displayZip != -1){
 				bodyZip = "<a class='link' href='javascript:;' onclick=\"UnZip('" + rdata.PATH +"/" +fmp[0] + "'," + displayZip + ")\">Extract</a> | ";
