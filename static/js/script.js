@@ -201,3 +201,20 @@ function OnlineEditFile(type, fileName) {
 		})
 	});
 }
+
+function GetConfigFile(type){
+	var fileName = '';
+	switch(type){
+		case 'mysql':
+			fileName = '/etc/my.cnf';
+			break;
+		case 'nginx':
+			fileName = '/etc/nginx/nginx.conf';
+			break;
+		default:
+			fileName = '/etc/php.ini';
+			break;
+	}
+
+	OnlineEditFile(0,fileName);
+}
