@@ -259,3 +259,27 @@ function GetConfigFile(type){
 
 	OnlineEditFile(0,fileName);
 }
+
+function SafeMessage(title,msg,success,thtml){
+	if(thtml == undefined) thtml = "";
+	layer.open({
+		type: 1,
+	    title: title,
+	    area: '350px',
+	    closeBtn: 2,
+	    shadeClose: true,
+	    content:"<div class='zun-form-new webDelete'>\
+	    	<p>" + msg + "</p>\
+	    	" + thtml + "\
+	    	<div class='submit-btn' style='margin-top:15px'>\
+				<button type='button' class='btn btn-danger btn-sm btn-title' onclick='layer.closeAll()'>Cancel</button>\
+		        <button type='button' id='toSubmit' class='btn btn-info btn-sm btn-title' >Submit</button>\
+	        </div>\
+	    </div>"
+	});
+
+
+	$("#toSubmit").click(function(){
+		success();
+	});
+}

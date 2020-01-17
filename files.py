@@ -362,17 +362,6 @@ class files:
         tmp = public.ExecShell('du -sbh '+ get.path)
         return tmp[0].split()[0]
 
-    def CloseLogs(self,get):
-        import web
-        get.path = web.ctx.session.rootPath
-        os.system('rm -f '+web.ctx.session.logsPath+'/*')
-        if web.ctx.session.webserver == 'nginx':
-            os.system('kill -USR1 `cat '+web.ctx.session.setupPath+'/nginx/logs/nginx.pid`');
-
-        public.WriteLog('Document management','Clean up the website log successfully!')
-        get.path = web.ctx.session.logsPath
-        return self.GetDirSize(get)
-
     def SetBatchData(self,get):
         get.path = get.path.encode('utf-8');
         if get.type == '1' or get.type == '2':
@@ -387,12 +376,10 @@ class files:
                     os.system('chown -R '+get.user+':'+get.user+" '"+filename+"'")
                 except:
                     continue;
-            public.WriteLog('Document management','Batch setting permissions succeeded!')
             return public.returnMsg(True,'Batch setting permissions succeeded!')
         else:
 
             import shutil
-            isRecyle = os.path.exists('data/recycle_bin.pl')
             path = get.path
             for key in get.data:
                 try:
@@ -400,21 +387,12 @@ class files:
                     get.path = filename;
                     if not os.path.exists(filename): continue
                     if os.path.isdir(filename):
-                        if isRecyle:
-                            self.Mv_Recycle_bin(get)
-                        else:
-                            shutil.rmtree(filename)
+                        shutil.rmtree(filename)
                     else:
-                        if key == '.user.ini': os.system('chattr -i ' + filename);
-                        if isRecyle:
-
-                            self.Mv_Recycle_bin(get)
-                        else:
-                            os.remove(filename)
+                        os.remove(filename)
                 except:
                     continue;
 
-            public.WriteLog('Document management','Delete files successfully in batches!')
             return public.returnMsg(True,'Delete files successfully in batches!')
 
 
