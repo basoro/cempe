@@ -186,8 +186,7 @@ function OnlineEditFile(type, fileName) {
 			matchtags:true,
 			autoMatchParens: true
 		});*/
-		var editor = new Behave({
-    	textarea: document.getElementById('textBody')
+		var editor = Behave.fromTextArea(document.getElementById("textBody"), {
 		});
 		editor.focus();
 		editor.setSize('auto',h-150);
