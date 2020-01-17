@@ -202,6 +202,47 @@ function OnlineEditFile(type, fileName) {
 	});
 }
 
+function ServiceAdmin(name,type){
+	if(!isNaN(name)){
+		name = 'php-fpm-' + name;
+	}
+	var data = "name="+name+"&type="+type;
+	var msg = '';
+	switch(type){
+		case 'stop':
+			msg = 'Stop';
+			break;
+		case 'start':
+			msg = 'Start';
+			break;
+		case 'restart':
+			msg = 'Restart';
+			break;
+		case 'reload':
+			msg = 'Reload';
+			break;
+	}
+	layer.confirm('Do you really want the '+msg+name+' service? ',{closeBtn:2},function(){
+		var loadT = layer.msg('Being '+msg+name+' service...',{icon:16,time:0});
+		$.post('/system?action=ServiceAdmin',data,function(rdata){
+			layer.close(loadT);
+			var reMsg =rdata.status?name+'The service has failed '+msg:name+' service '+msg+'! ';
+			layer.msg(reMsg,{icon:rdata.status?1:2});
+
+			if(type != 'reload' && rdata.status == true){
+				setTimeout(function(){
+					window.location.reload();
+				},1000)
+			}
+			if(!rdata.status) layer.msg(rdata.msg,{icon:2,time:0,shade:0.3,shadeClose:true});
+
+		}).error(function(){
+			layer.close(loadT);
+			layer.msg('Successful operation!',{icon:1});
+		});
+	});
+}
+
 function GetConfigFile(type){
 	var fileName = '';
 	switch(type){
