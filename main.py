@@ -15,6 +15,7 @@ urls = (
     '/system'  , 'panelSystem',
     '/public'   , 'panelPublic',
     '/files'   , 'panelFiles',
+    '/download', 'panelDownload',
 )
 
 
@@ -126,6 +127,32 @@ class panelFiles(common.panelAdmin):
                 return public.getJson(eval(fun))
 
         return public.returnJson(False,'Invalid specified parameter!')
+
+class panelDownload(common.panelAdmin):
+    def GET(self):
+        get = web.input()
+        try:
+            get.filename = get.filename.encode('utf-8');
+            import os
+            fp = open(get.filename,'rb')
+            size = os.path.getsize(get.filename)
+            filename = os.path.basename(get.filename)
+
+            web.header("Content-Disposition", "attachment; filename=" +filename);
+            web.header("Content-Length", size);
+            web.header('Content-Type','application/octet-stream')
+            buff = 4096
+            while True:
+                fBody = fp.read(buff)
+                if fBody:
+                    yield fBody
+                else:
+                    return
+        except Exception, e:
+            yield 'Error'
+        finally:
+            if fp:
+                fp.close()
 
 def publicObject(toObject,defs):
     get = web.input();
