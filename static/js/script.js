@@ -185,9 +185,14 @@ function OnlineEditFile(type, fileName) {
 			matchBrackets:true,
 			matchtags:true,
 			autoMatchParens: true
-		});*/
-		var editor = Behave.fromTextArea(document.getElementById("textBody"), {
 		});
+		editor.focus();
+		editor.setSize('auto',h-150);
+		$("#OnlineEditFileBtn").click(function(){
+			$("#textBody").text(editor.getValue());
+			OnlineEditFile(1,fileName);
+		});*/
+		var editor = document.getElementById("textBody");
 		editor.focus();
 		editor.setSize('auto',h-150);
 		$("#OnlineEditFileBtn").click(function(){
