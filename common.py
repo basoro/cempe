@@ -18,7 +18,7 @@ class panelAdmin(panelSetup):
         web.ctx.session.logsPath = web.ctx.session.rootPath+'/wwwlogs'
         setupPath = web.ctx.session.setupPath
         web.ctx.session.webserver = 'nginx'
-        
+
         try:
             if not web.ctx.session.login:
                 raise web.seeother('/login')
@@ -30,10 +30,11 @@ class panelAdmin(panelSetup):
     def GetOS(self):
         filename = "/opt/slemp/server/panel/data/osname.pl";
         if not os.path.exists(filename):
-            scriptFile = 'script/GetOS.sh'
+            scriptFile = 'GetOS.sh'
             if not os.path.exists(scriptFile):
                 public.downloadFile('https://basoro.id/downloads/slemp/GetOS.sh',scriptFile);
-            os.system("bash /opt/slemp/server/panel/script/GetOS.sh")
+            os.system("bash /opt/slemp/server/panel/GetOS.sh")
+            public.ExecShell("rm -f /opt/slemp/server/panel/GetOS.sh");
         tmp = {}
         tmp['x'] = 'RHEL';
         tmp['osname'] = public.readFile(filename).strip();
