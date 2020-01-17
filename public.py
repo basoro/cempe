@@ -112,6 +112,15 @@ def ExecShell(cmdstring, cwd=None, timeout=None, shell=True):
 
     return sub.communicate()
 
+def downloadFile(url,filename):
+    import urllib
+    urllib.urlretrieve(url,filename=filename ,reporthook= downloadHook)
+
+def downloadHook(count, blockSize, totalSize):
+    speed = {'total':totalSize,'block':blockSize,'count':count}
+    print speed
+    print '%02d%%'%(100.0 * count * blockSize / totalSize)
+
 
 def serviceReload():
     import web
