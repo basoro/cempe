@@ -192,11 +192,8 @@ function OnlineEditFile(type, fileName) {
 			$("#textBody").text(editor.getValue());
 			OnlineEditFile(1,fileName);
 		});*/
-		var editor = document.getElementById("textBody");
-		editor.focus();
-		editor.setSize('auto',h-150);
 		$("#OnlineEditFileBtn").click(function(){
-			$("#textBody").text(editor.getValue());
+			$("#textBody").text(getValue();
 			OnlineEditFile(1,fileName);
 		});
 		$(".btn-editor-close").click(function(){
