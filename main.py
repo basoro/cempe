@@ -119,7 +119,7 @@ def notfound():
     <title>404 Not Found</title>
     </head><body>
     <h1>Maaf, halaman tidak ada.</h1>
-        <p>Halaman yang Anda minta tidak ada. Harap periksa apakah alamat URL benar.!</p>
+    <p>Halaman yang Anda minta tidak ada. Harap periksa apakah alamat URL benar.!</p>
     <hr>
     <address>SLEMP Panel 1.x <a href="https://slemp.basoro.id" target="_blank">Bantuan</a></address>
     </body></html>
@@ -132,7 +132,7 @@ def internalerror():
     <title>500 Internal Server Error</title>
     </head><body>
     <h1>Maaf, cilukba....!!</h1>
-        <p>Halaman yang anda minta rusak!</p>
+    <p>Halaman yang anda minta rusak!</p>
     <hr>
     <address>SLEMP Panel 1.x <a href="https://slemp.basoro.id" target="_blank">Bantuan</a></address>
     </body></html>
