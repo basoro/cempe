@@ -109,11 +109,10 @@ $def with (data)
 					        <td style="padding-left:18px">nginx 1.16.0</td>
 					        <td class="visible-lg visible-md visible-sm">
                     <a class="link" href="javascript:GetConfigFile('nginx');">Config</a> |
-						        <a class="link" href="javascript:ServiceAdmin('nginx','reload');">Reload</a> | 
-                    <a class="link" href="javascript:GetNginxStatus();">Status</a>
+						        <a class="link" href="javascript:ServiceAdmin('nginx','reload');">Reload</a>
                   </td>
 					        <td><span class="ico-start glyphicon glyphicon-play"></span></td>
-					        <td style="text-align: right;padding-right:18px"><a class="link" href="javascript:ServiceAdmin('nginx','restart');">Restart</a> | 
+					        <td style="text-align: right;padding-right:18px"><a class="link" href="javascript:ServiceAdmin('nginx','restart');">Restart</a> |
                     <a class="link" href="javascript:ServiceAdmin('nginx','stop');">Stop</a></td>
 				        </tr>
 								<tr>
@@ -121,23 +120,22 @@ $def with (data)
 									<td class="visible-lg visible-md visible-sm"><a class="link" href="javascript:GetConfigFile('mysql');">Config</a> | <a class="link" href="javascript:ServiceAdmin('mysqld','reload');">Reload</a></td>
 									<td><span class="ico-start glyphicon glyphicon-play"></span></td>
 									<td style="text-align: right;padding-right:18px">
-                    <a class="link" href="javascript:ServiceAdmin('mysqld','restart');">Restart</a> | 
+                    <a class="link" href="javascript:ServiceAdmin('mysqld','restart');">Restart</a> |
                     <a class="link" href="javascript:ServiceAdmin('mysqld','stop');">Stop</a>
                   </td>
 								</tr>
 								<tr>
 									<td style="padding-left:18px">PHP version：54 </td>
 									<td class="visible-lg visible-md visible-sm">
-                    <a class="link" href="javascript:GetConfigFile('54');">Config</a> | 
-                    <a class="link" href="javascript:ServiceAdmin('php-fpm-54','reload');">Reload</a> | 
-                    <a class="link" href="javascript:GetPHPStatus('54');">Status</a>
+                    <a class="link" href="javascript:GetConfigFile('54');">Config</a> |
+                    <a class="link" href="javascript:ServiceAdmin('php-fpm-54','reload');">Reload</a>
                   </td>
 									<td><span class="ico-start glyphicon glyphicon-play"></span></td>
 									<td style="text-align: right;padding-right:18px">
-                    <a class="link" href="javascript:ServiceAdmin('php-fpm-54','restart');">Restart</a> | 
+                    <a class="link" href="javascript:ServiceAdmin('php-fpm-54','restart');">Restart</a> |
                     <a class="link" href="javascript:stopPHP('54');">Stop</a>
-                  </td> 
-								</tr>				
+                  </td>
+								</tr>
 			        </tbody>
 		        </table>
 			      </div>
@@ -396,4 +394,3 @@ $def with (data)
 		setImg();
 
 	</script>
-
