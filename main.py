@@ -14,6 +14,7 @@ urls = (
     '/login'   , 'panelLogin',
     '/system'  , 'panelSystem',
     '/public'   , 'panelPublic',
+    '/files'   , 'panelFiles',
 )
 
 
@@ -102,6 +103,28 @@ class panelSystem(common.panelAdmin):
             if key == get.action:
                 fun = 'sysObject.'+key+'()'
                 return public.getJson(eval(fun))
+        return public.returnJson(False,'Invalid specified parameter!')
+
+class panelFiles(common.panelAdmin):
+    def GET(self):
+        return render.files('test')
+
+    def POST(self):
+        get = web.input(zunfile = {},data = [])
+        if hasattr(get,'path'):
+            get.path = get.path.replace('//','/').replace('\\','/');
+
+        import files
+        filesObject = files.files()
+        defs = ('UploadFile','GetDir','CreateFile','CreateDir','DeleteDir','DeleteFile',
+                'CopyFile','CopyDir','MvFile','GetFileBody','SaveFileBody','Zip','UnZip',
+                'GetFileAccess','SetFileAccess','GetDirSize','SetBatchData','BatchPaste',
+                'DownloadFile')
+        for key in defs:
+            if key == get.action:
+                fun = 'filesObject.'+key+'(get)'
+                return public.getJson(eval(fun))
+
         return public.returnJson(False,'Invalid specified parameter!')
 
 def publicObject(toObject,defs):

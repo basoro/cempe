@@ -1,0 +1,1191 @@
+$def with (tData)
+<div class="main-content">
+	<div class="container-fluid">
+		<div class="white-black-ip" style="margin-top:16px">
+			<div class="black-ip">
+				<div class="def-log" style="padding-top:116px; position:relative">
+					<div id="tipTools" style="position: fixed;top:70px;left:15px;padding: 0 8px 14px 15px; border-bottom:#ccc 1px solid">
+						<div class="pos-ser" style="margin-top: 6px; margin-bottom: 20px;">
+							<div class="position" style="background:none; padding-left:2px">
+								<div class="pull-left" style="display:none"><a href="/">Home</a>/<span>File Manager</span>/</div>
+								<div class="pull-left">
+									<button id="backBtn" class="backBtn btn btn-default btn-sm glyphicon glyphicon-arrow-left pull-left" title="Back" onClick="BackDir()"></button>
+									<button class="backBtn refreshBtn btn btn-default btn-sm glyphicon glyphicon-refresh pull-right" title="Refresh"></button>
+									<span id='PathPlace' class="pull-left"><input type="text"></span>
+									<span id='PathPlaceBtn' class="pull-left"></span>
+								</div>
+								<div class="pull-left"><span id='DirInfo'></span></div>
+							</div>
+						</div>
+						<button class="btn btn-default btn-sm pull-left" onclick="UploadFiles()">Upload</button>
+						<button class="btn btn-default btn-sm pull-left" onclick="DownloadFile()" title='Download file to server' style="margin:0 5px">Download</button>
+						<span id='BarTools'></span>
+						<span id='Batch'></span>
+						<span id='comlist' class="comlist"></span>
+						<div class="btn-group btn-group-sm pull-right" style="margin-right:5px;">
+						  <button id="set_icon" title="Icon arrangement" type="button" class="btn btn-default">
+						  	<i class="glyphicon glyphicon-th"></i>
+						  </button>
+						  <button id="set_list" title="List arrangement" type="button" class="btn btn-default active">
+						  	<i class="glyphicon glyphicon-th-list"></i>
+						  </button>
+
+						</div>
+					</div>
+					<div class="divtable" id="fileCon"></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</div>
+<ul id="rmenu" class="dropdown-menu" style="display:none">
+	<li onclick="javascript:Batch(1);"><a style="cursor: pointer;">Copy</a></li>
+	<li onclick="javascript:Batch(2);"><a style="cursor: pointer;">Cut</a></li>
+	<li onclick="javascript:Batch(3);"><a style="cursor: pointer;">Permission</a></li>
+	<li onclick="javascript:Batch(4);"><a style="cursor: pointer;">Delete</a></li>
+</ul>
+<script src="/static/js/jquery-ui.min.js"></script>
+<script src="/static/js/jquery.contextify.min.js"></script>
+<script type="text/javascript">
+setTimeout(function(){
+	GetDisk();
+},500);
+var xPath = getCookie('Path');
+setTimeout(function(){
+	GetFiles((xPath!=undefined?xPath:'/opt/slemp/wwwroot'));
+},800);
+
+PathPlaceBtn((xPath!=undefined?xPath:'/opt/slemp/wwwroot'));
+setCookie('uploadSize','<?php echo intval(ini_get("upload_max_filesize"))*1024*1024; ?>');
+if(getCookie('rank') == undefined || getCookie('rank') == null){
+	setCookie('rank','a');
+}
+$$("#set_icon").click(function(){
+	setCookie('rank','b');
+	$$(this).addClass("active");
+	$$("#set_list").removeClass("active");
+	GetFiles(getCookie('Path'));
+});
+$$("#set_list").click(function(){
+	setCookie('rank','a');
+	$$(this).addClass("active");
+	$$("#set_icon").removeClass("active");
+	GetFiles(getCookie('Path'));
+})
+$$(".refreshBtn").click(function(){
+	GetFiles(getCookie('Path'));
+})
+
+function GetFiles(Path) {
+	var Body = '';
+	var data = 'path=' + Path;
+	var loadT = layer.load();
+	var totalSize = 0;
+	$$.post('/files?action=GetDir', data, function(rdata) {
+		layer.close(loadT);
+		if(rdata.DIR == null) rdata.DIR = [];
+		for (var i = 0; i < rdata.DIR.length; i++) {
+			var fmp = rdata.DIR[i].split(";");
+			var cnametext =fmp[0];
+			if(cnametext.length>20){
+				cnametext = cnametext.substring(0,20)+'...'
+			}
+			if(isChineseChar(cnametext)){
+				if(cnametext.length>10){
+					cnametext = cnametext.substring(0,10)+'...'
+				}
+			}
+			var timetext ='--';
+			if(rdata.PATH + "/" + rdata.DIR[i] == "/opt/slemp/wwwroot/default"){
+				timetext="SLEMP Panel directory";
+			}
+			if(getCookie("rank") == "a"){
+					$$("#set_list").addClass("active");
+					$$("#set_icon").removeClass("active");
+					Body += "<tr class='folderBoxTr' data-path='" + rdata.PATH + "/" + fmp[0] + "' filetype='dir'>\
+						<td><input type='checkbox' name='id' value='"+fmp[0]+"'></td>\
+						<td class='column-name'><span class='cursor' onclick=\"GetFiles('" + rdata.PATH + "/" + fmp[0] + "')\"><span class='ico ico-folder'></span><a class='text' title='" + fmp[0] + "'>" + cnametext + "</a></span></td>\
+						<td>"+ToSize(fmp[1])+"</td>\
+						<td>"+getLocalTime(fmp[2])+"</td>\
+						<td>"+fmp[3]+"</td>\
+						<td>"+fmp[4]+"</td>\
+						<td class='editmenu'><span>\
+						<a class='link' href='javascript:;' onclick=\"CopyFile('" + rdata.PATH +"/"+ fmp[0] + "')\">Copy</a> | \
+						<a class='link' href='javascript:;' onclick=\"CutFile('" + rdata.PATH +"/"+ fmp[0]+ "')\">Cut</a> | \
+						<a class='link' href=\"javascript:ReName(0,'" + fmp[0] + "');\">Rename</a> | \
+						<a class='link' href=\"javascript:SetChmod(0,'" + rdata.PATH + "/"+fmp[0] + "');\">Chmod</a> | \
+						<a class='link' href=\"javascript:Zip('" + rdata.PATH +"/" +fmp[0] + "');\">Compres</a> | \
+						<a class='link' href='javascript:;' onclick=\"DeleteDir('" + rdata.PATH +"/"+ fmp[0] + "')\">Delete</a></span>\
+					</td></tr>";
+			}
+			else{
+				$$("#set_icon").addClass("active");
+				$$("#set_list").removeClass("active");
+				Body += "<div class='file folderBox menufolder' data-path='" + rdata.PATH + "/" + fmp[0] + "' filetype='dir' title='File name: " + fmp[0]+"&#13;Size：" + ToSize(fmp[1])+"&#13;Modified datetime："+getLocalTime(fmp[2])+"&#13;Chmod："+fmp[3]+"&#13;Owner："+fmp[4]+"'>\
+						<input type='checkbox' name='id' value='"+fmp[0]+"'>\
+						<div class='ico ico-folder' ondblclick=\"GetFiles('" + rdata.PATH + "/" + fmp[0] + "')\"></div>\
+						<div class='titleBox' onclick=\"GetFiles('" + rdata.PATH + "/" + fmp[0] + "')\"><span class='title'>" + fmp[0] + "</span></div>\
+						</div>";
+			}
+		}
+		for (var i = 0; i < rdata.FILES.length; i++) {
+			if(rdata.FILES[i] == null) continue;
+			var fmp = rdata.FILES[i].split(";");
+			var displayZip = isZip(fmp[0]);
+			var bodyZip = '';
+			var download = '';
+			var cnametext =fmp[0];
+			if(cnametext.length>48){
+				cnametext = cnametext.substring(0,48)+'...'
+			}
+			if(isChineseChar(cnametext)){
+				if(cnametext.length>16){
+					cnametext = cnametext.substring(0,16)+'...'
+				}
+			}
+			if(displayZip != -1){
+				bodyZip = "<a class='link' href='javascript:;' onclick=\"UnZip('" + rdata.PATH +"/" +fmp[0] + "'," + displayZip + ")\">Extract</a> | ";
+			}
+			if(isText(fmp[0])){
+				bodyZip = "<a class='link' href='javascript:;' onclick=\"OnlineEditFile(0,'" + rdata.PATH +"/"+ fmp[0] + "')\">Edit</a> | ";
+			}
+			if(isImage(fmp[0])){
+				download = "<a class='link' href='javascript:;' onclick=\"GetImage('" + rdata.PATH +"/"+ fmp[0] + "')\">Preview</a> | ";
+			}else{
+				download = "<a class='link' href='javascript:;' onclick=\"GetFileBytes('" + rdata.PATH +"/"+ fmp[0] + "',"+fmp[1]+")\">Download</a> | ";
+			}
+
+			totalSize +=  parseInt(fmp[1]);
+			if(getCookie("rank")=="a"){
+				Body += "<tr class='folderBoxTr' data-path='" + rdata.PATH +"/"+ fmp[0] + "' filetype='" + fmp[0] + "'><td><input type='checkbox' name='id' value='"+fmp[0]+"'></td>\
+						<td class='column-name'><span class='ico ico-"+(GetExtName(fmp[0]))+"'></span><a class='text' title='" + fmp[0] + "'>" + cnametext + "</a></td>\
+						<td>" + (ToSize(fmp[1])) + "</td>\
+						<td>" + ((fmp[2].length > 11)?fmp[2]:getLocalTime(fmp[2])) + "</td>\
+						<td>"+fmp[3]+"</td>\
+						<td>"+fmp[4]+"</td>\
+						<td class='editmenu'>\
+						<span><a class='link' href='javascript:;' onclick=\"CopyFile('" + rdata.PATH +"/"+ fmp[0] + "')\">Copy</a> | \
+						<a class='link' href='javascript:;' onclick=\"CutFile('" + rdata.PATH +"/"+ fmp[0] + "')\">Cut</a> | \
+						<a class='link' href='javascript:;' onclick=\"ReName(0,'" + fmp[0] + "')\">Rename</a> | \
+						<a class='link' href=\"javascript:SetChmod(0,'" + rdata.PATH +"/"+ fmp[0] + "');\">Chmod</a> | \
+						"+bodyZip+download+"\
+						<a class='link' href='javascript:;' onclick=\"DeleteFile('" + rdata.PATH +"/"+ fmp[0] + "')\">Delete</a>\
+						</span></td></tr>";
+			}
+			else{
+				Body += "<div class='file folderBox menufile' data-path='" + rdata.PATH +"/"+ fmp[0] + "' filetype='"+fmp[0]+"' title='File name：" + fmp[0]+"&#13;Size：" + ToSize(fmp[1])+"&#13;Modified datetime："+getLocalTime(fmp[2])+"&#13;Chmod："+fmp[3]+"&#13;Owner："+fmp[4]+"'>\
+						<input type='checkbox' name='id' value='"+fmp[0]+"'>\
+						<div class='ico ico-"+(GetExtName(fmp[0]))+"'></div>\
+						<div class='titleBox'><span class='title'>" + fmp[0] + "</span></div>\
+						</div>";
+			}
+		}
+		var dirInfo = '(Total '+rdata.DIR.length+' directory and '+rdata.FILES.length+' files, Size: <font id="pathSize">'+(ToSize(totalSize))+' <a class="link" onClick="GetPathSize()">Obtain</a></font>)';
+		$$("#DirInfo").html(dirInfo);
+		if(getCookie("rank")=="a"){
+			var tablehtml = '<table width="100%" border="0" cellpadding="0" cellspacing="0" class="table table-hover">\
+							<thead>\
+								<tr>\
+									<th width="30"><input type="checkbox" id="setBox" placeholder=""></th>\
+									<th>File name</th>\
+									<th>Size</th>\
+									<th>Modified dattime</th>\
+									<th>Chmod</th>\
+									<th>Owner</th>\
+									<th style="text-align: right;" width="260">Action</th>\
+								</tr>\
+							</thead>\
+							<tbody id="filesBody" class="list-list">'+Body+'</tbody>\
+						</table>';
+			$$("#fileCon").removeClass("fileList").html(tablehtml);
+		}
+		else{
+			$$("#fileCon").addClass("fileList").html(Body);
+		}
+		$$("#PathPlace input").val(rdata.PATH);
+		var BarTools = '<div class="btn-group">\
+						<button class="btn btn-default btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">\
+						New <span class="caret"></span>\
+						</button>\
+						<ul class="dropdown-menu">\
+						<li><a href="javascript:CreateFile(0,\'' + Path + '\');">New file</a></li>\
+						<li><a href="javascript:CreateDir(0,\'' + Path + '\');">New directory</a></li>\
+						</ul>\
+						</div>';
+		if (rdata.PATH != '/') {
+			BarTools += ' <button onclick="javascript:BackDir();" class="btn btn-default btn-sm glyphicon glyphicon-arrow-left" title="Back to previous"></button>';
+		}
+		setCookie('Path',rdata.PATH);
+		//BarTools += ' <button onclick="javascript:ExecShell(\'' + rdata.PATH + '\');" class="btn btn-default btn-sm glyphicon glyphicon-console" title="Console"></button>';
+		BarTools += ' <button onclick="javascript:GetFiles(\'' + rdata.PATH + '\');" class="btn btn-default btn-sm glyphicon glyphicon-refresh" title="Refresh"></button>';
+		var copyName = getCookie('copyFileName');
+		var cutName = getCookie('cutFileName');
+		var isPaste = (copyName == 'null') ? cutName : copyName;
+		if (isPaste != 'null' && isPaste != undefined) {
+			BarTools += ' <button onclick="javascript:PasteFile(\'' + (GetFileName(isPaste)) + '\');" class="btn btn-Warning btn-sm">Paste</button>';
+		}
+
+		$$("#Batch").html('');
+		var BatchTools = '';
+		var isBatch = getCookie('BatchSelected');
+		if (isBatch == 1 || isBatch == '1') {
+			BatchTools += ' <button onclick="javascript:BatchPaste();" class="btn btn-default btn-sm">Paste all</button>';
+		}
+		$$("#Batch").html(BatchTools);
+		$$("#setBox").prop("checked", false);
+
+		$$("#BarTools").html(BarTools);
+
+		$$("input[name=id]").click(function(){
+			if($$(this).prop("checked")) {
+				$$(this).prop("checked", true);
+				$$(this).parents("tr").addClass("ui-selected");
+			}
+			else{
+				$$(this).prop("checked", false);
+				$$(this).parents("tr").removeClass("ui-selected");
+			}
+			showSeclect()
+		});
+
+		$$("#setBox").click(function() {
+			if ($$(this).prop("checked")) {
+				$$("input[name=id]").prop("checked", true);
+				$$("#filesBody > tr").addClass("ui-selected");
+
+			} else {
+				$$("input[name=id]").prop("checked", false);
+				$$("#filesBody > tr").removeClass("ui-selected");
+			}
+			showSeclect();
+		});
+
+		$$("#filesBody .link").click(function(e){
+			e.stopPropagation();
+		});
+		$$("input[name=id]").dblclick(function(e){
+			e.stopPropagation();
+		});
+
+		$$(".black-ip").bind("contextmenu",function(e){
+			return false;
+		});
+		bindselect();
+
+		$$("#fileCon").mousedown(function(e){
+			var count = totalFile();
+			if(e.which == 3) {
+				if(count>1){
+					RClickAll(e);
+				}
+				else{
+					return
+				}
+			}
+		});
+		$$(".folderBox,.folderBoxTr").mousedown(function(e){
+			var count = totalFile();
+			if(e.which == 3) {
+				if(count <= 1){
+					var a = $$(this);
+					a.contextify(RClick(a.attr("filetype"),a.attr("data-path"),a.find("input").val()));
+				}
+				else{
+					RClickAll(e);
+				}
+			}
+		});
+	});
+	setTimeout('PathPlaceBtn(getCookie("Path"));',200);
+}
+
+function totalFile(){
+	var el = $$("input[name='id']");
+	var len = el.length;
+	var count = 0;
+	for(var i=0;i<len;i++){
+		if(el[i].checked == true){
+			count++;
+		}
+	}
+	return count;
+}
+
+function bindselect(){
+	$$("#filesBody,#fileCon").selectable({
+		autoRefresh: false,
+		filter:"tr,.folderBox",
+		cancel: "a,span,input,.ico-folder",
+		selecting:function(e){
+			$$(".ui-selecting").find("input").prop("checked", true);
+			showSeclect();
+		},
+		selected:function(e){
+			$$(".ui-selectee").find("input").prop("checked", false);
+			$$(".ui-selected", this).each(function() {
+				$$(this).find("input").prop("checked", true);
+				showSeclect();
+			});
+		},
+		unselecting:function(e){
+			$$(".ui-selectee").find("input").prop("checked", false);
+			$$(".ui-selecting").find("input").prop("checked", true);
+			showSeclect();
+			$$("#rmenu").hide()
+		}
+	});
+	$$("#filesBody,#fileCon").selectable("refresh");
+
+	$$(".ico-folder").click(function(){
+		$$(this).parent().addClass("ui-selected").siblings().removeClass("ui-selected");
+		$$(".ui-selectee").find("input").prop("checked", false);
+		$$(this).prev("input").prop("checked", true);
+		showSeclect();
+	})
+}
+
+function showSeclect(){
+	var count = totalFile();
+	var BatchTools = '';
+	if(count > 1){
+		BatchTools = '<button onclick="javascript:Batch(1);" class="btn btn-default btn-sm">Copy</button>\
+						  <button onclick="javascript:Batch(2);" class="btn btn-default btn-sm">Cut</button>\
+						  <button onclick="javascript:Batch(3);" class="btn btn-default btn-sm">Chmod</button>\
+						  <button onclick="javascript:Batch(4);" class="btn btn-default btn-sm">Delete</button>'
+		$$("#Batch").html(BatchTools);
+	}else{
+		$$("#Batch").html(BatchTools);
+		//setCookie('BatchSelected', null);
+	}
+}
+
+$$(window).scroll(function () {
+	if($$(window).scrollTop() > 20){
+		$$("#tipTools").css({"position":"fixed","top":"50px","left":"15px","box-shadow":"0 1px 10px 3px #ccc"});
+	}else{
+		$$("#tipTools").css({"position":"absolute","top":"0","left":"0","box-shadow":"none"});
+	}
+});
+$$("#tipTools").width($$(".black-ip").width());
+$$("#PathPlaceBtn,#PathPlace input").width($$(".black-ip").width()-460);
+if($$(window).width()<1160){
+	$$("#PathPlaceBtn").width(290);
+}
+window.onresize = function(){
+	$$("#tipTools").width($$(".black-ip").width()-23);
+	$$("#PathPlaceBtn,#PathPlace input").width($$(".black-ip").width()-460);
+	if($$(window).width()<1160){
+		$$("#PathPlaceBtn,#PathPlace input").width(290);
+	}
+	PathLeft()
+}
+
+function Batch(type,access){
+	var path = $$("#PathPlace input").val();
+	var el = document.getElementsByTagName('input');
+	var len = el.length;
+	var data='path='+path+'&type='+type;
+	var name = 'data';
+	for(var i=0;i<len;i++){
+		if(el[i].checked == true && el[i].value != 'on'){
+			data += '&'+name+'='+el[i].value;
+		}
+	}
+
+	if(type == 3 && access == undefined){
+		SetChmod(0,'批量');
+		return;
+	}
+
+	if(type < 3) setCookie('BatchSelected', '1');
+	setCookie('BatchPaste',type);
+
+	if(access == 1){
+		var access = $$("#access").val();
+		var chown = $$("#chown").val();
+		data += '&access='+access+'&user='+chown;
+		layer.closeAll();
+	}
+	if(type == 4){
+		AllDeleteFileSub(data,path);
+		return;
+	}
+	myloadT = layer.msg('Executing, please wait...',{icon:16,time:0,shade: [0.3, '#000']});
+	$$.post('files?action=SetBatchData',data,function(rdata){
+		layer.close(myloadT);
+		if(type != 3) GetFiles(path);
+		layer.msg(rdata.msg,{icon:1});
+	});
+}
+
+function BatchPaste(){
+	var path = $$("#PathPlace input").val();
+	var type = getCookie('BatchPaste');
+	var data = 'type='+type+'&path='+path;
+	myloadT = layer.msg('Executing, please wait...',{icon:16,time:0,shade: [0.3, '#000']});
+	$$.post('files?action=BatchPaste',data,function(rdata){
+		layer.close(myloadT);
+		setCookie('BatchSelected', null);
+		GetFiles(path);
+		layer.msg(rdata.msg,{icon:1});
+	});
+}
+
+function GetExtName(fileName){
+	var extArr = fileName.split(".");
+	var exts = ['conf','sh','cnf','pl','so','passwd','cshrc','deny','cache','init','po','ext2','ext3','ext4','i686','img','gz','efi','old','pid','lock','frm','opt','err','MYI','MYD','CSM','ini','eps','exe'];
+	var extLastName = extArr[extArr.length - 1];
+	if(extArr.length<2 || extLastName.length>4 || extLastName.length < 2){
+		return "file";
+	}
+	for(var i=0; i<exts.length; i++){
+		if(exts[i]==extLastName){
+			return "file";
+		}
+	}
+	return extLastName;
+}
+
+function ShowEditMenu(){
+	$$("#filesBody > tr").hover(function(){
+		$$(this).addClass("hover");
+	},function(){
+		$$(this).removeClass("hover");
+	}).click(function(){
+		$$(this).addClass("on").siblings().removeClass("on");
+	})
+}
+
+function GetFileName(fileNameFull) {
+	var pName = fileNameFull.split('/');
+	return pName[pName.length - 1];
+}
+
+function GetDisk() {
+	var LBody = '';
+	$$.get('/system?action=GetDiskInfo', function(rdata) {
+		for (var i = 0; i < rdata.length; i++) {
+			LBody += "<span onclick=\"GetFiles('" + rdata[i].path + "')\"><span class='glyphicon glyphicon-hdd'></span>&nbsp;" + (rdata[i].path=='/'?'Root':rdata[i].path) + "(" + rdata[i].size[2] + ")</span>";
+		}
+		$$("#comlist").html(LBody);
+	});
+}
+
+function BackDir() {
+	var str = $$("#PathPlace input").val().replace('//','/');
+	if(str.substr(str.length-1,1) == '/'){
+			str = str.substr(0,str.length-1);
+	}
+	var Path = str.split("/");
+	var back = '/';
+	if (Path.length > 2) {
+		var count = Path.length - 1;
+		for (var i = 0; i < count; i++) {
+			back += Path[i] + '/';
+		}
+		if(back.substr(back.length-1,1) == '/'){
+			back = back.substr(0,back.length-1);
+		}
+		GetFiles(back);
+	} else {
+		back += Path[0];
+		GetFiles(back);
+	}
+	setTimeout('PathPlaceBtn(getCookie("Path"));',200);
+}
+
+function CreateFile(type, path) {
+	if (type == 1) {
+		var fileName = $$("#newFileName").val();
+		layer.msg('New...', {
+			icon: 16,
+			time: 10000
+		});
+		$$.post('/files?action=CreateFile', 'path=' + path + '/' + fileName, function(rdata) {
+			layer.closeAll();
+			layer.msg(rdata.msg, {
+				icon: rdata.status ? 1 : 2
+			});
+			GetFiles($$("#PathPlace input").val());
+		});
+		return;
+	}
+	layer.open({
+		type: 1,
+		shift: 5,
+		closeBtn: 2,
+		area: '320px',
+		title: 'New blank file',
+		content: '<div class="zun-form-new">\
+					<div class="line noborder">\
+					<input type="text" class="form-control" name="Name" id="newFileName" value="" placeholder="File name" />\
+					</div>\
+					<div class="submit-btn">\
+					<button type="button" class="btn btn-danger btn-sm btn-title" onclick="layer.closeAll()">Cancel</button>\
+					<button id="CreateFileBtn" type="button" class="btn btn-info btn-sm btn-title" onclick="CreateFile(1,\'' + path + '\')">Submit</button>\
+					</div>\
+				</div>'
+	});
+	$$("#newFileName").focus().keyup(function(e){
+		if(e.keyCode == 13) $$("#CreateFileBtn").click();
+	});
+}
+
+function CreateDir(type, path) {
+	if (type == 1) {
+		var dirName = $$("#newDirName").val();
+		layer.msg('New...', {
+			icon: 16,
+			time: 10000
+		});
+		$$.post('/files?action=CreateDir', 'path=' + path + '/' + dirName, function(rdata) {
+			layer.closeAll();
+			layer.msg(rdata.msg, {
+				icon: rdata.status ? 1 : 2
+			});
+			GetFiles($$("#PathPlace input").val());
+		});
+		return;
+	}
+	layer.open({
+		type: 1,
+		shift: 5,
+		closeBtn: 2,
+		area: '320px',
+		title: 'Create a new directory',
+		content: '<div class="zun-form-new">\
+					<div class="line noborder">\
+					<input type="text" class="form-control" name="Name" id="newDirName" value="" placeholder="Directory name" />\
+					</div>\
+					<div class="submit-btn">\
+					<button type="button" class="btn btn-danger btn-sm btn-title" onclick="layer.closeAll()">Cancel</button>\
+					<button type="button" id="CreateDirBtn" class="btn btn-info btn-sm btn-title" onclick="CreateDir(1,\'' + path + '\')">Submit</button>\
+					</div>\
+				</div>'
+	});
+	$$("#newDirName").focus().keyup(function(e){
+		if(e.keyCode == 13) $$("#CreateDirBtn").click();
+	});
+}
+
+function DeleteFile(fileName){
+	SafeMessage("Delete the file"," Do you really want to delete ["+fileName+"]?",function(){
+		layer.msg('Executing, please wait...',{icon:16,time:0,shade: [0.3, '#000']});
+		$$.post('/files?action=DeleteFile', 'path=' + fileName, function(rdata) {
+			layer.closeAll();
+			layer.msg(rdata.msg, {
+				icon: rdata.status ? 1 : 2
+			});
+			GetFiles($$("#PathPlace input").val());
+		});
+	});
+}
+
+function DeleteDir(dirName){
+	SafeMessage("Delete the directory "," Do you really want to delete ["+dirName+"]?",function(){
+		layer.msg('Executing, please wait...',{icon:16,time:0,shade: [0.3, '#000']});
+		$$.post('/files?action=DeleteDir', 'path=' + dirName, function(rdata) {
+			layer.closeAll();
+			layer.msg(rdata.msg, {
+				icon: rdata.status ? 1 : 2
+			});
+			GetFiles($$("#PathPlace input").val());
+		});
+	});
+}
+
+function AllDeleteFileSub(data,path){
+	SafeMessage("Delete files in bulk "," Do you really want to delete these files?",function(){
+		layer.msg('Executing, please wait...',{icon:16,time:0,shade: [0.3, '#000']});
+		$$.post('files?action=SetBatchData',data,function(rdata){
+			layer.closeAll();
+			GetFiles(path);
+			layer.msg(rdata.msg,{icon:1});
+		});
+	});
+}
+
+function ReloadFiles(){
+	setInterval(function(){
+		var path = $$("#PathPlace input").val();
+		GetFiles(path);
+	},3000);
+}
+
+function DownloadFile(action){
+
+	if(action == 1){
+		var fUrl = $$("#mUrl").val();
+		fUrl = encodeURI(fUrl);
+		fpath = $$("#dpath").val();
+		fname = $$("#dfilename").val();
+		layer.closeAll();
+		layer.msg('Adding queue, please wait..',{time:0,icon:16});
+		$$.post('/files?action=DownloadFile','path='+fpath+'&url='+fUrl+'&filename='+fname,function(rdata){
+			layer.closeAll();
+			GetFiles(fpath);
+			GetTaskCount();
+			layer.msg(rdata.msg,{icon:rdata.status?1:2});
+		});
+		return;
+	}
+	var path = $$("#PathPlace input").val();
+	layer.open({
+		type: 1,
+		shift: 5,
+		closeBtn: 2,
+		area: '500px',
+		title: 'Download file',
+		content: '<form class="zun-form-new">\
+					<div class="line noborder">\
+					<span class="name">URL address:</span><input type="text" class="form-control-text" name="url" id="mUrl" value="" placeholder="Url address" />\
+					</div>\
+					<div class="line noborder">\
+					<span class="name">Download to:</span><input type="text" class="form-control-text" name="path" id="dpath" value="'+path+'" placeholder="Download to" />\
+					</div>\
+					<div class="line noborder">\
+					<span class="name">File name:</span><input type="text" class="form-control-text" name="filename" id="dfilename" value="" placeholder="Save file name" />\
+					</div>\
+					<div class="submit-btn">\
+					<button type="button" class="btn btn-danger btn-sm btn-title" onclick="layer.closeAll()">Cancel</button>\
+					<button type="button" id="dlok" class="btn btn-info btn-sm btn-title dlok" onclick="DownloadFile(1)">Submit</button>\
+					</div>\
+				</form>'
+	});
+	fly("dlok");
+	$$("#mUrl").keyup(function(){
+		durl = $$(this).val()
+		tmp = durl.split('/')
+		$$("#dfilename").val(tmp[tmp.length-1])
+	});
+}
+
+function ExecShell(action){
+	if(action == 1){
+		var path = $$("#PathPlace input").val();
+		var exec = $$("#mExec").val();
+		$$.post('/files?action=ExecShell','path='+path+'&exec='+exec,function(rdata){
+			if(rdata.status){
+				$$("#mExec").val('');
+				GetShellEcho();
+				//outTimeGet();
+			}
+			else{
+				layer.msg(rdata.msg,{icon:rdata.status?1:2});
+			}
+
+		});
+		return;
+	}
+	layer.open({
+		type: 1,
+		shift: 5,
+		closeBtn: 2,
+		area: '70%',
+		title: 'Execute SHELL',
+		content: '<div class="zun-form-new">\
+					<div class="shellcode"><pre id="Result"></pre></div>\
+					<div class="line noborder">\
+					<input type="text" class="form-control" name="exec" id="mExec" value="" placeholder="SHELL command" onkeydown="if(event.keyCode==13)ExecShell(1);" /><span class="shellbutton" onclick="ExecShell(1)">Send</span>\
+					</div>\
+				</div>'
+	});
+}
+
+function outTimeGet(){
+	setInterval(function(){
+		GetShellEcho();
+	},3000);
+}
+
+function GetShellEcho(){
+	$$.get('/files?action=GetShellEcho',function(rdata){
+		$$("#Result").html(rdata);
+	});
+}
+
+function ReName(type, fileName) {
+	if (type == 1) {
+		var path = $$("#PathPlace input").val();
+		var newFileName = path + '/' + $$("#newFileName").val();
+		var oldFileName = path + '/' + fileName;
+		layer.msg('Processing...', {
+			icon: 16,
+			time: 10000
+		});
+		$$.post('/files?action=MvFile', 'sfile=' + oldFileName + '&dfile=' + newFileName, function(rdata) {
+			layer.closeAll();
+			layer.msg(rdata.msg, {
+				icon: rdata.status ? 1 : 2
+			});
+			GetFiles(path);
+		});
+		return;
+	}
+	layer.open({
+		type: 1,
+		shift: 5,
+		area: '320px',
+		title: 'Rename',
+		content: '<div class="zun-form-new">\
+					<div class="line noborder">\
+					<input type="text" class="form-control" name="Name" id="newFileName" value="' + fileName + '" placeholder="File name" />\
+					</div>\
+					<div class="submit-btn">\
+					<button type="button" class="btn btn-danger btn-sm btn-title" onclick="layer.closeAll()">Cancel</button>\
+					<button type="button" id="ReNameBtn" class="btn btn-info btn-sm btn-title" onclick="ReName(1,\'' + fileName + '\')">Save</button>\
+					</div>\
+				</div>'
+	});
+	$$("#newFileName").focus().keyup(function(e){
+		if(e.keyCode == 13) $$("#ReNameBtn").click();
+	});
+}
+
+function CutFile(fileName) {
+	var path = $$("#PathPlace input").val();
+	setCookie('cutFileName', fileName);
+	setCookie('copyFileName', null);
+	layer.msg('Cut', {
+		icon: 1,
+		time: 1
+	});
+	GetFiles(path);
+}
+
+function CopyFile(fileName) {
+	var path = $$("#PathPlace input").val();
+	setCookie('copyFileName', fileName);
+	setCookie('cutFileName', null);
+	layer.msg('Copied', {
+		icon: 1,
+		time: 1
+	});
+	GetFiles(path);
+}
+
+function PasteFile(fileName) {
+	var path = $$("#PathPlace input").val();
+	var copyName = getCookie('copyFileName');
+	if (copyName != 'null' && copyName != undefined) {
+		layer.msg('Copying...', {
+			icon: 16,
+			time: 10000
+		});
+		$$.post('/files?action=CopyFile', 'sfile=' + copyName + '&dfile=' + path +'/'+ fileName, function(rdata) {
+			layer.closeAll();
+			layer.msg(rdata.msg, {
+				icon: rdata.status ? 1 : 2
+			});
+			GetFiles(path);
+		});
+		setCookie('copyFileName', null);
+		setCookie('cutFileName', null);
+		return;
+	}
+	var cutName = getCookie('cutFileName');
+	if (cutName != 'null' && cutName != undefined) {
+		layer.msg('正在移动...', {
+			icon: 16,
+			time: 10000
+		});
+		$$.post('/files?action=MvFile', 'sfile=' + cutName + '&dfile=' + path + '/'+fileName, function(rdata) {
+			layer.closeAll();
+			layer.msg(rdata.msg, {
+				icon: rdata.status ? 1 : 2
+			});
+			GetFiles(path);
+		});
+		setCookie('copyFileName', null);
+		setCookie('cutFileName', null);
+	}
+}
+
+function Zip(dirName,submits) {
+	var path = $$("#PathPlace input").val();
+	if(submits != undefined){
+		tmp = $$("#sfile").val().split('/')
+		sfile = tmp[tmp.length-1]
+		dfile = $$("#dfile").val()
+		layer.msg('Compressing...', {icon: 16,time: 0});
+		$$.post('/files?action=Zip', 'sfile=' + sfile + '&dfile=' + dfile + '&type=zip&path='+path, function(rdata) {
+			layer.closeAll();
+			if(rdata == null || rdata == undefined){
+				layer.msg('The server is compressing files in the background, please check the progress later!',{icon:1});
+				GetFiles(path)
+				ReloadFiles();
+				return;
+			}
+			layer.msg(rdata.msg, {icon: rdata.status ? 1 : 2});
+			if(rdata.status) GetFiles(path);
+		});
+		return
+	}
+
+
+	layer.open({
+		type: 1,
+		shift: 5,
+		area: '320px',
+		title: 'Compressed file',
+		content: '<div class="zun-form-new">'
+					+'<div class="line noborder">'
+					+'<input type="text" class="form-control" id="sfile" value="' +dirName + '" placeholder="Compressed directory" />'
+					+'<input type="text" class="form-control" id="dfile" value="'+dirName + '.zip" placeholder="Compressed to" />'
+					+'</div>'
+					+'<div class="submit-btn">'
+					+'<button type="button" class="btn btn-danger btn-sm btn-title" onclick="layer.closeAll()">Cancel</button>'
+					+'<button type="button" id="ReNameBtn" class="btn btn-info btn-sm btn-title" onclick="Zip(\'' + dirName + '\',1)">Submit</button>'
+					+'</div>'
+				+'</div>'
+	});
+}
+
+function UnZip(fileName,type) {
+	var path = $$("#PathPlace input").val();
+	if(type.length ==3){
+		sfile = $$("#sfile").val()
+		dfile = $$("#dfile").val()
+		coding = $$("select[name='coding']").val();
+		layer.msg('Extract...', {icon: 16,time: 0});
+		$$.post('/files?action=UnZip', 'sfile=' + sfile + '&dfile=' + dfile +'&type=' + type + '&coding=' + coding, function(rdata) {
+			layer.closeAll();
+			layer.msg(rdata.msg, {icon: rdata.status ? 1 : 2});
+			GetFiles(path);
+		});
+		return
+	}
+
+	type = (type == 1) ? 'tar':'zip'
+	layer.open({
+		type: 1,
+		shift: 5,
+		area: '460px',
+		title: 'Compressed file',
+		content: '<div class="zun-form-new">'
+					+'<div class="line noborder unzipdiv">'
+					+'<span class="tit">File name</span><input type="text" class="form-control" id="sfile" value="' +fileName + '" placeholder="Compressed file name" />'
+					+'<span class="tit">Extract to</span><input type="text" class="form-control" id="dfile" value="'+path + '" placeholder="Extract to" />'
+					+'<span class="tit">Coding</span><select name="coding">'
+						+'<option value="UTF-8">UTF-8</option>'\
+						+'<option value="GBK">GBK</option>'\
+					+'</select>'
+					+'</div>'
+					+'<div class="submit-btn">'
+					+'<button type="button" class="btn btn-danger btn-sm btn-title" onclick="layer.closeAll()">Cancel</button>'
+					+'<button type="button" id="ReNameBtn" class="btn btn-info btn-sm btn-title" onclick="UnZip(\'' + fileName + '\',\''+type+'\')">Submit</button>'
+					+'</div>'
+				+'</div>'
+	});
+}
+
+function isZip(fileName){
+	var ext = fileName.split('.');
+	var extName = ext[ext.length-1].toLowerCase();
+	if( extName == 'zip') return 0;
+	if( extName == 'gz' || extName == 'tgz') return 1;
+	return -1;
+}
+
+function isText(fileName){
+	var exts = ['txt','html','php','js','css','sh','htm','jsp','init','log','script','error','xml','c','cpp','shtml','sql','key','asp','java','pl','err','conf','cnf','default','ini','htaccess',''];
+	return isExts(fileName,exts);
+}
+
+function isImage(fileName){
+	var exts = ['jpg','jpeg','png','bmp','gif','tiff','ico'];
+	return isExts(fileName,exts);
+}
+
+function isExts(fileName,exts){
+	var ext = fileName.split('.');
+	if(ext.length < 2) return false;
+	var extName = ext[ext.length-1].toLowerCase();
+	for(var i=0;i<exts.length;i++){
+		if(extName == exts[i]) return true;
+	}
+	return false;
+}
+
+function GetImage(fileName){
+	var imgUrl = '/download?filename='+fileName;
+	layer.open({
+		type:1,
+		title:false,
+		area: '500px',
+		shadeClose: true,
+		content: '<div class="showpicdiv"><img width="100%" src="'+imgUrl+'"></div>'
+	});
+	$$(".layui-layer").css("top", "30%");
+}
+
+function GetFileBytes(fileName, fileSize){
+	window.open('/download?filename='+fileName);
+}
+
+function UploadFiles(){
+	var path = $$("#PathPlace input").val()+"/";
+	layer.open({
+		type:1,
+		closeBtn: 2,
+		title:'Upload files ',
+		area: ['500px','500px'],
+		shadeClose:false,
+		content:'<div class="fileUploadDiv"><input type="hidden" id="input-val" value="'+path+'" />\
+				<input type="file" id="file_input"  multiple="true" autocomplete="off" />\
+				<button type="button"  id="opt" autocomplete="off">Add files</button>\
+				<button type="button" id="up" autocomplete="off" >Upload</button>\
+				<span id="totalProgress" style="float:right;"></span>\
+				<button type="button" id="filesClose" autocomplete="off" onClick="layer.closeAll()" >Close</button>\
+				<ul id="up_box"></ul></div>'
+	});
+	UploadStart();
+}
+
+function SetChmod(action,fileName){
+	if(action == 1){
+		var chmod = $$("#access").val();
+		var chown = $$("#chown").val();
+		var data = 'filename='+fileName+'&user='+chown+'&access='+chmod;
+		var loadT = layer.msg('Setting up..',{icon:16,time:0,shade: [0.3, '#000']});
+		$$.post('files?action=SetFileAccess',data,function(rdata){
+			layer.close(loadT);
+			if(rdata.status) layer.closeAll();
+			layer.msg(rdata.msg,{icon:rdata.status?1:2});
+			var path = $$("#PathPlace input").val();
+			GetFiles(path)
+		});
+		return;
+	}
+
+	var toExec = fileName == 'Batch'?'Batch(3,1)':'SetChmod(1,\''+fileName+'\')';
+
+	$$.post('/files?action=GetFileAccess','filename='+fileName,function(rdata){
+		layer.open({
+			type:1,
+			title:'Setting permissions ['+fileName+']',
+			area: '400px',
+			shadeClose:false,
+			content:'<div class="setchmod zun-form-new">\
+						<fieldset>\
+							<legend>Owner</legend>\
+							<p><input type="checkbox" id="owner_r" />Read</p>\
+							<p><input type="checkbox" id="owner_w" />Write</p>\
+							<p><input type="checkbox" id="owner_x" />Execute</p>\
+						</fieldset>\
+						<fieldset>\
+							<legend>User group</legend>\
+							<p><input type="checkbox" id="group_r" />Read</p>\
+							<p><input type="checkbox" id="group_w" />Write</p>\
+							<p><input type="checkbox" id="group_x" />Execute</p>\
+						</fieldset>\
+						<fieldset>\
+							<legend>公共</legend>\
+							<p><input type="checkbox" id="public_r" />Read</p>\
+							<p><input type="checkbox" id="public_w" />Write</p>\
+							<p><input type="checkbox" id="public_x" />Execute</p>\
+						</fieldset>\
+						<div class="setchmodnum"><input type="text" id="access" maxlength="3" value="'+rdata.chmod+'">Chmod，\
+						<span>Owner\
+						<select id="chown">\
+							<option value="www" '+(rdata.chown=='www'?'selected="selected"':'')+'>www</option>\
+							<option value="mysql" '+(rdata.chown=='mysql'?'selected="selected"':'')+'>mysql</option>\
+							<option value="root" '+(rdata.chown=='root'?'selected="selected"':'')+'>root</option>\
+						</select></span></div>\
+						<div class="submit-btn">\
+							<button type="button" class="btn btn-danger btn-sm btn-title" onclick="layer.closeAll()">Cancel</button>\
+					        <button type="button" class="btn btn-info btn-sm btn-title" onclick="'+toExec+'" >Submit</button>\
+				        </div>\
+					</div>'
+		});
+
+		onAccess();
+		$$("#access").keyup(function(){
+			onAccess();
+		});
+
+		$$("input[type=checkbox]").change(function(){
+			var idName = ['owner','group','public'];
+			var onacc = '';
+			for(var n=0;n<idName.length;n++){
+				var access = 0;
+				access += $$("#"+idName[n]+"_x").prop('checked')?1:0;
+				access += $$("#"+idName[n]+"_w").prop('checked')?2:0;
+				access += $$("#"+idName[n]+"_r").prop('checked')?4:0;
+				onacc += access;
+			}
+			$$("#access").val(onacc);
+
+		});
+	})
+
+}
+
+function onAccess(){
+	var access = $$("#access").val();
+	var idName = ['owner','group','public'];
+	for(var n=0;n<idName.length;n++){
+		$$("#"+idName[n]+"_x").prop('checked',false);
+		$$("#"+idName[n]+"_w").prop('checked',false);
+		$$("#"+idName[n]+"_r").prop('checked',false);
+	}
+	for(var i=0;i<access.length;i++){
+		var onacc = access.substr(i,1);
+		if(i > idName.length) continue;
+		if(onacc > 7) $$("#access").val(access.substr(0,access.length-1));
+		switch(onacc){
+			case '1':
+				$$("#"+idName[i]+"_x").prop('checked',true);
+				break;
+			case '2':
+				$$("#"+idName[i]+"_w").prop('checked',true);
+				break;
+			case '3':
+				$$("#"+idName[i]+"_x").prop('checked',true);
+				$$("#"+idName[i]+"_w").prop('checked',true);
+				break;
+			case '4':
+				$$("#"+idName[i]+"_r").prop('checked',true);
+				break;
+			case '5':
+				$$("#"+idName[i]+"_r").prop('checked',true);
+				$$("#"+idName[i]+"_x").prop('checked',true);
+				break;
+			case '6':
+				$$("#"+idName[i]+"_r").prop('checked',true);
+				$$("#"+idName[i]+"_w").prop('checked',true);
+				break;
+			case '7':
+				$$("#"+idName[i]+"_r").prop('checked',true);
+				$$("#"+idName[i]+"_w").prop('checked',true);
+				$$("#"+idName[i]+"_x").prop('checked',true);
+				break;
+		}
+	}
+}
+
+function RClick(type,path,name){
+	var displayZip = isZip(type);
+	var options = {items:[
+	  {text: 'Copy', 	onclick: function() {CopyFile(path)}},
+	  {text: 'Cut', 	onclick: function() {CutFile(path)}},
+	  {text: 'Rename', 	onclick: function() {ReName(0,name)}},
+	  {text: 'Chmod', 	onclick: function() {SetChmod(0,path)}}
+
+	]};
+	if(type == "dir"){
+		options.items.push({text: 'Compress', onclick: function() {Zip(path)}},{text: 'Delete', onclick: function() {DeleteDir(path)}});
+	}
+	else if(isText(type)){
+		options.items.push({text: 'Edit', onclick: function() {OnlineEditFile(0,path)}},{text: 'Download', onclick: function() {GetFileBytes(path)}},{text: 'Delete', onclick: function() {DeleteFile(path)}});
+	}
+	else if(displayZip != -1){
+		options.items.push({text: 'Extract', onclick: function() {UnZip(path,displayZip)}},{text: 'Download', onclick: function() {GetFileBytes(path)}},{text: 'Delete', onclick: function() {DeleteFile(path)}});
+	}
+	else if(isImage(type)){
+		options.items.push({text: 'Preview', onclick: function() {GetImage(path)}},{text: 'Download', onclick: function() {GetFileBytes(path)}},{text: 'Delete', onclick: function() {DeleteFile(path)}});
+	}
+	else{
+		options.items.push({text: 'Download', onclick: function() {GetFileBytes(path)}},{text: 'Delete', onclick: function() {DeleteFile(path)}});
+	}
+	return options;
+}
+
+function RClickAll(e){
+	var menu = $$("#rmenu");
+	var windowWidth = $$(window).width(),
+		windowHeight = $$(window).height(),
+		menuWidth = menu.outerWidth(),
+		menuHeight = menu.outerHeight(),
+		x = (menuWidth + e.clientX < windowWidth) ? e.clientX : windowWidth - menuWidth,
+		y = (menuHeight + e.clientY < windowHeight) ? e.clientY : windowHeight - menuHeight;
+
+	menu.css('top', y)
+		.css('left', x)
+		.css('position', 'fixed')
+		.css("z-index","1")
+		.show();
+}
+
+function GetPathSize(){
+	var path = $$("#PathPlace input").val();
+	layer.msg("Calculating, please wait",{icon:16,time:0,shade: [0.3, '#000']})
+	$$.post("/files?action=GetDirSize","path="+path,function(rdata){
+		layer.closeAll();
+		$$("#pathSize").text(rdata)
+	})
+}
+$$("body").not(".def-log").click(function(){
+	$$("#rmenu").hide()
+});
+
+$$("#PathPlace input").keyup(function(e){
+	if(e.keyCode == 13) {
+		GetFiles($$(this).val());
+	}
+});
+function PathPlaceBtn(path){
+	var html = '';
+	var title = '';
+	var	Dpath = path;
+	if(path == '/'){
+		html ='<li><a title="/">Root</a></li>';
+	}
+	else{
+		Dpath = path.split("/");
+		for(var i = 0; i<Dpath.length; i++ ){
+			title += Dpath[i]+'/';
+			Dpath[0] = 'Root';
+			html +='<li><a title="'+title+'">'+Dpath[i]+'</a></li>';
+		}
+	}
+	html = '<div style="width:1200px;height:26px"><ul>'+html+'</ul></div>';
+	$$("#PathPlaceBtn").html(html);
+	$$("#PathPlaceBtn ul li a").click(function(e){
+		var Gopath = $$(this).attr("title");
+		if(Gopath.length>1){
+			if(Gopath.substr(Gopath.length-1,Gopath.length) =='/'){
+				Gopath = Gopath.substr(0,Gopath.length-1);
+			}
+		}
+		GetFiles(Gopath);
+		e.stopPropagation();
+	});
+	PathLeft();
+}
+
+function PathLeft(){
+	var UlWidth = $$("#PathPlaceBtn ul").width();
+	var SpanPathWidth = $$("#PathPlaceBtn").width() - 50;
+	var Ml = UlWidth - SpanPathWidth;
+	if(UlWidth > SpanPathWidth ){
+		$$("#PathPlaceBtn ul").css("left",-Ml)
+	}
+	else{
+		$$("#PathPlaceBtn ul").css("left",0)
+	}
+}
+
+$$("#PathPlaceBtn").on("click", function(e){
+	if($$("#PathPlace").is(":hidden")){
+		$$("#PathPlace").css("display","inline");
+		$$("#PathPlace input").focus();
+		$$(this).hide();
+	}else{
+		$$("#PathPlace").hide();
+		$$(this).css("display","inline");
+	}
+	$$(document).one("click", function(){
+		$$("#PathPlace").hide();
+		$$("#PathPlaceBtn").css("display","inline");
+	});
+	e.stopPropagation();
+});
+$$("#PathPlace").on("click", function(e){
+	e.stopPropagation();
+});
+
+</script>
+<script src="/static/js/upload.js"></script>
+<script src="/static/js/ajax.js"></script>
