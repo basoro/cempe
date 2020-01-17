@@ -193,7 +193,7 @@ function OnlineEditFile(type, fileName) {
 			OnlineEditFile(1,fileName);
 		});*/
 		$("#OnlineEditFileBtn").click(function(){
-			$("#textBody").text(getValue());
+			$("#textBody").text();
 			OnlineEditFile(1,fileName);
 		});
 		$(".btn-editor-close").click(function(){
