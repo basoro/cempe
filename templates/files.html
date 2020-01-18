@@ -615,7 +615,7 @@ function DownloadFile(action){
 		$$.post('/files?action=DownloadFile','path='+fpath+'&url='+fUrl+'&filename='+fname,function(rdata){
 			layer.closeAll();
 			GetFiles(fpath);
-			GetTaskCount();
+			//GetTaskCount();
 			layer.msg(rdata.msg,{icon:rdata.status?1:2});
 		});
 		return;
