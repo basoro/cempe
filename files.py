@@ -50,7 +50,6 @@ class files:
             fp.write(get['zunfile'].file.read());
             fp.close()
             os.system('chown www.www ' + filename);
-            public.WriteLog('Document management','Upload files ['+get['zunfile'].filename+'] to ['+get['path']+'] success!')
             return public.returnMsg(True,'Upload success')
         except:
             import time
@@ -65,7 +64,6 @@ class files:
             fp.write(get['zunfile'].file.read());
             fp.close()
             os.system('chown www.www ' + filename);
-            public.WriteLog('Document management','Upload files ['+"New_uploaded_files_" + opt + ext+'] to ['+get['path']+'] success!')
             return public.returnMsg(True,'Upload success')
 
     def GetDir(self,get):
@@ -116,7 +114,6 @@ class files:
                 os.makedirs(path)
             open(get.path,'w+').close()
             self.SetFileAccept(get.path);
-            public.WriteLog('Document management','Create a file ['+get.path+'] success!')
             return public.returnMsg(True,'The file was created successfully!')
         except:
             return public.returnMsg(False,'File creation failed!')
@@ -128,7 +125,6 @@ class files:
                 return public.returnMsg(False,'The specified directory already exists!')
             os.makedirs(get.path)
             self.SetFileAccept(get.path);
-            public.WriteLog('Document management','Create a directory ['+get.path+'] success!')
             return public.returnMsg(True,'Directory created successfully!')
         except:
             return public.returnMsg(False,'Directory creation failed!')
@@ -153,7 +149,6 @@ class files:
 
             import shutil
             shutil.rmtree(get.path)
-            public.WriteLog('Document management','Delete directory ['+get.path+'] success!')
             return public.returnMsg(True,'Directory deleted successfully!')
         except:
             return public.returnMsg(False,'Directory deletion failed!')
@@ -176,7 +171,6 @@ class files:
             if os.path.exists('data/recycle_bin.pl'):
                 if self.Mv_Recycle_bin(get): return public.returnMsg(True,'Moved file to trash!');
             os.remove(get.path)
-            public.WriteLog('Document management','Delete Files ['+get.path+'] success!')
             return public.returnMsg(True,'File deleted successfully!')
         except:
             return public.returnMsg(False,'File deletion failed!')
@@ -193,7 +187,6 @@ class files:
         import shutil
         try:
             shutil.copyfile(get.sfile, get.dfile)
-            public.WriteLog('Document management','Copy file ['+get.sfile+'] to ['+get.dfile+'] success!')
             self.SetFileAccept(get.dfile);
             return public.returnMsg(True,'File copy succeeded!')
         except:
@@ -211,7 +204,6 @@ class files:
         import shutil
         try:
             shutil.copytree(get.sfile, get.dfile)
-            public.WriteLog('Document management','Copy directory ['+get.sfile+'] to ['+get.dfile+'] success!')
             self.SetFileAccept(get.dfile);
             return public.returnMsg(True,'Directory replication succeeded!')
         except:
@@ -230,7 +222,6 @@ class files:
         import shutil
         try:
             shutil.move(get.sfile, get.dfile)
-            public.WriteLog('Document management','Moving files ['+get.sfile+'] to ['+get.dfile+'] success!')
             return public.returnMsg(True,'File move succeeded!')
         except:
             return public.returnMsg(False,'File or directory move failed!')
@@ -283,7 +274,6 @@ class files:
                     return public.returnMsg(False,'Configuration file error:<br><font style="color:red;">'+isError.replace("\n",'<br>')+'</font>');
                 public.serviceReload();
 
-            public.WriteLog('Document management','File ['+get.path+'] successfully saved!');
             return public.returnMsg(True,'File saved successfully!');
         except:
             return public.returnMsg(False,'File save failed!');
@@ -301,7 +291,6 @@ class files:
             else:
                 os.system("cd '"+get.path+"' && tar -zcvf '"+get.dfile+"' '"+get.sfile+"' > "+tmps+" 2>&1")
             self.SetFileAccept(get.dfile);
-            public.WriteLog("Document management", "Compressed file ["+get.sfile+"] to ["+get.dfile+"] success!");
             return public.returnMsg(True,'File compression succeeded!')
         except:
             return public.returnMsg(False,'File compression failed!')
@@ -320,7 +309,6 @@ class files:
         else:
             os.system("tar zxf '"+get.sfile+"' -C '"+get.dfile+"' > "+tmps+" 2>&1")
         self.SetFileAccept(get.dfile);
-        public.WriteLog("Document management", "Unzip files ["+get.sfile+"] to ["+get.dfile+"] success!");
         return public.returnMsg(True,'File decompression succeeded!')
         #except:
         #    return public.returnMsg(False,'File decompression failed!')
@@ -346,7 +334,6 @@ class files:
                 return public.returnMsg(False,'The specified file or directory does not exist!')
             os.system('chmod '+all+' '+get.access+" '"+get.filename+"'")
             os.system('chown '+all+' '+get.user+':'+get.user+" '"+get.filename+"'")
-            public.WriteLog('Document management','Setting ['+get.filename+'] permission is ['+get.access+'], owner is ['+get.user+']')
             return public.returnMsg(True,'Permission setting is successful!')
         except:
             return public.returnMsg(False,'Permission setting failed!')
@@ -413,7 +400,6 @@ class files:
                         shutil.copyfile(sfile,dfile)
                 except:
                     continue;
-            public.WriteLog('Document management','From ['+web.ctx.session.selected.path+'] bulk copy to ['+get.path+'] success!!')
         else:
             for key in web.ctx.session.selected.data:
                 try:
@@ -423,7 +409,6 @@ class files:
                     i += 1
                 except:
                     continue;
-            public.WriteLog('Document management','From ['+web.ctx.session.selected.path+'] move to batch ['+get.path+'] success!!')
 
         errorCount = len(web.ctx.session.selected.data) - i
         del(web.ctx.session.selected)
@@ -431,14 +416,10 @@ class files:
 
     def DownloadFile(self,get):
         get.path = get.path.encode('utf-8');
-        import db,time
         isTask = '/tmp/panelTask.pl'
         execstr = get.url +'|bt|'+get.path+'/'+get.filename
-        sql = db.Sql()
-        sql.table('tasks').add('name,type,status,addtime,execstr',('download file ['+get.filename+']','download','0',time.strftime('%Y-%m-%d %H:%M:%S'),execstr))
         public.writeFile(isTask,'True')
         self.SetFileAccept(get.path+'/'+get.filename);
-        public.WriteLog('Document management','Download file: ' + get.url + ' to '+ get.path);
         return public.returnMsg(True,'The download task has been added to the queue!')
 
     def GetLastLine(self,inputfile,lineNum):

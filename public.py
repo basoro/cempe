@@ -48,18 +48,6 @@ def getDate():
     import time
     return time.strftime('%Y-%m-%d %X',time.localtime())
 
-def WriteLog(type,logMsg):
-    try:
-        import time
-        import db
-        sql = db.Sql()
-        mDate = time.strftime('%Y-%m-%d %X',time.localtime())
-        data = (type,logMsg,mDate)
-        result = sql.table('logs').add('type,log,addtime',data)
-        writeFile('/tmp/test.pl', str(data))
-    except:
-        pass
-
 def writeFile(filename,str):
     try:
         fp = open(filename, 'w+');
