@@ -186,7 +186,7 @@ function OnlineEditFile(type, fileName) {
 			matchtags:true,
 			autoMatchParens: true
 		});*/
-		var editor = new nanoEditor("#textBody", "javascript", true);
+		const editor = new nanoEditor("#textBody", "javascript", true);
 		//editor.focus();
 		//editor.setSize('auto',h-150);
 		$("#OnlineEditFileBtn").click(function(){
