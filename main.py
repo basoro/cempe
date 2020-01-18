@@ -99,7 +99,7 @@ class panelSystem(common.panelAdmin):
         import system,json
         get = web.input()
         sysObject = system.system()
-        defs = ('GetNetWork','GetDiskInfo','GetCpuInfo','GetBootTime','GetSystemVersion','GetMemInfo','GetSystemTotal','ServiceAdmin','RestartServer','setPassword')
+        defs = ('GetNetWork','GetDiskInfo','GetCpuInfo','GetBootTime','GetSystemVersion','GetMemInfo','GetSystemTotal','ServiceAdmin','RestartServer')
         for key in defs:
             if key == get.action:
                 fun = 'sysObject.'+key+'()'
@@ -120,7 +120,7 @@ class panelFiles(common.panelAdmin):
         defs = ('UploadFile','GetDir','CreateFile','CreateDir','DeleteDir','DeleteFile',
                 'CopyFile','CopyDir','MvFile','GetFileBody','SaveFileBody','Zip','UnZip',
                 'GetFileAccess','SetFileAccess','GetDirSize','SetBatchData','BatchPaste',
-                'DownloadFile')
+                'DownloadFile','setPassword')
         for key in defs:
             if key == get.action:
                 fun = 'filesObject.'+key+'(get)'
