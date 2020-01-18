@@ -174,7 +174,7 @@ function OnlineEditFile(type, fileName) {
 		//$(".layui-layer").css("top", "5%");
 		var h = $(window).height()*0.9;
 		$("#textBody").height(h-160);
-		/*var editor = CodeMirror.fromTextArea(document.getElementById("textBody"), {
+		var editor = CodeMirror.fromTextArea(document.getElementById("textBody"), {
 			extraKeys: {"Ctrl-F": "findPersistent","Ctrl-H":"replaceAll","Ctrl-S":function(){
 					$("#textBody").text(editor.getValue());
 					OnlineEditFile(2,fileName);
@@ -185,12 +185,11 @@ function OnlineEditFile(type, fileName) {
 			matchBrackets:true,
 			matchtags:true,
 			autoMatchParens: true
-		});*/
-		const editor = new nanoEditor("#textBody", "javascript", true);
-		//editor.focus();
-		//editor.setSize('auto',h-150);
+		});
+		editor.focus();
+		editor.setSize('auto',h-150);
 		$("#OnlineEditFileBtn").click(function(){
-			$("#textBody").text(editor.setValue());
+			$("#textBody").text(editor.getValue());
 			OnlineEditFile(1,fileName);
 		});
 		/*$("#OnlineEditFileBtn").click(function(){
