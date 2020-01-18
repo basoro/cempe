@@ -199,9 +199,6 @@ function OnlineEditFile(type, fileName) {
 }
 
 function ServiceAdmin(name,type){
-	if(!isNaN(name)){
-		name = 'php-fpm-' + name;
-	}
 	var data = "name="+name+"&type="+type;
 	var msg = '';
 	switch(type){
