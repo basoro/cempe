@@ -1,7 +1,5 @@
 #coding: utf-8
 import psutil,web,time,os,public,re
-reload(sys)
-sys.setdefaultencoding('utf-8')
 class system:
     setupPath = None;
 
