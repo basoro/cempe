@@ -206,7 +206,6 @@ function GetFiles(Path) {
 			BarTools += ' <button onclick="javascript:BackDir();" class="btn btn-default btn-sm glyphicon glyphicon-arrow-left" title="Back to previous"></button>';
 		}
 		setCookie('Path',rdata.PATH);
-		BarTools += ' <button onclick="javascript:ExecShell(\'' + rdata.PATH + '\');" class="btn btn-default btn-sm glyphicon glyphicon-console" title="Console"></button>';
 		BarTools += ' <button onclick="javascript:GetFiles(\'' + rdata.PATH + '\');" class="btn btn-default btn-sm glyphicon glyphicon-refresh" title="Refresh"></button>';
 		var copyName = getCookie('copyFileName');
 		var cutName = getCookie('cutFileName');
@@ -600,50 +599,6 @@ function ReloadFiles(){
 		var path = $$("#PathPlace input").val();
 		GetFiles(path);
 	},3000);
-}
-
-function ExecShell(action){
-	if(action == 1){
-		var path = $$("#PathPlace input").val();
-		var exec = $$("#mExec").val();
-		$$.post('/files?action=ExecShell','path='+path+'&exec='+exec,function(rdata){
-			if(rdata.status){
-				$$("#mExec").val('');
-				GetShellEcho();
-				//outTimeGet();
-			}
-			else{
-				layer.msg(rdata.msg,{icon:rdata.status?1:2});
-			}
-
-		});
-		return;
-	}
-	layer.open({
-		type: 1,
-		shift: 5,
-		closeBtn: 2,
-		area: '70%',
-		title: 'Execute SHELL',
-		content: '<div class="zun-form-new">\
-					<div class="shellcode"><pre id="Result"></pre></div>\
-					<div class="line noborder">\
-					<input type="text" class="form-control" name="exec" id="mExec" value="" placeholder="SHELL command" onkeydown="if(event.keyCode==13)ExecShell(1);" /><span class="shellbutton" onclick="ExecShell(1)">Send</span>\
-					</div>\
-				</div>'
-	});
-}
-
-function outTimeGet(){
-	setInterval(function(){
-		GetShellEcho();
-	},3000);
-}
-
-function GetShellEcho(){
-	$$.get('/files?action=GetShellEcho',function(rdata){
-		$$("#Result").html(rdata);
-	});
 }
 
 function ReName(type, fileName) {
