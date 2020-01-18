@@ -174,7 +174,7 @@ function OnlineEditFile(type, fileName) {
 		//$(".layui-layer").css("top", "5%");
 		var h = $(window).height()*0.9;
 		$("#textBody").height(h-160);
-		/*var editor = CodeMirror.fromTextArea(document.getElementById("textBody"), {
+		var editor = CodeMirror.fromTextArea(document.getElementById("textBody"), {
 			extraKeys: {"Ctrl-F": "findPersistent","Ctrl-H":"replaceAll","Ctrl-S":function(){
 					$("#textBody").text(editor.getValue());
 					OnlineEditFile(2,fileName);
@@ -191,7 +191,7 @@ function OnlineEditFile(type, fileName) {
 		$("#OnlineEditFileBtn").click(function(){
 			$("#textBody").text(editor.getValue());
 			OnlineEditFile(1,fileName);
-		});*/
+		});
 		$("#OnlineEditFileBtn").click(function(){
 			$("#textBody").text();
 			OnlineEditFile(1,fileName);
