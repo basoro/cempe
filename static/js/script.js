@@ -187,10 +187,10 @@ function OnlineEditFile(type, fileName) {
 			autoMatchParens: true
 		});*/
 		var editor = new nanoEditor("#textBody", "javascript", true);
-		editor.focus();
-		editor.setSize('auto',h-150);
+		//editor.focus();
+		//editor.setSize('auto',h-150);
 		$("#OnlineEditFileBtn").click(function(){
-			$("#textBody").text(editor.getValue());
+			$("#textBody").text(editor.setValue());
 			OnlineEditFile(1,fileName);
 		});
 		/*$("#OnlineEditFileBtn").click(function(){
