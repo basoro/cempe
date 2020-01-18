@@ -245,6 +245,9 @@ function GetConfigFile(type){
 		case 'nginx':
 			fileName = '/etc/nginx/nginx.conf';
 			break;
+		case 'php-fpm':
+			fileName = '/etc/php.ini';
+			break;
 		default:
 			fileName = '/etc/php.ini';
 			break;
