@@ -54,6 +54,13 @@ $def with (content)
 </html>
 
 <script>
+$$("#dologin").click(function(){
+	layer.confirm('Apakah Anda benar-benar ingin keluar dari panel?',{closeBtn:2},function(){
+		window.location.href = '/login?dologin=True';
+	});
+	return false;
+});
+
 function setPassword(to){
 	if(to == 1){
 		p1 = $$("#p1").val();
