@@ -57,12 +57,17 @@ $def with (content)
 function setPassword(to){
 	if(to == 1){
 		p1 = $$("#p1").val();
+		p2 = $$("#p2").val();
 		if(p1 == '' || p1.length < 5){
 			layer.msg('Kata sandi baru kosong atau kurang dari 5 digit!',{icon:2});
 			return;
 		}
+		if(p1 != p2){
+			layer.msg('Kata sandi yang dimasukkan dua kali tidak sama!',{icon:2});
+			return;
+		}
 
-		$$.post('/system?action=setPassword','password1='+p1,function(rdata){
+		$$.post('/files?action=setPassword','password1='+p1+'&password2='+p2,function(rdata){
 			if(rdata.status){
 				layer.closeAll();
 				layer.msg(rdata.msg,{icon:1});
@@ -85,6 +90,8 @@ function setPassword(to){
 				<label><span>Kata sandi</span></label>\
 				<div class='info-r'><input type='password' name='password1' id='p1' value='' placeholder='Kata sandi baru'/></div></div>\
 				<div class='line'>\
+				<label><span>Ulangi</span></label>\
+				<div class='info-r'><input type='password' name='password2' id='p2' value='' placeholder='Ulangi lagi'/></div></div>\
 				<div class='submit-btn'><button type='button' class='btn btn-danger btn-sm' onclick=\"layer.closeAll()\">Batal</button>\
 				<button type='button' class='btn btn-info btn-sm' onclick=\"setPassword(1)\">Simpan</button></div>\
 			</div>"
