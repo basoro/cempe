@@ -17,7 +17,6 @@ $def with (content)
 		<script src="/static/js/bootstrap.min.js"></script>
 		<script src="/static/js/jquery-ui-1.10.4.custom.min.js"></script>
 		<script src="/static/layer/layer.js"></script>
-		<script src="https://raw.githubusercontent.com/jakiestfu/Behave.js/master/behave.js"></script>
 		<script src="/static/js/script.js?$web.ctx.session.version"></script>
 		<!--[if lte IE 9]>
 		<script src="/static/js/requestAnimationFrame.js"></script>
@@ -38,7 +37,7 @@ $def with (content)
 				<ul class="nav navbar-nav navbar-right" style="margin-right:10px;">
 					<li class="nav-item"><a href="/">Beranda</a></li>
 					<li class="nav-item"><a href="javascript:openPath('/opt/slemp/wwwroot');">Kelola Berkas</a></li>
-					<li class="nav-item"><a href="/crontab">PHP MyAdmin</a></li>
+					<li class="nav-item"><a href="/phpmyadmin/">PHP MyAdmin</a></li>
 					<li class="nav-item"><a href="javascript:;" onclick="setPassword()">Kata Kunci</a></li>
 					<li class="nav-item"><a href="javascript:;" id="dologin">Keluar</a></li>
 				</ul>
@@ -53,3 +52,49 @@ $def with (content)
 		</div>
 	</body>
 </html>
+
+<script>
+function setPassword(to){
+	if(to == 1){
+		p1 = $$("#p1").val();
+		p2 = $$("#p2").val();
+		if(p1 == '' || p1.length < 5){
+			layer.msg('Kata sandi baru kosong atau kurang dari 5 digit!',{icon:2});
+			return;
+		}
+		if(p1 != p2){
+			layer.msg('Kata sandi yang dimasukkan dua kali tidak sama!',{icon:2});
+			return;
+		}
+
+		$$.post('/system?action=setPassword','password1='+p1+'&password2='+p2,function(rdata){
+			if(rdata.status){
+				layer.closeAll();
+				layer.msg(rdata.msg,{icon:1});
+			}else{
+				layer.msg(rdata.msg,{icon:2});
+			}
+		})
+		return;
+	}
+
+	layer.open({
+		type: 1,
+		area: '290px',
+		title: 'Ubah kata sandi',
+		closeBtn: 2,
+		shift: 5,
+		shadeClose: false,
+		content: "<div class='zun-form-new'>\
+				<div class='line'>\
+				<label><span>Kata sandi</span></label>\
+				<div class='info-r'><input type='password' name='password1' id='p1' value='' placeholder='Kata sandi baru'/></div></div>\
+				<div class='line'>\
+				<label><span>Ulangi</span></label>\
+				<div class='info-r'><input type='password' name='password2' id='p2' value='' placeholder='Ulangi lagi'/></div></div>\
+				<div class='submit-btn'><button type='button' class='btn btn-danger btn-sm' onclick=\"layer.closeAll()\">Batal</button>\
+				<button type='button' class='btn btn-info btn-sm' onclick=\"setPassword(1)\">Simpan</button></div>\
+			</div>"
+	});
+}
+</script>

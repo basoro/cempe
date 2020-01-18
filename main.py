@@ -99,7 +99,7 @@ class panelSystem(common.panelAdmin):
         import system,json
         get = web.input()
         sysObject = system.system()
-        defs = ('GetNetWork','GetDiskInfo','GetCpuInfo','GetBootTime','GetSystemVersion','GetMemInfo','GetSystemTotal','ServiceAdmin','RestartServer')
+        defs = ('GetNetWork','GetDiskInfo','GetCpuInfo','GetBootTime','GetSystemVersion','GetMemInfo','GetSystemTotal','ServiceAdmin','RestartServer','setPassword')
         for key in defs:
             if key == get.action:
                 fun = 'sysObject.'+key+'()'

@@ -118,3 +118,9 @@ class system:
         if not public.IsRestart(): return public.returnMsg(False,'Please wait for all installation tasks to complete before executing!');
         public.ExecShell("/etc/init.d/slemp stop && init 6 &");
         return public.returnMsg(True,'Command sent successfully!');
+
+    def setPassword(self,get):
+        if get.password1 != get.password2: return public.returnMsg(False,'Kata sandi yang dimasukkan dua kali tidak cocok, silakan masukkan kembali!')
+        if len(get.password1) < 5: return public.returnMsg(False,'Kata sandi pengguna tidak boleh kurang dari 5 digit!')
+        public.M('users').where("username=?",(web.ctx.session.username,)).setField('password',public.md5(get.password1))
+        return public.returnMsg(True,'Kata sandi berhasil dimodifikasi.!')
