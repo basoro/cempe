@@ -206,7 +206,7 @@ function GetFiles(Path) {
 			BarTools += ' <button onclick="javascript:BackDir();" class="btn btn-default btn-sm glyphicon glyphicon-arrow-left" title="Back to previous"></button>';
 		}
 		setCookie('Path',rdata.PATH);
-		//BarTools += ' <button onclick="javascript:ExecShell(\'' + rdata.PATH + '\');" class="btn btn-default btn-sm glyphicon glyphicon-console" title="Console"></button>';
+		BarTools += ' <button onclick="javascript:ExecShell(\'' + rdata.PATH + '\');" class="btn btn-default btn-sm glyphicon glyphicon-console" title="Console"></button>';
 		BarTools += ' <button onclick="javascript:GetFiles(\'' + rdata.PATH + '\');" class="btn btn-default btn-sm glyphicon glyphicon-refresh" title="Refresh"></button>';
 		var copyName = getCookie('copyFileName');
 		var cutName = getCookie('cutFileName');
