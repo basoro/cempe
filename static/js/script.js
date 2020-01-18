@@ -192,10 +192,10 @@ function OnlineEditFile(type, fileName) {
 			$("#textBody").text(editor.getValue());
 			OnlineEditFile(1,fileName);
 		});
-		$("#OnlineEditFileBtn").click(function(){
+		/*$("#OnlineEditFileBtn").click(function(){
 			$("#textBody").text();
 			OnlineEditFile(1,fileName);
-		});
+		});*/
 		$(".btn-editor-close").click(function(){
 			layer.close(editorbox);
 		})
