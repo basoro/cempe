@@ -18,7 +18,6 @@ $def with (tData)
 							</div>
 						</div>
 						<button class="btn btn-default btn-sm pull-left" onclick="UploadFiles()">Upload</button>
-						<button class="btn btn-default btn-sm pull-left" onclick="DownloadFile()" title='Download file to server' style="margin:0 5px">Download</button>
 						<span id='BarTools'></span>
 						<span id='Batch'></span>
 						<span id='comlist' class="comlist"></span>
@@ -601,54 +600,6 @@ function ReloadFiles(){
 		var path = $$("#PathPlace input").val();
 		GetFiles(path);
 	},3000);
-}
-
-function DownloadFile(action){
-
-	if(action == 1){
-		var fUrl = $$("#mUrl").val();
-		fUrl = encodeURI(fUrl);
-		fpath = $$("#dpath").val();
-		fname = $$("#dfilename").val();
-		layer.closeAll();
-		layer.msg('Adding queue, please wait..',{time:0,icon:16});
-		$$.post('/files?action=DownloadFile','path='+fpath+'&url='+fUrl+'&filename='+fname,function(rdata){
-			layer.closeAll();
-			GetFiles(fpath);
-			//GetTaskCount();
-			layer.msg(rdata.msg,{icon:rdata.status?1:2});
-		});
-		return;
-	}
-	var path = $$("#PathPlace input").val();
-	layer.open({
-		type: 1,
-		shift: 5,
-		closeBtn: 2,
-		area: '500px',
-		title: 'Download file',
-		content: '<form class="zun-form-new">\
-					<div class="line noborder">\
-					<span class="name">URL address:</span><input type="text" class="form-control-text" name="url" id="mUrl" value="" placeholder="Url address" />\
-					</div>\
-					<div class="line noborder">\
-					<span class="name">Download to:</span><input type="text" class="form-control-text" name="path" id="dpath" value="'+path+'" placeholder="Download to" />\
-					</div>\
-					<div class="line noborder">\
-					<span class="name">File name:</span><input type="text" class="form-control-text" name="filename" id="dfilename" value="" placeholder="Save file name" />\
-					</div>\
-					<div class="submit-btn">\
-					<button type="button" class="btn btn-danger btn-sm btn-title" onclick="layer.closeAll()">Cancel</button>\
-					<button type="button" id="dlok" class="btn btn-info btn-sm btn-title dlok" onclick="DownloadFile(1)">Submit</button>\
-					</div>\
-				</form>'
-	});
-	fly("dlok");
-	$$("#mUrl").keyup(function(){
-		durl = $$(this).val()
-		tmp = durl.split('/')
-		$$("#dfilename").val(tmp[tmp.length-1])
-	});
 }
 
 function ExecShell(action){
