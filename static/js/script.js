@@ -143,15 +143,7 @@ function OnlineEditFile(type, fileName) {
 	}
 	$.post('/files?action=GetFileBody', 'path=' + fileName, function(rdata) {
 		layer.close(loadT);
-		var encodings = ["utf-8","gbk"];
-		var encoding = ''
-		var opt = ''
 		var val = ''
-		for(var i=0;i<encodings.length;i++){
-			opt = rdata.encoding == encodings[i] ? 'selected':'';
-			encoding += '<option value="'+encodings[i]+'" '+opt+'>'+encodings[i]+'</option>';
-		}
-
 		var editorbox = layer.open({
 			type: 1,
 			shift: 5,
@@ -160,8 +152,6 @@ function OnlineEditFile(type, fileName) {
 			title: 'Online editing [' + fileName + ']',
 			content: '<form class="zun-form-new" style="padding-top:10px">\
 			<div class="line noborder">\
-			<p style="color:red;margin-bottom:10px">Hint: Ctrl+F to search for keywords, Ctrl+G to find the next one, Ctrl+S to save, Ctrl+Shift+R to find replacements! \
-			<select name="encoding" style="width: 74px;position: absolute;top: 11px;right: 14px;height: 22px;z-index: 9999;border-radius: 0;">'+encoding+'</select></p>\
 			<textarea class="mCustomScrollbar" id="textBody" style="width:100%;margin:0 auto;line-height: 1.8;position: relative;top: 10px;" value="" />\
 			</div>\
 			<div class="submit-btn" style="position:absolute; bottom:0; width:100%">\
