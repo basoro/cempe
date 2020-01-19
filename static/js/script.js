@@ -177,7 +177,7 @@ function OnlineEditFile(type, fileName) {
 			autoMatchParens: true
 		});
 		editor.focus();
-		editor.setSize('auto',h-120);
+		editor.setSize('auto',h-110);
 		$("#OnlineEditFileBtn").click(function(){
 			$("#textBody").text(editor.getValue());
 			OnlineEditFile(1,fileName);
