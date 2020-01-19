@@ -53,7 +53,7 @@ $def with (data)
 				<div class="bw-title">Status Server</div>
 				<div class="server-circle">
 		      <ul class="row" id="systemInfoList">
-		        <li class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+		        <li class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
 		          <h3>CPU</h3>
 		          <div class="circle">
 		            <div class="pie_left">
@@ -66,7 +66,7 @@ $def with (data)
 		          </div>
 		          <h4 id="core">Memeriksa</h4>
 		        </li>
-		        <li class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+		        <li class="col-xs-12 col-sm-6 col-md-6 col-lg-3">
 		          <h3>RAM</h3>
 		          <div class="circle">
 		            <div class="pie_left">
@@ -163,7 +163,7 @@ $def with (data)
 							$$("#messageError").append('<p><span class="glyphicon glyphicon-alert" style="color: #f39c12; margin-right: 10px;"></span>Disk partition ['+rdata[i].path+'], the available capacity is less than 1GB, which may cause MySQL to stop automatically, the panel can not be accessed, etc. Please clean up in time!</p>')
 						}
 					}
-					dBody = '<li class="col-xs-12 col-sm-6 col-md-6 col-lg-4">'
+					dBody = '<li class="col-xs-12 col-sm-6 col-md-6 col-lg-3">'
 								+'<h3>'+rdata[i].path+'</h3>'
 								+'<div class="circle">'
 									+'<div class="pie_left">'
