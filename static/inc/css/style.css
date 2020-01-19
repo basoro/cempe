@@ -1831,7 +1831,8 @@ select[multiple].form-control {
 
 }
 .server-circle ul li {
-    padding: 20px;
+    padding: 0px;
+    margin: 20px;
     list-style:none;
 }
 .server-circle ul li h3, .server-circle ul li h4 {
