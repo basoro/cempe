@@ -16,6 +16,7 @@ urls = (
     '/public'  , 'panelPublic',
     '/files'   , 'panelFiles',
     '/download', 'panelDownload',
+    '/test', 'panelTest',
 )
 
 
@@ -43,6 +44,12 @@ class panelIndex(common.panelAdmin):
         import system
         data = []
         return render.index(data)
+
+class panelIndex(common.panelAdmin):
+    def GET(self):
+        import system
+        data = []
+        return render.test(data)
 
 class panelLogin(common.panelSetup):
     def GET(self):
