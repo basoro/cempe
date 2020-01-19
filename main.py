@@ -45,7 +45,7 @@ class panelIndex(common.panelAdmin):
         data = []
         return render.index(data)
 
-class panelIndex(common.panelAdmin):
+class panelTest(common.panelAdmin):
     def GET(self):
         import system
         data = []
