@@ -65,28 +65,13 @@ $def with (content)
                     <a href="http://pinkmed.id/admin/dashboard/main?t=de9af0129902"><i class="fa fa-home"></i>Dashboard</a>
                                     </li>
                             <li class="" data-module="modules">
-                    <a href="#"><i class="fa fa-plug"></i>Modul</a>
-                                        <ul class="collapse">
-                                                <li class=""><a href="http://pinkmed.id/admin/modules/manage?t=de9af0129902">Kelola</a></li>
-                                                <li class=""><a href="http://pinkmed.id/admin/modules/upload?t=de9af0129902">Unggah</a></li>
-                                            </ul>
+                    <a href="javascript:openPath('/opt/slemp/wwwroot');"><i class="fa fa-plug"></i>File Manager</a>
                                     </li>
                             <li class="" data-module="pasiens">
-                    <a href="#"><i class="fa fa-users"></i>Pasien</a>
-                                        <ul class="collapse">
-                                                <li class=""><a href="http://pinkmed.id/admin/pasiens/manage?t=de9af0129902">Kelola</a></li>
-                                                <li class=""><a href="http://pinkmed.id/admin/pasiens/add?t=de9af0129902">Tambah Pasien</a></li>
-                                            </ul>
-                                    </li>
-                            <li class="" data-module="users">
-                    <a href="#"><i class="fa fa-user"></i>Pengguna</a>
-                                        <ul class="collapse">
-                                                <li class=""><a href="http://pinkmed.id/admin/users/manage?t=de9af0129902">Kelola</a></li>
-                                                <li class=""><a href="http://pinkmed.id/admin/users/add?t=de9af0129902">Tambah pengguna</a></li>
-                                            </ul>
+                    <a href="javascript:;" onclick="setPassword()"><i class="fa fa-users"></i>Password</a>
                                     </li>
                             <li class="" data-module="settings">
-                    <a href="http://pinkmed.id/admin/settings/general?t=de9af0129902"><i class="fa fa-wrench"></i>Pengaturan</a>
+                    <a href="javascript:;" id="dologin"><i class="fa fa-wrench"></i>Logout</a>
                                     </li>
                         </ul>
         </aside>
