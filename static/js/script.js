@@ -152,7 +152,7 @@ function OnlineEditFile(type, fileName) {
 			title: 'Online editing [' + fileName + ']',
 			content: '<form class="zun-form-new" style="padding-top:10px">\
 			<div class="line noborder">\
-			<textarea class="mCustomScrollbar" id="textBody" style="width:100%;margin:0 auto;line-height: 1.8;position: relative;top: 10px;" value="" />\
+			<textarea class="mCustomScrollbar" id="textBody" style="width:100%;height:100%;margin:0 auto;line-height: 1.8;position: relative;top: 10px;" value="" />\
 			</div>\
 			<div class="submit-btn" style="position:absolute; bottom:0; width:100%">\
 			<button type="button" class="btn btn-danger btn-sm btn-title btn-editor-close">Close</button>\
