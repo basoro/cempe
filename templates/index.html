@@ -5,34 +5,39 @@ $def with (data)
 		    <div class="alert alert-warning" id="messageError" style="display: none;">
 		    </div>
 		  </div>
-		  <div class="system-info">
-		    <div class="tips">
-		      Informasi Sistem
-		    </div>
-		    <div class="list-serve" style="padding:0 15px;">
-		      <div class="row">
-		        <div class="col-md-3 col-sm-6 col-xs-12">
-		          <div class="info-box">
-		            <span class="info-box-icon bg-aqua"><i class="glyphicon glyphicon-hdd"></i></span>
-		            <div class="info-box-content">
-		              <span class="info-box-text">Sistem Operasi</span>
-		              <span class="info-box-number" id="info">Getting</span>
-		            </div>
-		          </div>
-		        </div>
-		        <div class="col-md-3 col-sm-6 col-xs-12">
-		          <div class="info-box">
-		            <span class="info-box-icon bg-red"><i class="glyphicon glyphicon-time"></i></span>
-		            <div class="info-box-content">
-		              <span class="info-box-text">Uptime Server</span>
-		              <span class="info-box-number" id="running"></span>
-		            </div>
-		          </div>
-		        </div>
-		        <div class="clearfix visible-sm-block"></div>
-		      </div>
-		    </div>
-		  </div>
+
+			<div class="col-sm-4">
+	        <div class="panel panel-default">
+	              <div class="panel-heading">
+	                    <h3 class="panel-title">Sistem Operasi</h3>
+	              </div>
+	              <div class="panel-body">
+	                    <h1 class="text-center" id="info"></h1>
+	              </div>
+	        </div>
+	    </div>
+	    <div class="col-sm-4">
+	        <div class="panel panel-default">
+	              <div class="panel-heading">
+	                    <h3 class="panel-title">Uptime Server</h3>
+	              </div>
+	              <div class="panel-body">
+	                    <h1 class="text-center" id="running"></h1>
+	              </div>
+	        </div>
+	    </div>
+	    <div class="col-sm-4">
+	        <div class="panel panel-default">
+	              <div class="panel-heading">
+	                    <h3 class="panel-title">Kunjungan</h3>
+	              </div>
+	              <div class="panel-body">
+	                    <h1 class="text-center">0</h1>
+	              </div>
+	        </div>
+	    </div>
+
+
 		  <div class="server">
 		    <div class="s-title">
 		      <h3>Status Server</h3>
