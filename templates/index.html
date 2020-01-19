@@ -1,7 +1,7 @@
 $def with (data)
 <h2 class="content-title">Dashboard</h2>
 <article class="row">
-		  <div class="danger-tips">
+		  <div class="col-sm-12 danger-tips">
 		    <div class="alert alert-warning" id="messageError" style="display: none;">
 		    </div>
 		  </div>
@@ -196,7 +196,7 @@ $def with (data)
 
 				if(memFree < 64){
 					$$("#messageError").show();
-					$$("#messageError").append('<p style="margin-left:20px;margin-right:20px;"><span class="glyphicon glyphicon-alert" style="color: #f39c12; margin-right: 10px;"></span> Currently available physical memory is less than 64M, which may cause MySQL to automatically stop, site 502 and other errors, please try to free the memory!</p>')
+					$$("#messageError").append('<p><span class="glyphicon glyphicon-alert" style="color: #f39c12; margin-right: 10px;"></span> Currently available physical memory is less than 64M, which may cause MySQL to automatically stop, site 502 and other errors, please try to free the memory!</p>')
 				}
 				setImg();
 			});
