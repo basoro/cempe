@@ -8,29 +8,19 @@ $def with (content)
 		<meta name="renderer" content="webkit">
 		<title>$web.ctx.session.webname</title>
 		<link rel="shortcut icon" href="/static/favicon.ico" type="image/x-icon" />
-
-		<link href="/static/inc/css/bootstrap.min.css?$web.ctx.session.version" rel="stylesheet">
-    <link href="/static/inc/css/bootstrap-theme.min.css?$web.ctx.session.version" rel="stylesheet">
-    <link href="/static/inc/css/animate.min.css" rel="stylesheet">
-    <link href="/static/inc/css/56fa629212.css" rel="stylesheet">
+		<link href="/static/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet">
 		<link href="/static/css/reset.css?$web.ctx.session.version" rel="stylesheet">
 		<link href="/static/css/site.css?$web.ctx.session.version" rel="stylesheet">
-		<link href="/static/inc/css/style.css?$web.ctx.session.version" rel="stylesheet">
 		<link href="/static/css/file.css?$web.ctx.session.version" rel="stylesheet">
 		<link href="/static/codemirror/lib/codemirror.css" rel="stylesheet">
 		<link href="/static/codemirror/addon/hint/show-hint.css" rel="stylesheet">
 		<link href="/static/codemirror/addon/dialog/dialog.css" rel="stylesheet">
 		<link href="/static/codemirror/addon/search/matchesonscrollbar.css" rel="stylesheet">
-
 		<script src="/static/js/jquery-1.10.2.min.js"></script>
 		<script src="/static/js/base64.js"></script>
+		<script src="/static/js/bootstrap.min.js"></script>
 		<script src="/static/js/jquery-ui-1.10.4.custom.min.js"></script>
-
-    <script src="/static/inc/jscripts/bootstrap.min.js?$web.ctx.session.version"></script>
-    <script src="/static/inc/jscripts/bootbox.min.js?$web.ctx.session.version"></script>
-    <script src="/static/inc/jscripts/tinynav.min.js?$web.ctx.session.version"></script>
-		<script src="/static/inc/js/scripts.js?$web.ctx.session.version"></script>
-
+		<script src="/static/layer/layer.js"></script>
 		<script src="/static/layer/layer.js"></script>
 		<script src="/static/js/script.js?$web.ctx.session.version"></script>
 		<script src="/static/codemirror/lib/codemirror.js"></script>
@@ -45,55 +35,32 @@ $def with (content)
 		<![endif]-->
 	</head>
 	<body>
-
-		<div id="wrapper">
-
-        <aside id="sidebar-wrapper">
-            <div class="sidebar-brand">
-                <img src="/static/inc/img/logo.png" alt="logo">
-                <h2 class="pink">Pink<span>MED</span></h2>
-            </div>
-            <ul class="sidebar-nav">
-							<li class="nav-item"><a href="/">Beranda</a></li>
-							<li class="nav-item"><a href="javascript:openPath('/opt/slemp/wwwroot');">Kelola Berkas</a></li>
-							<li class="nav-item"><a href="javascript:;" onclick="setPassword()">Kata Kunci</a></li>
-							<li class="nav-item"><a href="javascript:;" id="dologin">Keluar</a></li>
-            </ul>
-        </aside>
-
-        <div id="navbar-wrapper">
-            <nav class="navbar navbar-inverse">
-                <div class="container-fluid">
-                    <div class="navbar-header">
-                        <a href="#" class="navbar-brand" id="sidebar-toggle"><i class="fa fa-bars"></i></a>
-                    </div>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="hidden-sm hidden-xs"><a href="#" class="small"><span class="label label-danger">Updata available</span></a></li>
-                        <li class="hello hidden-sm hidden-xs"><a href="#"><i class="fa fa-fw fa-user"></i> <span>Welcome Admin</span></a></li>
-                        <li><a href="/logout/" class="fa fa-power-off" data-toggle="tooltip" data-placement="bottom" title="Logout"></a></li>
-                    </ul>
-                </div>
-            </nav>
-        </div>
-
-        <section id="content-wrapper">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-12">
-												<a style="display: none;" id="defaultPath">$web.ctx.session.configPath</a>
-												$:content
-                    </div>
-                </div>
-            </div>
-        </section>
-
-    </div>
-
-		<footer class="hidden-xs">
-        <a href="https://github.com/sruupl/batflat/issues" target="_blank" class="text-danger"><i class="fa fa-fw fa-bug"></i>Report a bug.</a>
-        Created by <a href="http://sruu.pl/" target="_blank">Sruu.pl</a>
-    </footer>
-
+		<nav class="navbar navbar-inverse navbar-fixed-top">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="/" style="margin-right:20px;">$web.ctx.session.webname</a>
+			</div>
+			<div id="navbar" class="collapse navbar-collapse">
+				<ul class="nav navbar-nav navbar-right" style="margin-right:10px;">
+					<li class="nav-item"><a href="/">Beranda</a></li>
+					<li class="nav-item"><a href="javascript:openPath('/opt/slemp/wwwroot');">Kelola Berkas</a></li>
+					<li class="nav-item"><a href="javascript:;" onclick="setPassword()">Kata Kunci</a></li>
+					<li class="nav-item"><a href="javascript:;" id="dologin">Keluar</a></li>
+				</ul>
+			</div><!--/.nav-collapse -->
+		</nav>
+		<div class="bt-warp">
+			<div id="container" class="container-fluid">
+				<a style="display: none;" id="defaultPath">$web.ctx.session.configPath</a>
+				$:content
+				<div class="footer">$web.ctx.session.brand $web.ctx.session.version © 2018-2019 By <a href="https://slemp.basoro.id" target="_blank">Ataaka</a></div></div>
+			</div>
+		</div>
 	</body>
 </html>
 
