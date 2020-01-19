@@ -148,7 +148,7 @@ function OnlineEditFile(type, fileName) {
 			type: 1,
 			shift: 5,
 			closeBtn: 2,
-			area: ['100%', '90%'],
+			area: ['90%', '90%'],
 			title: 'Online editing [' + fileName + ']',
 			content: '<form class="zun-form-new" style="padding-top:10px">\
 			<div class="line noborder">\
@@ -163,7 +163,7 @@ function OnlineEditFile(type, fileName) {
 		$("#textBody").text(rdata.data);
 		//$(".layui-layer").css("top", "5%");
 		var h = $(window).height()*0.9;
-		$("#textBody").height(h-160);
+		$("#textBody").height(h-60);
 		var editor = CodeMirror.fromTextArea(document.getElementById("textBody"), {
 			extraKeys: {"Ctrl-F": "findPersistent","Ctrl-H":"replaceAll","Ctrl-S":function(){
 					$("#textBody").text(editor.getValue());
@@ -177,7 +177,7 @@ function OnlineEditFile(type, fileName) {
 			autoMatchParens: true
 		});
 		editor.focus();
-		editor.setSize('auto',h-150);
+		editor.setSize('auto',h-50);
 		$("#OnlineEditFileBtn").click(function(){
 			$("#textBody").text(editor.getValue());
 			OnlineEditFile(1,fileName);
