@@ -119,6 +119,11 @@ class system:
         #    public.writeFile(statusData,get.type)
         #return public.returnMsg(True,'execution succeed');
 
+    def StatusNginx(self):
+        import public
+        status = public.readFile('/opt/slemp/server/panel/data/status-nginx.pl')
+        return status
+
     def RestartServer(self):
         if not public.IsRestart(): return public.returnMsg(False,'Please wait for all installation tasks to complete before executing!');
         public.ExecShell("/etc/init.d/slemp stop && init 6 &");
