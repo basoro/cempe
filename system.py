@@ -108,8 +108,10 @@ class system:
 
         #if get.name != 'nginx':
         os.system(execStr);
-        if get.type != 'restart':
-            public.writeFile(statusData,get.type)
+        if get.type = 'stop':
+            public.writeFile(statusData,'stop')
+        else:
+            public.writeFile(statusData,'start')
         return public.returnMsg(True,'execution succeed');
 
         #result = public.ExecShell(execStr)
