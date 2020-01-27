@@ -13,6 +13,7 @@ class system:
         data['cpuRealUsed'] = cpu[0]
         data['time'] = self.GetBootTime()
         data['system'] = self.GetSystemVersion()
+        data['nginx'] = self.StatusNginx()
         return data
 
     def GetSystemVersion(self):
