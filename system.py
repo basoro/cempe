@@ -108,7 +108,11 @@ class system:
 
         #if get.name != 'nginx':
         os.system(execStr);
-        if get.type != 'restart':
+        if get.type != 'reload':
+            public.writeFile(statusData,get.type)
+        else if get.type = 'restart':
+            public.writeFile(statusData,'start')
+        else:
             public.writeFile(statusData,get.type)
         return public.returnMsg(True,'execution succeed');
 
