@@ -109,16 +109,23 @@ class system:
 
         if get.name != 'nginx':
             os.system(execStr);
+            status = public.ExecShell(execStatus)
+            if status[1].find('running') == 1:
+                public.writeFile('start',statusData)
+            else:
+                public.writeFile('stop',statusData)
             return public.returnMsg(True,'execution succeed');
         result = public.ExecShell(execStr)
-        status = public.ExecShell(execStatus)
 
-        if status[1].find('running') == 1:
-            public.writeFile('start',statusData)
 
         if result[1].find('nginx.pid') != -1:
             public.ExecShell('pkill -9 nginx && sleep 1');
             public.ExecShell('/etc/init.d/nginx start');
+            status = public.ExecShell(execStatus)
+            if status[1].find('running') == 1:
+                public.writeFile('start',statusData)
+            else:
+                public.writeFile('stop',statusData)
         return public.returnMsg(True,'execution succeed');
 
     def RestartServer(self):
