@@ -119,12 +119,6 @@ class system:
         #    public.writeFile(statusData,get.type)
         #return public.returnMsg(True,'execution succeed');
 
-    def GetStatus(self):
-        data['nginx'] = self.StatusNginx()
-        #data['mysql'] = self.StatusMySQL()
-        #data['php'] = self.StatusPHP()
-        return data
-
     def StatusNginx(self):
         import public
         status = public.readFile('/opt/slemp/server/panel/data/status-nginx.pl')
