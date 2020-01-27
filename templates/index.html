@@ -111,7 +111,7 @@ $def with (data)
                     <a class="link" href="javascript:GetConfigFile('nginx');">Config</a> |
 						        <a class="link" href="javascript:ServiceAdmin('nginx','reload');">Reload</a>
                   </td>
-					        <td><span class="ico-start glyphicon glyphicon-play"></span></td>
+					        <td><span class="ico-start glyphicon glyphicon-play" id="nginx"></span></td>
 					        <td style="text-align: right;padding-right:18px"><a class="link" href="javascript:ServiceAdmin('nginx','start');">Start</a> |
                     <a class="link" href="javascript:ServiceAdmin('nginx','stop');">Stop</a></td>
 				        </tr>
@@ -203,6 +203,7 @@ $def with (data)
 				$$("#running").html(info.time);
 				$$("#core").html(info.cpuNum + " Inti");
 				$$("#state").html(info.cpuRealUsed);
+        $$("#nginx").html(info.nginx);
 				var memFree = info.memTotal - info.memRealUsed;
 
 				if(memFree < 64){
