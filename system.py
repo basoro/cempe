@@ -110,10 +110,6 @@ class system:
         os.system(execStr);
         if get.type != 'reload':
             public.writeFile(statusData,get.type)
-        else if get.type = 'restart':
-            public.writeFile(statusData,'start')
-        else:
-            public.writeFile(statusData,get.type)
         return public.returnMsg(True,'execution succeed');
 
         #result = public.ExecShell(execStr)
