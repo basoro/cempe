@@ -14,6 +14,8 @@ class system:
         data['time'] = self.GetBootTime()
         data['system'] = self.GetSystemVersion()
         data['nginx'] = self.StatusNginx()
+        data['mysql'] = self.StatusMySQL()
+        data['php'] = self.StatusPHP()
         return data
 
     def GetSystemVersion(self):

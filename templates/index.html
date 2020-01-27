@@ -118,7 +118,7 @@ $def with (data)
 								<tr>
 									<td style="padding-left:18px">MySQL Database</td>
 									<td class="visible-lg visible-md visible-sm"><a class="link" href="javascript:GetConfigFile('mysql');">Config</a> | <a class="link" href="javascript:ServiceAdmin('mysqld','reload');">Reload</a></td>
-									<td><span class="ico-start glyphicon glyphicon-play"></span></td>
+                  <td><span class="text-capitalize" id="mysql"></span></td>
 									<td style="text-align: right;padding-right:18px">
                     <a class="link" href="javascript:ServiceAdmin('mysqld','start');">Start</a> |
                     <a class="link" href="javascript:ServiceAdmin('mysqld','stop');">Stop</a>
@@ -130,7 +130,7 @@ $def with (data)
                     <a class="link" href="javascript:GetConfigFile('php-fpm');">Config</a> |
                     <a class="link" href="javascript:ServiceAdmin('php-fpm','reload');">Reload</a>
                   </td>
-									<td><span class="ico-start glyphicon glyphicon-play"></span></td>
+                  <td><span class="text-capitalize" id="php"></span></td>
 									<td style="text-align: right;padding-right:18px">
                     <a class="link" href="javascript:ServiceAdmin('php-fpm','start');">Start</a> |
                     <a class="link" href="javascript:ServiceAdmin('php-fpm','stop');">Stop</a>
@@ -204,6 +204,8 @@ $def with (data)
 				$$("#core").html(info.cpuNum + " Inti");
 				$$("#state").html(info.cpuRealUsed);
         $$("#nginx").html(info.nginx);
+        $$("#mysql").html(info.mysql);
+        $$("#php").html(info.php);
 				var memFree = info.memTotal - info.memRealUsed;
 
 				if(memFree < 64){
