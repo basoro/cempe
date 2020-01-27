@@ -119,9 +119,25 @@ class system:
         #    public.writeFile(statusData,get.type)
         #return public.returnMsg(True,'execution succeed');
 
+    def GetStatus(self):
+        status['nginx'] = self.StatusNginx()
+        status['mysql'] = self.StatusMySQL()
+        status['sysphptem'] = self.StatusPHP()
+        return status
+
     def StatusNginx(self):
         import public
         status = public.readFile('/opt/slemp/server/panel/data/status-nginx.pl')
+        return status
+
+    def StatusMySQL(self):
+        import public
+        status = public.readFile('/opt/slemp/server/panel/data/status-mysql.pl')
+        return status
+
+    def StatusPHP(self):
+        import public
+        status = public.readFile('/opt/slemp/server/panel/data/status-php.pl')
         return status
 
     def RestartServer(self):
