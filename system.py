@@ -104,28 +104,18 @@ class system:
         get = web.input()
 
         execStr = "/etc/init.d/"+get.name+" "+get.type
-        execStatus = "/etc/init.d/"+get.name+" status"
-        statusData = "/opt/slemp/server/panel/data/"+get.name+".status"
+        statusData = "/opt/slemp/server/panel/data/status-"+get.name+".pl"
 
         if get.name != 'nginx':
             os.system(execStr);
-            status = public.ExecShell(execStatus)
-            if status[1].find('running') == 1:
-                public.writeFile('start',statusData)
-            else:
-                public.writeFile('stop',statusData)
+            public.writeFile('start',statusData)
             return public.returnMsg(True,'execution succeed');
+
         result = public.ExecShell(execStr)
-
-
         if result[1].find('nginx.pid') != -1:
             public.ExecShell('pkill -9 nginx && sleep 1');
             public.ExecShell('/etc/init.d/nginx start');
-            status = public.ExecShell(execStatus)
-            if status[1].find('running') == 1:
-                public.writeFile('start',statusData)
-            else:
-                public.writeFile('stop',statusData)
+            public.writeFile('start',statusData)
         return public.returnMsg(True,'execution succeed');
 
     def RestartServer(self):
