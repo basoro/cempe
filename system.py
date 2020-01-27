@@ -109,7 +109,7 @@ class system:
 
         os.system(execStr);
         if get.type != 'reload':
-            public.writeFile(statusData,'{status: '+get.type+'}')
+            public.writeFile(statusData,get.type)
         return public.returnMsg(True,'execution succeed');
 
     def StatusNginx(self):
