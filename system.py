@@ -106,17 +106,18 @@ class system:
         execStr = "/etc/init.d/"+get.name+" "+get.type
         statusData = "/opt/slemp/server/panel/data/status-"+get.name+".pl"
 
-        if get.name != 'nginx':
-            os.system(execStr);
-            public.writeFile(statusData,get.type)
-            return public.returnMsg(True,'execution succeed');
-
-        result = public.ExecShell(execStr)
-        if result[1].find('nginx.pid') != -1:
-            public.ExecShell('pkill -9 nginx && sleep 1');
-            public.ExecShell('/etc/init.d/nginx start');
+        #if get.name != 'nginx':
+        os.system(execStr);
+        if get.type != 'restart':
             public.writeFile(statusData,get.type)
         return public.returnMsg(True,'execution succeed');
+
+        #result = public.ExecShell(execStr)
+        #if result[1].find('nginx.pid') != -1:
+        #    public.ExecShell('pkill -9 nginx && sleep 1');
+        #    public.ExecShell('/etc/init.d/nginx start');
+        #    public.writeFile(statusData,get.type)
+        #return public.returnMsg(True,'execution succeed');
 
     def RestartServer(self):
         if not public.IsRestart(): return public.returnMsg(False,'Please wait for all installation tasks to complete before executing!');
