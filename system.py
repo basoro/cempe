@@ -120,10 +120,10 @@ class system:
         #return public.returnMsg(True,'execution succeed');
 
     def GetStatus(self):
-        status['nginx'] = self.StatusNginx()
-        status['mysql'] = self.StatusMySQL()
-        status['sysphptem'] = self.StatusPHP()
-        return status
+        data['nginx'] = self.StatusNginx()
+        data['mysql'] = self.StatusMySQL()
+        data['sysphptem'] = self.StatusPHP()
+        return data
 
     def StatusNginx(self):
         import public
