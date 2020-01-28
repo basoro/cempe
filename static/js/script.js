@@ -54,7 +54,7 @@ function ToSize(bytes){
 
 function openPath(path){
 	setCookie('Path',path);
-	window.location.href = '/files';
+	window.location.href = '/filemanager';
 }
 
 function OnlineEditFile(type, fileName) {
@@ -66,7 +66,7 @@ function OnlineEditFile(type, fileName) {
 			icon: 16,
 			time: 0
 		});
-		$.post('/files?action=SaveFileBody', 'data=' + data + '&path=' + fileName+'&encoding='+encoding, function(rdata) {
+		$.post('/filemanager?action=SaveFileBody', 'data=' + data + '&path=' + fileName+'&encoding='+encoding, function(rdata) {
 			if(type == 1) layer.closeAll();
 			layer.msg(rdata.msg, {
 				icon: rdata.status ? 1 : 2
@@ -141,7 +141,7 @@ function OnlineEditFile(type, fileName) {
 			  };
 			doctype = mixedMode;
 	}
-	$.post('/files?action=GetFileBody', 'path=' + fileName, function(rdata) {
+	$.post('/filemanager?action=GetFileBody', 'path=' + fileName, function(rdata) {
 		layer.close(loadT);
 		var val = ''
 		var editorbox = layer.open({

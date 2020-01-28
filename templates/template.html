@@ -81,7 +81,7 @@ function setPassword(to){
 			return;
 		}
 
-		$$.post('/files?action=setPassword','password1='+p1+'&password2='+p2,function(rdata){
+		$$.post('/filemanager?action=setPassword','password1='+p1+'&password2='+p2,function(rdata){
 			if(rdata.status){
 				layer.closeAll();
 				layer.msg(rdata.msg,{icon:1});

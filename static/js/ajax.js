@@ -159,7 +159,7 @@ function UploadStart(isBackup) {
 			UpType: new Array(),
 			FilesSize: 5242880000,
 			MaxUpNum: 100,
-			url: "/files?action=UploadFile&path=" + document.getElementById("input-val").value
+			url: "/filemanager?action=UploadFile&path=" + document.getElementById("input-val").value
 		});
 		uploads.opt.addEventListener("click", function() {
 			uploads.file_input.click();

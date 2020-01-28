@@ -10,13 +10,13 @@ from collections import OrderedDict
 web.config.debug = False
 
 urls = (
-    '/'        , 'panelIndex',
-    '/login'   , 'panelLogin',
-    '/system'  , 'panelSystem',
-    '/public'  , 'panelPublic',
-    '/files'   , 'panelFiles',
-    '/download', 'panelDownload',
-    '/test', 'panelTest',
+    '/'             , 'panelIndex',
+    '/login'        , 'panelLogin',
+    '/system'       , 'panelSystem',
+    '/public'       , 'panelPublic',
+    '/filemanager'  , 'panelFiles',
+    '/download'     , 'panelDownload',
+    '/test'         , 'panelTest',
 )
 
 
