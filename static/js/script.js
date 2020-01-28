@@ -193,23 +193,23 @@ function ServiceAdmin(name,type){
 	var msg = '';
 	switch(type){
 		case 'stop':
-			msg = 'Stop';
+			msg = 'stop';
 			break;
 		case 'start':
-			msg = 'Start';
+			msg = 'start';
 			break;
 		case 'restart':
-			msg = 'Restart';
+			msg = 'restart';
 			break;
 		case 'reload':
-			msg = 'Reload';
+			msg = 'reload';
 			break;
 	}
-	layer.confirm('Do you really want the '+msg+name+' service? ',{closeBtn:2},function(){
-		var loadT = layer.msg('Being '+msg+name+' service...',{icon:16,time:0});
+	layer.confirm('Do you really want to '+msg+' '+name+' service? ',{closeBtn:2},function(){
+		var loadT = layer.msg('Being '+msg+' '+name+' service...',{icon:16,time:0});
 		$.post('/system?action=ServiceAdmin',data,function(rdata){
 			layer.close(loadT);
-			var reMsg =rdata.status?name+'The service has failed '+msg:name+' service '+msg+'! ';
+			var reMsg =rdata.status?name+' service has success '+msg:name+' service '+msg+'! ';
 			layer.msg(reMsg,{icon:rdata.status?1:2});
 
 			if(type != 'reload' && rdata.status == true){
