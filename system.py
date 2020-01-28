@@ -121,12 +121,12 @@ class system:
 
     def StatusMySQL(self):
         import public
-        status = public.readFile('/opt/slemp/server/panel/data/status-mysql.pl')
+        status = public.readFile('/opt/slemp/server/panel/data/status-mysqld.pl')
         return status
 
     def StatusPHP(self):
         import public
-        status = public.readFile('/opt/slemp/server/panel/data/status-php.pl')
+        status = public.readFile('/opt/slemp/server/panel/data/status-php-fpm.pl')
         return status
 
     def RestartServer(self):
