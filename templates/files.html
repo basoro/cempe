@@ -81,7 +81,7 @@ function GetFiles(Path) {
 	var data = 'path=' + Path;
 	var loadT = layer.load();
 	var totalSize = 0;
-	$$.post('/filemanager?action=GetDir', data, function(rdata) {
+	$$.post('/files?action=GetDir', data, function(rdata) {
 		layer.close(loadT);
 		if(rdata.DIR == null) rdata.DIR = [];
 		for (var i = 0; i < rdata.DIR.length; i++) {
@@ -491,7 +491,7 @@ function CreateFile(type, path) {
 			icon: 16,
 			time: 10000
 		});
-		$$.post('/filemanager?action=CreateFile', 'path=' + path + '/' + fileName, function(rdata) {
+		$$.post('/files?action=CreateFile', 'path=' + path + '/' + fileName, function(rdata) {
 			layer.closeAll();
 			layer.msg(rdata.msg, {
 				icon: rdata.status ? 1 : 2
@@ -528,7 +528,7 @@ function CreateDir(type, path) {
 			icon: 16,
 			time: 10000
 		});
-		$$.post('/filemanager?action=CreateDir', 'path=' + path + '/' + dirName, function(rdata) {
+		$$.post('/files?action=CreateDir', 'path=' + path + '/' + dirName, function(rdata) {
 			layer.closeAll();
 			layer.msg(rdata.msg, {
 				icon: rdata.status ? 1 : 2
@@ -561,7 +561,7 @@ function CreateDir(type, path) {
 function DeleteFile(fileName){
 	SafeMessage("Delete the file"," Do you really want to delete ["+fileName+"]?",function(){
 		layer.msg('Executing, please wait...',{icon:16,time:0,shade: [0.3, '#000']});
-		$$.post('/filemanager?action=DeleteFile', 'path=' + fileName, function(rdata) {
+		$$.post('/files?action=DeleteFile', 'path=' + fileName, function(rdata) {
 			layer.closeAll();
 			layer.msg(rdata.msg, {
 				icon: rdata.status ? 1 : 2
@@ -574,7 +574,7 @@ function DeleteFile(fileName){
 function DeleteDir(dirName){
 	SafeMessage("Delete the directory "," Do you really want to delete ["+dirName+"]?",function(){
 		layer.msg('Executing, please wait...',{icon:16,time:0,shade: [0.3, '#000']});
-		$$.post('/filemanager?action=DeleteDir', 'path=' + dirName, function(rdata) {
+		$$.post('/files?action=DeleteDir', 'path=' + dirName, function(rdata) {
 			layer.closeAll();
 			layer.msg(rdata.msg, {
 				icon: rdata.status ? 1 : 2
@@ -611,7 +611,7 @@ function ReName(type, fileName) {
 			icon: 16,
 			time: 10000
 		});
-		$$.post('/filemanager?action=MvFile', 'sfile=' + oldFileName + '&dfile=' + newFileName, function(rdata) {
+		$$.post('/files?action=MvFile', 'sfile=' + oldFileName + '&dfile=' + newFileName, function(rdata) {
 			layer.closeAll();
 			layer.msg(rdata.msg, {
 				icon: rdata.status ? 1 : 2
@@ -670,7 +670,7 @@ function PasteFile(fileName) {
 			icon: 16,
 			time: 10000
 		});
-		$$.post('/filemanager?action=CopyFile', 'sfile=' + copyName + '&dfile=' + path +'/'+ fileName, function(rdata) {
+		$$.post('/files?action=CopyFile', 'sfile=' + copyName + '&dfile=' + path +'/'+ fileName, function(rdata) {
 			layer.closeAll();
 			layer.msg(rdata.msg, {
 				icon: rdata.status ? 1 : 2
@@ -687,7 +687,7 @@ function PasteFile(fileName) {
 			icon: 16,
 			time: 10000
 		});
-		$$.post('/filemanager?action=MvFile', 'sfile=' + cutName + '&dfile=' + path + '/'+fileName, function(rdata) {
+		$$.post('/files?action=MvFile', 'sfile=' + cutName + '&dfile=' + path + '/'+fileName, function(rdata) {
 			layer.closeAll();
 			layer.msg(rdata.msg, {
 				icon: rdata.status ? 1 : 2
@@ -706,7 +706,7 @@ function Zip(dirName,submits) {
 		sfile = tmp[tmp.length-1]
 		dfile = $$("#dfile").val()
 		layer.msg('Compressing...', {icon: 16,time: 0});
-		$$.post('/filemanager?action=Zip', 'sfile=' + sfile + '&dfile=' + dfile + '&type=zip&path='+path, function(rdata) {
+		$$.post('/files?action=Zip', 'sfile=' + sfile + '&dfile=' + dfile + '&type=zip&path='+path, function(rdata) {
 			layer.closeAll();
 			if(rdata == null || rdata == undefined){
 				layer.msg('The server is compressing files in the background, please check the progress later!',{icon:1});
@@ -746,7 +746,7 @@ function UnZip(fileName,type) {
 		dfile = $$("#dfile").val()
 		coding = $$("select[name='coding']").val();
 		layer.msg('Extract...', {icon: 16,time: 0});
-		$$.post('/filemanager?action=UnZip', 'sfile=' + sfile + '&dfile=' + dfile +'&type=' + type + '&coding=' + coding, function(rdata) {
+		$$.post('/files?action=UnZip', 'sfile=' + sfile + '&dfile=' + dfile +'&type=' + type + '&coding=' + coding, function(rdata) {
 			layer.closeAll();
 			layer.msg(rdata.msg, {icon: rdata.status ? 1 : 2});
 			GetFiles(path);
@@ -858,7 +858,7 @@ function SetChmod(action,fileName){
 
 	var toExec = fileName == 'Batch'?'Batch(3,1)':'SetChmod(1,\''+fileName+'\')';
 
-	$$.post('/filemanager?action=GetFileAccess','filename='+fileName,function(rdata){
+	$$.post('/files?action=GetFileAccess','filename='+fileName,function(rdata){
 		layer.open({
 			type:1,
 			title:'Setting permissions ['+fileName+']',
@@ -1008,7 +1008,7 @@ function RClickAll(e){
 function GetPathSize(){
 	var path = $$("#PathPlace input").val();
 	layer.msg("Calculating, please wait",{icon:16,time:0,shade: [0.3, '#000']})
-	$$.post("/filemanager?action=GetDirSize","path="+path,function(rdata){
+	$$.post("/files?action=GetDirSize","path="+path,function(rdata){
 		layer.closeAll();
 		$$("#pathSize").text(rdata)
 	})

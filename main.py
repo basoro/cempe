@@ -14,7 +14,7 @@ urls = (
     '/login'        , 'panelLogin',
     '/system'       , 'panelSystem',
     '/public'       , 'panelPublic',
-    '/filemanager'  , 'panelFiles',
+    '/files'        , 'panelFiles',
     '/download'     , 'panelDownload',
     '/test'         , 'panelTest',
 )
