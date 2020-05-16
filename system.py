@@ -89,18 +89,19 @@ class system:
         if not hasattr(web.ctx.session,'up'):
             web.ctx.session.up   =  networkIo[0]
             web.ctx.session.down =  networkIo[1]
-        networkInfo = {}
-        networkInfo['upTotal']   = networkIo[0]
-        networkInfo['downTotal'] = networkIo[1]
-        networkInfo['up']        = round(float(networkIo[0] - web.ctx.session.up) / 1024 / 3,2)
-        networkInfo['down']      = round(float(networkIo[1] - web.ctx.session.down) / 1024 / 3,2)
-        networkInfo['downPackets'] =networkIo[3]
-        networkInfo['upPackets']   =networkIo[2]
 
-        web.ctx.session.up   =  networkIo[0]
-        web.ctx.session.down =  networkIo[1]
+            networkInfo = {}
+            networkInfo['upTotal']   = networkIo[0]
+            networkInfo['downTotal'] = networkIo[1]
+            networkInfo['up']        = round(float(networkIo[0] - web.ctx.session.up) / 1024 / 3,2)
+            networkInfo['down']      = round(float(networkIo[1] - web.ctx.session.down) / 1024 / 3,2)
+            networkInfo['downPackets'] =networkIo[3]
+            networkInfo['upPackets']   =networkIo[2]
 
-        networkInfo['cpu'] = self.GetCpuInfo()
+            web.ctx.session.up   =  networkIo[0]
+            web.ctx.session.down =  networkIo[1]
+
+            networkInfo['cpu'] = self.GetCpuInfo()
         return networkInfo
 
     def ServiceAdmin(self):

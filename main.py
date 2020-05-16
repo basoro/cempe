@@ -16,7 +16,6 @@ urls = (
     '/public'       , 'panelPublic',
     '/files'        , 'panelFiles',
     '/download'     , 'panelDownload',
-    '/test'         , 'panelTest',
 )
 
 
@@ -44,12 +43,6 @@ class panelIndex(common.panelAdmin):
         import system
         data = []
         return render.index(data)
-
-class panelTest(common.panelAdmin):
-    def GET(self):
-        import system
-        data = []
-        return render.test(data)
 
 class panelLogin(common.panelSetup):
     def GET(self):
@@ -106,7 +99,20 @@ class panelSystem(common.panelAdmin):
         import system,json
         get = web.input()
         sysObject = system.system()
-        defs = ('GetNetWork','GetDiskInfo','GetCpuInfo','GetBootTime','GetSystemVersion','GetMemInfo','GetSystemTotal','ServiceAdmin','StatusNginx','StatusMySQL','StatusPHP','RestartServer')
+        defs = (
+            'GetNetWork',
+            'GetDiskInfo',
+            'GetCpuInfo',
+            'GetBootTime',
+            'GetSystemVersion',
+            'GetMemInfo',
+            'GetSystemTotal',
+            'ServiceAdmin',
+            'StatusNginx',
+            'StatusMySQL',
+            'StatusPHP',
+            'RestartServer'
+            )
         for key in defs:
             if key == get.action:
                 fun = 'sysObject.'+key+'()'
@@ -124,10 +130,28 @@ class panelFiles(common.panelAdmin):
 
         import files
         filesObject = files.files()
-        defs = ('UploadFile','GetDir','CreateFile','CreateDir','DeleteDir','DeleteFile',
-                'CopyFile','CopyDir','MvFile','GetFileBody','SaveFileBody','Zip','UnZip',
-                'GetFileAccess','SetFileAccess','GetDirSize','SetBatchData','BatchPaste',
-                'DownloadFile','setPassword')
+        defs = (
+            'UploadFile',
+            'GetDir',
+            'CreateFile',
+            'CreateDir',
+            'DeleteDir',
+            'DeleteFile',
+            'CopyFile',
+            'CopyDir',
+            'MvFile',
+            'GetFileBody',
+            'SaveFileBody',
+            'Zip',
+            'UnZip',
+            'GetFileAccess',
+            'SetFileAccess',
+            'GetDirSize',
+            'SetBatchData',
+            'BatchPaste',
+            'DownloadFile',
+            'setPassword'
+            )
         for key in defs:
             if key == get.action:
                 fun = 'filesObject.'+key+'(get)'

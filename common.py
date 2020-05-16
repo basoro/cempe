@@ -37,8 +37,6 @@ class panelAdmin(panelSetup):
         tmp = {}
         tmp['x'] = 'RHEL';
         tmp['osname'] = public.readFile(filename).strip();
-        #rs = ['CentOS','RHEL','Fedora']
-        #if osname in rs: tmp['x'] = 'RHEL';
         ds = ['Debian','Ubuntu','Raspbian','Deepin']
         if tmp['osname'] in ds: tmp['x'] = 'Debian';
         return tmp
