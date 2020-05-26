@@ -13,9 +13,6 @@ class system:
         data['cpuRealUsed'] = cpu[0]
         data['time'] = self.GetBootTime()
         data['system'] = self.GetSystemVersion()
-        data['nginx'] = self.StatusNginx()
-        data['mysql'] = self.StatusMySQL()
-        data['php'] = self.StatusPHP()
         return data
 
     def GetSystemVersion(self):
@@ -89,48 +86,85 @@ class system:
         if not hasattr(web.ctx.session,'up'):
             web.ctx.session.up   =  networkIo[0]
             web.ctx.session.down =  networkIo[1]
+        networkInfo = {}
+        networkInfo['upTotal']   = networkIo[0]
+        networkInfo['downTotal'] = networkIo[1]
+        networkInfo['up']        = round(float(networkIo[0] - web.ctx.session.up) / 1024 / 3,2)
+        networkInfo['down']      = round(float(networkIo[1] - web.ctx.session.down) / 1024 / 3,2)
+        networkInfo['downPackets'] =networkIo[3]
+        networkInfo['upPackets']   =networkIo[2]
 
-            networkInfo = {}
-            networkInfo['upTotal']   = networkIo[0]
-            networkInfo['downTotal'] = networkIo[1]
-            networkInfo['up']        = round(float(networkIo[0] - web.ctx.session.up) / 1024 / 3,2)
-            networkInfo['down']      = round(float(networkIo[1] - web.ctx.session.down) / 1024 / 3,2)
-            networkInfo['downPackets'] =networkIo[3]
-            networkInfo['upPackets']   =networkIo[2]
+        web.ctx.session.up   =  networkIo[0]
+        web.ctx.session.down =  networkIo[1]
 
-            web.ctx.session.up   =  networkIo[0]
-            web.ctx.session.down =  networkIo[1]
-
-            networkInfo['cpu'] = self.GetCpuInfo()
+        networkInfo['cpu'] = self.GetCpuInfo()
         return networkInfo
 
     def ServiceAdmin(self):
         get = web.input()
 
+        if get.name == 'mysqld': public.CheckMyCnf();
+
+        if get.name == 'phpmyadmin':
+            import ajax
+            get.status = 'True';
+            ajax.ajax().setPHPMyAdmin(get);
+
+        elif get.name == 'nginx':
+            vhostPath = self.setupPath + '/panel/data/rewrite'
+            if not os.path.exists(vhostPath): public.ExecShell('mkdir ' + vhostPath);
+            vhostPath = self.setupPath + '/panel/data/vhost'
+            if not os.path.exists(vhostPath):
+                public.ExecShell('mkdir ' + vhostPath);
+                public.ExecShell('/etc/init.d/nginx start');
+
+            result = public.ExecShell('nginx -t -c '+self.setupPath+'/nginx/conf/nginx.conf');
+            if result[1].find('perserver') != -1:
+                limit = self.setupPath + '/nginx/conf/nginx.conf';
+                nginxConf = public.readFile(limit);
+                limitConf = "limit_conn_zone $binary_remote_addr zone=perip:10m;\n\t\tlimit_conn_zone $server_name zone=perserver:10m;";
+                nginxConf = nginxConf.replace("#limit_conn_zone $binary_remote_addr zone=perip:10m;",limitConf);
+                public.writeFile(limit,nginxConf)
+                public.ExecShell('/etc/init.d/nginx start');
+                return public.returnMsg(True,'Profile mismatch due to reloading Nginx has been fixed!');
+
+            if result[1].find('proxy') != -1:
+                import panelSite
+                panelSite.panelSite().CheckProxy(get);
+                public.ExecShell('/etc/init.d/nginx start');
+                return public.returnMsg(True,'Profile mismatch due to reloading Nginx has been fixed!');
+
+            #return result
+            if result[1].find('successful') == -1:
+                public.WriteLog("Pengaturan ", "Execution failed: "+str(result));
+                return public.returnMsg(False,'Nginx configuration rule error: <br><a style="color:red;">'+result[1].replace("\n",'<br>')+'</a>');
+
         execStr = "/etc/init.d/"+get.name+" "+get.type
-        statusData = "/opt/slemp/server/panel/data/status-"+get.name+".pl"
 
-        os.system(execStr);
-        if get.type != 'reload':
-            public.writeFile(statusData,get.type)
+        if get.name != 'nginx':
+            os.system(execStr);
+            return public.returnMsg(True,'execution succeed');
+        result = public.ExecShell(execStr)
+        if result[1].find('nginx.pid') != -1:
+            public.ExecShell('pkill -9 nginx && sleep 1');
+            public.ExecShell('/etc/init.d/nginx start');
+        if get.type != 'test':
+            public.WriteLog("Pengaturan ", execStr+" execution succeed!");
         return public.returnMsg(True,'execution succeed');
-
-    def StatusNginx(self):
-        import public
-        status = public.readFile('/opt/slemp/server/panel/data/status-nginx.pl')
-        return status
-
-    def StatusMySQL(self):
-        import public
-        status = public.readFile('/opt/slemp/server/panel/data/status-mysqld.pl')
-        return status
-
-    def StatusPHP(self):
-        import public
-        status = public.readFile('/opt/slemp/server/panel/data/status-php-fpm.pl')
-        return status
 
     def RestartServer(self):
         if not public.IsRestart(): return public.returnMsg(False,'Please wait for all installation tasks to complete before executing!');
         public.ExecShell("/etc/init.d/slemp stop && init 6 &");
         return public.returnMsg(True,'Command sent successfully!');
+
+    def ReMemory(self):
+        scriptFile = 'script/rememory.sh'
+        if not os.path.exists(scriptFile):
+            public.downloadFile('https://basoro.id/downloads/slemp/rememory.sh',scriptFile);
+        public.ExecShell("/bin/bash " + self.setupPath + '/panel/' + scriptFile);
+        return self.GetMemInfo();
+
+    def ReWeb(self):
+        if not public.IsRestart(): return public.returnMsg(False,'Please wait for all installation tasks to complete before executing!');
+        public.ExecShell('/etc/init.d/slemp restart &')
+        return True
