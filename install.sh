@@ -39,9 +39,9 @@ pip install psutil chardet web.py pillow
 mkdir -p /opt/slemp/server
 
 wget -O panel.zip https://github.com/basoro/panel/archive/master.zip
-wget -O /etc/init.d/slemp $download_Url/init/slemp.init -T 10
+wget -O /etc/init.d/slemp https://raw.githubusercontent.com/basoro/panel/master/slemp.init -T 10
 
-unzip -o master.zip -d $setup_path/server/ > /dev/null
+unzip -o panel.zip -d $setup_path/server/ > /dev/null
 mv $setup_path/server/panel-master $setup_path/server/panel
 
 python -m compileall $setup_path/server/panel
@@ -51,15 +51,10 @@ rm -f $setup_path/server/panel/*.py
 chmod 777 /tmp
 chmod +x /etc/init.d/slemp
 
-if [ -f "/usr/sbin/update-rc.d" ];then
-	update-rc.d slemp defaults
-else
-	chkconfig --add slemp
-	chkconfig --level 2345 slemp on
-fi
+chkconfig --add slemp
+chkconfig --level 2345 slemp on
 
 chmod -R 600 $setup_path/server/panel
-chmod -R +x $setup_path/server/panel/script
 ln -sf /etc/init.d/slemp /usr/bin/slemp
 echo "$port" > $setup_path/server/panel/data/port.pl
 /etc/init.d/slemp start
