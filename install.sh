@@ -5,7 +5,7 @@ LANG=en_US.UTF-8
 
 echo "
 +----------------------------
-| Panel Lite 1.x  Setup FOR CentOS
+| Panel Lite 1.x  Untuk CentOS
 +----------------------------
 "
 download_Url=https://basoro.id/downloads/slemp
@@ -15,7 +15,7 @@ port='12345'
 
 while [ "$go" != 'y' ] && [ "$go" != 'n' ]
 do
-	read -p "Do you want to install SLEMP-Panel to the $setup_path directory now?(y/n): " go;
+	read -p "Yakin mau memasang SLEMP Panel Lite?(y/n): " go;
 done
 
 if [ "$go" == 'n' ];then
@@ -39,7 +39,6 @@ pip install psutil chardet web.py pillow
 mkdir -p /opt/slemp/server
 
 wget -O panel.zip https://github.com/basoro/panel/archive/master.zip
-wget -O /etc/init.d/slemp https://raw.githubusercontent.com/basoro/panel/master/slemp.init -T 10
 
 unzip -o panel.zip -d $setup_path/server/ > /dev/null
 mv $setup_path/server/panel-master $setup_path/server/panel
@@ -49,6 +48,7 @@ rm -f $setup_path/server/panel/class/*.py
 rm -f $setup_path/server/panel/*.py
 
 chmod 777 /tmp
+mv $setup_path/server/panel/slemp.init /etc/init.d/slemp
 chmod +x /etc/init.d/slemp
 
 chkconfig --add slemp
@@ -62,6 +62,7 @@ password=`cat /dev/urandom | head -n 16 | md5sum | head -c 8`
 cd $setup_path/server/panel/
 username=`python tools.pyc panel $password`
 cd ~
+rm -f panel.zip
 echo "$password" > $setup_path/server/panel/default.pl
 chmod 600 $setup_path/server/panel/default.pl
 
@@ -105,16 +106,16 @@ do
 done
 
 echo -e "=================================================================="
-echo -e "\033[32mCongratulations! Install succeeded!\033[0m"
+echo -e "\033[32mSelamat! Pemasangan SLEMP Panel Lite berhasil!\033[0m"
 echo -e "=================================================================="
 echo  "SLEMP-Panel: http://$address:$port"
 echo -e "username: $username"
 echo -e "password: $password"
-echo -e "\033[33mWarning:\033[0m"
-echo -e "\033[33mIf you cannot access the panel, \033[0m"
-echo -e "\033[33mrelease the following port (12345|1234|80|22) in the security group\033[0m"
+echo -e "\033[33mPeringatan:\033[0m"
+echo -e "\033[33mJika tidak bisa mengakses panel, \033[0m"
+echo -e "\033[33msilahkan buka port berikut (12345|1234|80|22) di menu keamanan\033[0m"
 echo -e "=================================================================="
 
 endTime=`date +%s`
 ((outTime=($endTime-$startTime)/60))
-echo -e "Time consumed:\033[32m $outTime \033[0mMinute!"
+echo -e "Waktu :\033[32m $outTime \033[0mMenit!"
