@@ -5,7 +5,7 @@ LANG=en_US.UTF-8
 
 echo "
 +----------------------------
-| Panel Lite 1.x  Untuk CentOS
+| SLEMP Panel Lite 1.x  Untuk CentOS
 +----------------------------
 "
 download_Url=https://basoro.id/downloads/slemp
