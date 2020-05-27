@@ -1,5 +1,7 @@
 #!/bin/bash
 
+rpm -Uvh http://rpms.famillecollet.com/enterprise/remi-release-7.rpm
+
 Install_PHP() 
 {
 mkdir -pv /opt/slemp/server/php/${php_version}/{etc,bin,sbin,var/run}
