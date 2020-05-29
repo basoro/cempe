@@ -48,7 +48,7 @@ rm -f $setup_path/server/panel/class/*.py
 rm -f $setup_path/server/panel/*.py
 
 chmod 777 /tmp
-mv $setup_path/server/panel/slemp.init /etc/init.d/slemp
+mv $setup_path/server/panel/scripts/slemp.init /etc/init.d/slemp
 chmod +x /etc/init.d/slemp
 
 chkconfig --add slemp
