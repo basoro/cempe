@@ -175,6 +175,13 @@ http
         root /opt/slemp/wwwroot/default;
         include enable-php-56.conf;
     }
+		server{
+        listen 1234;
+        server_name phpmyadmin.basoro.id;
+        index index.html index.htm index.php;
+        root  /opt/slemp/server/phpmyadmin;
+        include enable-php-56.conf;
+    }
     include /opt/slemp/server/nginx/conf/vhost/*.conf;
 }
 END
@@ -276,7 +283,7 @@ ln -sf /usr/bin/mysqlcheck /opt/slemp/server/mysql/bin/mysqlcheck
 ln -s /usr/lib64/mysql/libmysqlclient.so.18 /opt/slemp/server/mysql/lib/libmysqlclient.so
 ln -s /usr/lib64/mysql/libmysqlclient.so.18 /opt/slemp/server/mysql/lib/libmysqlclient.so.18
 ln -sf /var/lib/mysql/mysql.sock /tmp/mysql.sock
-echo "5.6.43" > /opt/slemp/server/mysql/version.pl
+echo "5.6.49" > /opt/slemp/server/mysql/version.pl
 chown -R mysql:mysql /opt/slemp/server/data/rm -f /etc/init.d/mysqld
 mv $setup_path/server/panel/scripts/mysqld.init /etc/init.d/mysqld
 chmod +x /etc/init.d/mysqld
@@ -354,6 +361,26 @@ ln -sf /opt/remi/php${php_version}/root/etc/php.ini /etc/php.ini
 rm -f /etc/init.d/php-fpm
 mv $setup_path/server/panel/scripts/php-fpm.init /etc/init.d/php-fpm
 chmod +x /etc/init.d/php-fpm
+
+wget -O phpMyAdmin.zip $download_Url/src/phpMyAdmin-4.4.zip -T20
+
+unzip -o phpMyAdmin.zip -d $setup_path/server/phpmyadmin/ > /dev/null
+rm -f phpMyAdmin.zip
+rm -rf $setup_path/server/phpmyadmin/phpmyadmin*
+
+phpmyadminExt=`cat /dev/urandom | head -n 32 | md5sum | head -c 16`;
+mv $setup_path/server/phpmyadmin/databaseAdmin $setup_path/server/phpmyadmin/phpmyadmin_$phpmyadminExt
+chmod -R 744 $setup_path/server/phpmyadmin/phpmyadmin_$phpmyadminExt
+chown -R www.www $setup_path/server/phpmyadmin/phpmyadmin_$phpmyadminExt
+
+secret=`cat /dev/urandom | head -n 32 | md5sum | head -c 32`;
+\cp -a -r $setup_path/server/phpmyadmin/phpmyadmin_$phpmyadminExt/config.sample.inc.php  $setup_path/server/phpmyadmin/phpmyadmin_$phpmyadminExt/config.inc.php
+sed -i "s#^\$cfg\['blowfish_secret'\].*#\$cfg\['blowfish_secret'\] = '${secret}';#" $setup_path/server/phpmyadmin/phpmyadmin_$phpmyadminExt/libraries/config.default.php
+sed -i "s#^\$cfg\['blowfish_secret'\].*#\$cfg\['blowfish_secret'\] = '${secret}';#" $setup_path/server/phpmyadmin/phpmyadmin_$phpmyadminExt/config.inc.php
+
+echo "4.4" > $setup_path/server/phpmyadmin/version.pl
+echo $phpmyadminExt > $setup_path/server/phpmyadmin/default.pl
+
 
 chkconfig syslog-ng on
 service syslog-ng start
