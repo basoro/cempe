@@ -38,7 +38,7 @@ pip install psutil chardet web.py pillow
 
 mkdir -p /opt/slemp/server
 
-mkdir -pv /opt/slemp/{wwwroot/default,wwwlogs,server/{mysql/{bin,lib},nginx/{sbin,logs,conf/{vhost,rewrite}},php/56/{etc,bin,sbin,var/run}}}
+mkdir -pv /opt/slemp/{wwwroot/default,wwwlogs,server/{data,mysql/{bin,lib},nginx/{sbin,logs,conf/{vhost,rewrite}},php/56/{etc,bin,sbin,var/run}}}
 
 wget -O panel.zip https://github.com/basoro/panel/archive/master.zip
 
@@ -277,17 +277,15 @@ ln -s /usr/lib64/mysql/libmysqlclient.so.18 /opt/slemp/server/mysql/lib/libmysql
 ln -s /usr/lib64/mysql/libmysqlclient.so.18 /opt/slemp/server/mysql/lib/libmysqlclient.so.18
 ln -sf /var/lib/mysql/mysql.sock /tmp/mysql.sock
 echo "5.6.43" > /opt/slemp/server/mysql/version.pl
-rm -f /etc/init.d/mysqld
+chown -R mysql:mysql /opt/slemp/server/data/rm -f /etc/init.d/mysqld
 mv $setup_path/server/panel/scripts/mysqld.init /etc/init.d/mysqld
 chmod +x /etc/init.d/mysqld
-/etc/init.d/mysqld start
-sleep 5
+systemctl start mysql
 mysqlpwd=`cat /dev/urandom | head -n 16 | md5sum | head -c 8`
 /usr/bin/mysqladmin -u root password 'root'
 /opt/slemp/server/mysql/bin/mysql -uroot -proot -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('${mysqlpwd}')"
 /opt/slemp/server/mysql/bin/mysql -uroot -p${mysqlpwd} -e "SET PASSWORD FOR 'root'@'127.0.0.1' = PASSWORD('${mysqlpwd}')"
 /opt/slemp/server/mysql/bin/mysql -uroot -p${mysqlpwd} -e "flush privileges"
-/etc/init.d/mysqld stop
 
 php_version="56";
 yum -y install php${php_version}-php-common php${php_version}-php-fpm php${php_version}-php-process php${php_version}-php-mysql php${php_version}-php-pecl-memcache php${php_version}-php-pecl-memcached php${php_version}-php-gd php${php_version}-php-mbstring php${php_version}-php-mcrypt php${php_version}-php-xml php${php_version}-php-pecl-apc php${php_version}-php-cli php${php_version}-php-pear php${php_version}-php-pdo
@@ -307,6 +305,7 @@ ln -sf /opt/slemp/server/nginx/conf/enable-php-${php_version}.conf /etc/nginx/en
 php_conf="/opt/remi/php${php_version}/root/etc"
 vphp="5.6";
 
+mkdir /usr/local/ioncube
 wget -O /usr/local/ioncube/ioncube_loader_lin_${vphp}.so https://basoro.id/downloads/ioncube_loader_lin_${vphp}.so -T 20
 
 echo "Write Ioncube Loader to php.ini..."
@@ -359,13 +358,14 @@ chkconfig crond on
 service crond start
 chkconfig nginx on
 chkconfig php-fpm on
+systemctl stop mysql
 chkconfig mysqld on
 
 chown -R www:www /opt/slemp/wwwroot/default/
 chown -R www:www /opt/slemp/server/panel/
 
 #Fix Sessions:
-mkdir /var/lib/php/session
+mkdir -p /var/lib/php/session
 chmod 777 /var/lib/php/session
 rm -rf $setup_path/server/panel/scripts
 sleep 3
