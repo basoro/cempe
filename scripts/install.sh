@@ -286,6 +286,8 @@ mysqlpwd=`cat /dev/urandom | head -n 16 | md5sum | head -c 8`
 /opt/slemp/server/mysql/bin/mysql -uroot -proot -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('${mysqlpwd}')"
 /opt/slemp/server/mysql/bin/mysql -uroot -p${mysqlpwd} -e "SET PASSWORD FOR 'root'@'127.0.0.1' = PASSWORD('${mysqlpwd}')"
 /opt/slemp/server/mysql/bin/mysql -uroot -p${mysqlpwd} -e "flush privileges"
+echo "$mysqlpwd" > $setup_path/server/mysql/default.pl
+chmod 600 $setup_path/server/mysql/default.pl
 
 php_version="56";
 yum -y install php${php_version}-php-common php${php_version}-php-fpm php${php_version}-php-process php${php_version}-php-mysql php${php_version}-php-pecl-memcache php${php_version}-php-pecl-memcached php${php_version}-php-gd php${php_version}-php-mbstring php${php_version}-php-mcrypt php${php_version}-php-xml php${php_version}-php-pecl-apc php${php_version}-php-cli php${php_version}-php-pear php${php_version}-php-pdo
