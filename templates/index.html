@@ -206,11 +206,13 @@ $def with (data)
         $$("#nginx").html(info.nginx);
         $$("#mysql").html(info.mysql);
         $$("#php").html(info.php);
-				var memFree = info.memTotal - info.memRealUsed;
+				var phpmyadmin = info.phpmyadmin;
+        $$("#phpmyadmin").append('<a href="' + window.location.href + ':1234/phpmyadmin_' + phpmyadmin + '">Database</a>');
+        var memFree = info.memTotal - info.memRealUsed;
 
 				if(memFree < 64){
 					$$("#messageError").show();
-					$$("#messageError").append('<p><span class="glyphicon glyphicon-alert" style="color: #f39c12; margin-right: 10px;"></span> Currently available physical memory is less than 64M, which may cause MySQL to automatically stop, site 502 and other errors, please try to free the memory!</p>')
+					$$("#messageError").append('<p><span class="glyphicon glyphicon-alert" style="color: #f39c12; margin-right: 10px;"></span> Currently available physical memory is less than 64M, which may cause MySQL to automatically stop, site 502 and other errors, please try to free the memory!</p>');
 				}
 				setImg();
 			});
