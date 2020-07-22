@@ -16,6 +16,7 @@ class system:
         data['nginx'] = self.StatusNginx()
         data['mysql'] = self.StatusMySQL()
         data['php'] = self.StatusPHP()
+        data['phpmyadmin'] = self.PHPMyAdminExt()
         return data
 
     def GetSystemVersion(self):
@@ -129,6 +130,11 @@ class system:
         import public
         status = public.readFile('/opt/slemp/server/panel/data/status-php-fpm.pl')
         return status
+
+    def PHPMyAdminExt(self):
+        import public
+        extension = public.readFile('/opt/slemp/server/phpmyadmin/default.pl')
+        return extension
 
     def RestartServer(self):
         if not public.IsRestart(): return public.returnMsg(False,'Please wait for all installation tasks to complete before executing!');
