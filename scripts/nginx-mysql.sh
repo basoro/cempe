@@ -11,22 +11,22 @@ startTime=`date +%s`
 ##############################
 # disable un-needed services #
 ##############################
-systemctl stop httpd 
-systemctl disable httpd 
-systemctl stop xinetd 
-chkcsystemctl disableonfig xinetd 
-systemctl stop saslauthd 
-systemctl disable saslauthd 
-systemctl stop sendmail 
-systemctl disable sendmail Php
-systemctl stop rsyslog 
+systemctl stop httpd
+systemctl disable httpd
+systemctl stop xinetd
+chkcsystemctl disableonfig xinetd
+systemctl stop saslauthd
+systemctl disable saslauthd
+systemctl stop sendmail
+systemctl disable sendmail
+systemctl stop rsyslog
 systemctl disable rsyslog
 
 groupadd www
 useradd -s /sbin/nologin -g www www
 
 #Create directories
-mkdir -pv /opt/slemp/{wwwroot/default,wwwlogs,server/{panel,mysql/{bin,lib},nginx/{sbin,logs,conf/{vhost,rewrite}},php/56/{etc,bin,sbin,var/run}}}
+mkdir -pv /opt/slemp/{wwwroot/default,wwwlogs,server/{mysql/{bin,lib},nginx/{sbin,logs,conf/{vhost,rewrite}}}}
 
 #remove all current PHP, MySQL, mailservers, rsyslog.
 yum -y remove httpd php mysql rsyslog sendmail postfix mysql-libs
@@ -126,16 +126,6 @@ http
 
         server_tokens off;
         access_log off;
-    server{
-        listen 888;
-        server_name basoro.id;
-        index index.html index.htm index.php;
-        root  /opt/slemp/server/panel;
-
-        #error_page   404   /404.html;
-        include enable-php-56.conf;
-        access_log  /opt/slemp/wwwlogs/access.log;
-    }
     server {
         listen 80 default;
         server_name _;
@@ -244,7 +234,6 @@ ln -sf /usr/bin/mysqlcheck /opt/slemp/server/mysql/bin/mysqlcheck
 ln -s /usr/lib64/mysql/libmysqlclient.so.18 /opt/slemp/server/mysql/lib/libmysqlclient.so
 ln -s /usr/lib64/mysql/libmysqlclient.so.18 /opt/slemp/server/mysql/lib/libmysqlclient.so.18
 ln -sf /var/lib/mysql/mysql.sock /tmp/mysql.sock
-echo "5.6.43" > /opt/slemp/server/mysql/version.pl
 systemctl start mysqld
 sleep 5
 /usr/bin/mysqladmin -u root password 'root'
@@ -255,19 +244,12 @@ sleep 5
 
 token=${pwd:0:8}
 echo "${token}" > /opt/slemp/server/token.pl
-userINI='/opt/slemp/server/panel/.user.ini'
-if [ -f "${userINI}" ];then
-  chattr -i $userINI
-  rm -f $userINI
-fi
-rm -f phpMyAdmin.zip
 
 #start services and configure iptables
 yum -y install firewalld
 systemctl enable firewalld
 systemctl start firewalld
 firewall-cmd --permanent --zone=public --add-port=80/tcp
-firewall-cmd --permanent --zone=public --add-port=888/tcp
 firewall-cmd --reload
 
 chkconfig syslog-ng on
@@ -276,18 +258,11 @@ chkconfig crond on
 service crond start
 service nginx restart
 chkconfig nginx on
-#service php-fpm start
-#chkconfig php-fpm on
 service mysqld start
 chkconfig mysqld on
-service panel start
 
 chown -R www:www /opt/slemp/wwwroot/default/
-chown -R www:www /opt/slemp/server/panel/
 
-#Fix Sessions:
-mkdir /var/lib/php/session
-chmod 777 /var/lib/php/session
 
 sleep 3
 
@@ -299,11 +274,9 @@ echo
 echo "====================================="
 echo -e "\033[32mInstalasi server selesai.\033[0m"
 echo -e "====================================="
-echo Default Site Url: http://SERVER_IP:888
+echo Default Site Url: http://SERVER_IP
 echo MySQL Password: $mysqlpwd
-echo phpMyAdmin: http://SERVER_IP:888/phpmyadmin_$phpmyadminExt
 echo -e "====================================="
-mv -f install.sh /opt/slemp/server/install.sh
 endTime=`date +%s`
 ((outTime=($endTime-$startTime)/60))
 echo -e "Time consuming:\033[32m $outTime \033[0mMinute!"
