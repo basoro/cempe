@@ -349,6 +349,7 @@ ln -sf /opt/remi/php${php_version}/root/usr/bin/phpize /opt/slemp/server/php/${p
 ln -sf /opt/remi/php${php_version}/root/usr/bin/pear /opt/slemp/server/php/${php_version}/bin/pear
 ln -sf /opt/remi/php${php_version}/root/usr/bin/pecl /opt/slemp/server/php/${php_version}/bin/pecl
 ln -sf /opt/remi/php${php_version}/root/usr/sbin/php-fpm /opt/slemp/server/php/${php_version}/sbin/php-fpm
+ln -sf /opt/remi/php${php_version}/root/etc/php.ini /etc/php.ini
 
 rm -f /etc/init.d/php-fpm
 mv $setup_path/server/panel/scripts/php-fpm.init /etc/init.d/php-fpm
