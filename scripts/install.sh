@@ -34,7 +34,7 @@ sleep 5
 pip install --upgrade pip
 pip install --upgrade setuptools
 pip install wheel
-pip install psutil chardet web.py pillow
+pip install psutil chardet web.py==0.51 pillow
 
 mkdir -p /opt/slemp/server
 
