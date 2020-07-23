@@ -47,7 +47,7 @@ $def with (content)
 			<div id="navbar" class="collapse navbar-collapse">
 				<ul class="nav navbar-nav navbar-right" style="margin-right:10px;">
 					<li class="nav-item"><a href="/">Beranda</a></li>
-					<li class="nav-item"><span id="phpmyadmin"></span></li>
+					<li class="nav-item"><a href="javascript:openPHPMyAdmin();">Database</a></li>
 					<li class="nav-item"><a href="javascript:openPath('/opt/slemp/wwwroot');">Kelola Berkas</a></li>
 					<li class="nav-item"><a href="javascript:;" onclick="setPassword()">Kata Kunci</a></li>
 					<li class="nav-item"><a href="javascript:;" id="dologin">Keluar</a></li>
@@ -58,7 +58,7 @@ $def with (content)
 			<div id="container" class="container-fluid">
 				<a style="display: none;" id="defaultPath">$web.ctx.session.configPath</a>
 				$:content
-				<div class="footer">$web.ctx.session.brand $web.ctx.session.version © 2018-2019 By <a href="https://slemp.basoro.id" target="_blank">Ataaka</a></div></div>
+				<div class="footer">$web.ctx.session.brand $web.ctx.session.version Â© 2018-2019 By <a href="https://slemp.basoro.id" target="_blank">Ataaka</a></div></div>
 			</div>
 		</div>
 	</body>
@@ -71,6 +71,13 @@ $$("#dologin").click(function(){
 	});
 	return false;
 });
+
+function openPHPMyAdmin(){
+   $$.get("/system?action=GetSystemTotal", function(info) {
+  	  window.location.href = '/phpmyadmin_'+info.phpmyadmin;
+   });
+};
+
 
 function setPassword(to){
 	if(to == 1){

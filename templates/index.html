@@ -206,8 +206,6 @@ $def with (data)
         $$("#nginx").html(info.nginx);
         $$("#mysql").html(info.mysql);
         $$("#php").html(info.php);
-				var phpmyadmin = info.phpmyadmin;
-        $$("#phpmyadmin").append('<a href="' + window.location.href + ':1234/phpmyadmin_' + phpmyadmin + '">Database</a>');
         var memFree = info.memTotal - info.memRealUsed;
 
 				if(memFree < 64){
