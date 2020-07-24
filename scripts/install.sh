@@ -285,7 +285,7 @@ ln -sf /usr/bin/mysqlcheck /opt/slemp/server/mysql/bin/mysqlcheck
 ln -s /usr/lib64/mysql/libmysqlclient.so.18 /opt/slemp/server/mysql/lib/libmysqlclient.so
 ln -s /usr/lib64/mysql/libmysqlclient.so.18 /opt/slemp/server/mysql/lib/libmysqlclient.so.18
 ln -sf /var/lib/mysql/mysql.sock /tmp/mysql.sock
-echo "5.6.49" > /opt/slemp/server/mysql/version.pl
+echo "5.6" > /opt/slemp/server/mysql/version.pl
 chown -R mysql:mysql /opt/slemp/server/data/rm -f /etc/init.d/mysqld
 mv $setup_path/server/panel/scripts/mysqld.init /etc/init.d/mysqld
 chmod +x /etc/init.d/mysqld
@@ -359,6 +359,7 @@ ln -sf /opt/remi/php${php_version}/root/usr/bin/pear /opt/slemp/server/php/${php
 ln -sf /opt/remi/php${php_version}/root/usr/bin/pecl /opt/slemp/server/php/${php_version}/bin/pecl
 ln -sf /opt/remi/php${php_version}/root/usr/sbin/php-fpm /opt/slemp/server/php/${php_version}/sbin/php-fpm
 ln -sf /opt/remi/php${php_version}/root/etc/php.ini /etc/php.ini
+echo "5.6" > $setup_path/server/php/56/version.pl
 
 rm -f /etc/init.d/php-fpm
 mv $setup_path/server/panel/scripts/php-fpm.init /etc/init.d/php-fpm
