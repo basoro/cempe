@@ -137,6 +137,9 @@ class system:
         return extension
 
     def RestartServer(self):
-        if not public.IsRestart(): return public.returnMsg(False,'Please wait for all installation tasks to complete before executing!');
         public.ExecShell("/etc/init.d/slemp stop && init 6 &");
-        return public.returnMsg(True,'Command sent successfully!');
+        return public.returnMsg(True,'Command sent successfully! Server restarting.');
+
+    def RestartPanel(self):
+        public.ExecShell("/etc/init.d/slemp restart &");
+        return public.returnMsg(True,'Command sent successfully! Panel restarting.');

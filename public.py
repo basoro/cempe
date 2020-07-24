@@ -112,9 +112,18 @@ def downloadHook(count, blockSize, totalSize):
 
 def serviceReload():
     import web
-    if web.ctx.session.webserver == 'nginx':
-        result = ExecShell('/etc/init.d/nginx reload')
-        if result[1].find('nginx.pid') != -1:
-            ExecShell('pkill -9 nginx && sleep 1');
-            ExecShell('/etc/init.d/nginx start');
+    result = ExecShell('/etc/init.d/nginx reload')
+    if result[1].find('nginx.pid') != -1:
+        ExecShell('pkill -9 nginx && sleep 1');
+        ExecShell('/etc/init.d/nginx start');
     return result;
+
+def checkWebConfig():
+    import web
+    result = ExecShell(web.ctx.session.setupPath+"/nginx/sbin/nginx -t -c "+web.ctx.session.setupPath+"/nginx/conf/nginx.conf");
+    searchStr = 'successful'
+
+    if result[1].find(searchStr) == -1:
+        WriteLog("Check configuration", "Configuration file error: "+result[1]);
+        return result[1];
+    return True;

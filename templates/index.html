@@ -41,7 +41,10 @@ $def with (data)
 		  <div class="server">
 		    <div class="s-title">
 		      <h3>Status Server</h3>
-		    </div>
+              <div class="safe-screen pull-right" style="padding-top:10px;margin-right:10px !important;">
+				<button class="btn btn-danger btn-sm" type="button" onclick="ReBoot()">Reboot</button>
+			  </div>
+            </div>
 		    <div class="server-circle">
 		      <ul class="row" id="systemInfoList">
 		        <li class="col-xs-6 col-sm-3 col-md-3 col-lg-2">
@@ -106,7 +109,7 @@ $def with (data)
 		          </thead>
 		          <tbody>
 				        <tr>
-					        <td style="padding-left:18px">Nginx Webserver</td>
+					        <td style="padding-left:18px">Nginx 1.18.0</td>
 					        <td class="visible-lg visible-md visible-sm">
                     <a class="link" href="javascript:GetConfigFile('nginx');">Config</a> |
 						        <a class="link" href="javascript:ServiceAdmin('nginx','reload');">Reload</a>
@@ -116,7 +119,7 @@ $def with (data)
                     <a class="link" href="javascript:ServiceAdmin('nginx','stop');">Stop</a></td>
 				        </tr>
 								<tr>
-									<td style="padding-left:18px">MySQL Database</td>
+									<td style="padding-left:18px">MySQL 5.6.49</td>
 									<td class="visible-lg visible-md visible-sm"><a class="link" href="javascript:GetConfigFile('mysql');">Config</a> | <a class="link" href="javascript:ServiceAdmin('mysqld','reload');">Reload</a></td>
                   <td><span class="text-capitalize" id="mysql"></span></td>
 									<td style="text-align: right;padding-right:18px">
@@ -125,7 +128,7 @@ $def with (data)
                   </td>
 								</tr>
 								<tr>
-									<td style="padding-left:18px">PHP-FPM</td>
+									<td style="padding-left:18px">PHP 5.6.40</td>
 									<td class="visible-lg visible-md visible-sm">
                     <a class="link" href="javascript:GetConfigFile('php-fpm');">Config</a> |
                     <a class="link" href="javascript:ServiceAdmin('php-fpm','reload');">Reload</a>
@@ -395,5 +398,73 @@ $def with (data)
 
 		}
 		setImg();
+
+		function ReBoot(){
+			layer.open({
+				type: 1,
+				title: "Safely restart the server",
+				area: ['500px', '280px'],
+				closeBtn: 2,
+				shadeClose: false,
+				content:"<div class='zun-form-new webDelete' style='padding-top:15px'>\
+					<p style='color:red; margin-bottom:10px; font-size:15px;'>Note that if your server is a container, please cancel.</p>\
+					<div class='SafeRestart' style='line-height:26px'>\
+						<p>A secure restart is good for file security and will do the following:</p>\
+						<p>1.Stopping the $web.ctx.session.webserver service</p>\
+						<p>2.Stop MySQL service</p>\
+						<p>3.Start restarting the server</p>\
+						<p>4.Waiting for server to start</p>\
+					</div>\
+					<div class='submit-btn'>\
+						<button type='button' id='web_end_time' class='btn btn-danger btn-sm btn-title' onclick='layer.closeAll()'>Cancel</button>\
+						<button type='button' id='web_del_send' class='btn btn-info btn-sm btn-title'  onclick='WSafeRestart()'>Submit</button>\
+					</div>\
+				</div>"
+			})
+		}
+
+		function WSafeRestart(){
+			var body = '<div class="SafeRestartCode" style="line-height:26px"></div>';
+			$$(".webDelete").html(body);
+			var data = "name=$web.ctx.session.webserver&type=stop";
+			$$(".SafeRestartCode").html("<p>Stopping the $web.ctx.session.webserver service...</p>");
+			$$.post('/system?action=ServiceAdmin',data,function(r1){
+				data = "name=mysqld&type=stop";
+				$$(".SafeRestartCode").html("<p style='color:999'>Stopping the $web.ctx.session.webserver service</p><p>Stopping MySQL service...</p>");
+				$$.post('/system?action=ServiceAdmin',data,function(r2){
+					$$(".SafeRestartCode").html("<p style='color:999'>Stopping the $web.ctx.session.webserver service</p><p style='color:#999'>Stopping MySQL service</p><p>Start restarting the server...</p>");
+					$$.post('/system?action=RestartServer','',function(rdata){
+						$$(".SafeRestartCode").html("<p style='color:#999'>Stopping the $web.ctx.session.webserver service</p><p style='color:#999'>Stopping MySQL service</p><p>Start restarting the server</p><p>Waiting for server to start...</p>");
+						var sEver = setInterval(function(){
+							$$.get("/system?action=GetSystemTotal", function(info) {
+								clearInterval(sEver);
+								$$(".SafeRestartCode").html("<p style='color:#999'>Stopping the $web.ctx.session.webserver service</p><p style='color:#999'>Stopping MySQL service</p><p>Start restarting the server</p><p>Waiting for server to start</p><p>The server restarted successfully.!</p>");
+								setTimeout(function(){
+									layer.closeAll();
+								},3000);
+							}).error(function(){
+
+							});
+						},3000);
+					}).error(function(){
+						$$(".SafeRestartCode").html("<p style='color:#999'>Stopping the $web.ctx.session.webserver service</p><p style='color:#999'>Stopping MySQL service</p><p style='color:#999'>Start restarting the server</p><p>Waiting for server to start...</p>");
+						var sEver = setInterval(function(){
+							$$.get("/system?action=GetSystemTotal", function(info) {
+								clearInterval(sEver);
+								$$(".SafeRestartCode").html("<p style='color:#999'>Stopping the $web.ctx.session.webserver service</p><p style='color:#999'>Stopping MySQL service</p><p style='color:#999'>Start restarting the server</p><p style='color:#999'>Waiting for server to start</p><p>The server restarted successfully.!</p>");
+								setTimeout(function(){
+									layer.closeAll();
+									window.location.reload();
+								},3000);
+
+							}).error(function(){
+
+							});
+						},3000);
+					});
+				});
+			});
+			$$(".layui-layer-close").unbind("click");
+		}
 
 	</script>
