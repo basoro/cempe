@@ -14,6 +14,7 @@ urls = (
     '/login'        , 'panelLogin',
     '/system'       , 'panelSystem',
     '/public'       , 'panelPublic',
+    '/domains'      , 'panelDomains',
     '/files'        , 'panelFiles',
     '/download'     , 'panelDownload',
 )
@@ -111,6 +112,7 @@ class panelSystem(common.panelAdmin):
             'StatusNginx',
             'StatusMySQL',
             'StatusPHP',
+            'PHPMyAdminExt',
             'RestartServer'
             )
         for key in defs:
