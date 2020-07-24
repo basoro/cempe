@@ -82,7 +82,7 @@ firewall-cmd --reload
 systemctl stop httpd
 systemctl disable httpd
 systemctl stop xinetd
-chkcsystemctl disableonfig xinetd
+systemctl disable xinetd
 systemctl stop saslauthd
 systemctl disable saslauthd
 systemctl stop sendmail
