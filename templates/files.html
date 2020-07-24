@@ -20,15 +20,14 @@ $def with (tData)
 						<button class="btn btn-default btn-sm pull-left" onclick="UploadFiles()">Upload</button>
 						<span id='BarTools'></span>
 						<span id='Batch'></span>
-						<span id='comlist' class="comlist"></span>
-						<div class="btn-group btn-group-sm pull-right" style="margin-right:5px;">
+						<span id='comlist' class="comlist visible-lg visible-md visible-sm"></span>
+						<div class="btn-group btn-group-sm pull-right visible-lg visible-md visible-sm" style="margin-right:5px;">
 						  <button id="set_icon" title="Icon arrangement" type="button" class="btn btn-default">
 						  	<i class="glyphicon glyphicon-th"></i>
 						  </button>
 						  <button id="set_list" title="List arrangement" type="button" class="btn btn-default active">
 						  	<i class="glyphicon glyphicon-th-list"></i>
 						  </button>
-
 						</div>
 					</div>
 					<div class="divtable" id="fileCon"></div>
@@ -101,9 +100,9 @@ function GetFiles(Path) {
 						<td><input type='checkbox' name='id' value='"+fmp[0]+"'></td>\
 						<td class='column-name'><span class='cursor' onclick=\"GetFiles('" + rdata.PATH + "/" + fmp[0] + "')\"><span class='ico ico-folder'></span><a class='text' title='" + fmp[0] + "'>" + cnametext + "</a></span></td>\
 						<td>"+ToSize(fmp[1])+"</td>\
-						<td>"+getLocalTime(fmp[2])+"</td>\
-						<td>"+fmp[3]+"</td>\
-						<td>"+fmp[4]+"</td>\
+						<td class='visible-lg visible-md visible-sm'>"+getLocalTime(fmp[2])+"</td>\
+						<td class='visible-lg visible-md visible-sm'>"+fmp[3]+"</td>\
+						<td class='visible-lg visible-md visible-sm'>"+fmp[4]+"</td>\
 						<td class='editmenu'><span>\
 						<a class='link' href='javascript:;' onclick=\"CopyFile('" + rdata.PATH +"/"+ fmp[0] + "')\">Copy</a> | \
 						<a class='link' href='javascript:;' onclick=\"CutFile('" + rdata.PATH +"/"+ fmp[0]+ "')\">Cut</a> | \
@@ -150,9 +149,9 @@ function GetFiles(Path) {
 				Body += "<tr class='folderBoxTr' data-path='" + rdata.PATH +"/"+ fmp[0] + "' filetype='" + fmp[0] + "'><td><input type='checkbox' name='id' value='"+fmp[0]+"'></td>\
 						<td class='column-name'><span class='ico ico-"+(GetExtName(fmp[0]))+"'></span><a class='text' title='" + fmp[0] + "'>" + cnametext + "</a></td>\
 						<td>" + (ToSize(fmp[1])) + "</td>\
-						<td>" + ((fmp[2].length > 11)?fmp[2]:getLocalTime(fmp[2])) + "</td>\
-						<td>"+fmp[3]+"</td>\
-						<td>"+fmp[4]+"</td>\
+						<td class='visible-lg visible-md visible-sm'>" + ((fmp[2].length > 11)?fmp[2]:getLocalTime(fmp[2])) + "</td>\
+						<td class='visible-lg visible-md visible-sm'>"+fmp[3]+"</td>\
+						<td class='visible-lg visible-md visible-sm'>"+fmp[4]+"</td>\
 						<td class='editmenu'>\
 						<span><a class='link' href='javascript:;' onclick=\"CopyFile('" + rdata.PATH +"/"+ fmp[0] + "')\">Copy</a> | \
 						<a class='link' href='javascript:;' onclick=\"CutFile('" + rdata.PATH +"/"+ fmp[0] + "')\">Cut</a> | \
@@ -179,9 +178,9 @@ function GetFiles(Path) {
 									<th width="30"><input type="checkbox" id="setBox" placeholder=""></th>\
 									<th>File name</th>\
 									<th>Size</th>\
-									<th>Modified dattime</th>\
-									<th>Chmod</th>\
-									<th>Owner</th>\
+									<th class="visible-lg visible-md visible-sm">Modified dattime</th>\
+									<th class="visible-lg visible-md visible-sm">Chmod</th>\
+									<th class="visible-lg visible-md visible-sm">Owner</th>\
 									<th style="text-align: right;" width="260">Action</th>\
 								</tr>\
 							</thead>\
@@ -359,13 +358,13 @@ $$(window).scroll(function () {
 $$("#tipTools").width($$(".black-ip").width());
 $$("#PathPlaceBtn,#PathPlace input").width($$(".black-ip").width()-460);
 if($$(window).width()<1160){
-	$$("#PathPlaceBtn").width(290);
+	$$("#PathPlaceBtn").width(190);
 }
 window.onresize = function(){
 	$$("#tipTools").width($$(".black-ip").width()-23);
 	$$("#PathPlaceBtn,#PathPlace input").width($$(".black-ip").width()-460);
 	if($$(window).width()<1160){
-		$$("#PathPlaceBtn,#PathPlace input").width(290);
+		$$("#PathPlaceBtn,#PathPlace input").width(190);
 	}
 	PathLeft()
 }
