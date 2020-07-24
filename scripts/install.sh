@@ -73,6 +73,8 @@ systemctl start firewalld
 firewall-cmd --set-default-zone=public > /dev/null 2>&1
 firewall-cmd --permanent --zone=public --add-port=22/tcp > /dev/null 2>&1
 firewall-cmd --permanent --zone=public --add-port=80/tcp > /dev/null 2>&1
+firewall-cmd --permanent --zone=public --add-port=443/tcp > /dev/null 2>&1
+firewall-cmd --permanent --zone=public --add-port=3306/tcp > /dev/null 2>&1
 firewall-cmd --permanent --zone=public --add-port=1234/tcp > /dev/null 2>&1
 firewall-cmd --permanent --zone=public --add-port=$port/tcp > /dev/null 2>&1
 firewall-cmd --reload
