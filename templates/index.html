@@ -443,7 +443,6 @@ $def with (data)
 									layer.closeAll();
 								},3000);
 							}).error(function(){
-
 							});
 						},3000);
 					}).error(function(){
@@ -451,14 +450,22 @@ $def with (data)
 						var sEver = setInterval(function(){
 							$$.get("/system?action=GetSystemTotal", function(info) {
 								clearInterval(sEver);
+                var data = "name=nginx&type=start";
+                $$(".SafeRestartCode").html();
+                $$.post('/system?action=ServiceAdmin',data,function(r1){
+                  var data = "name=mysqld&type=start";
+                  $$(".SafeRestartCode").html();
+                  $$.post('/system?action=ServiceAdmin',data,function(r2){
+                  });
+                });
+                             
 								$$(".SafeRestartCode").html("<p style='color:#999'>Stopping the $web.ctx.session.webserver service</p><p style='color:#999'>Stopping MySQL service</p><p style='color:#999'>Start restarting the server</p><p style='color:#999'>Waiting for server to start</p><p>The server restarted successfully.!</p>");
 								setTimeout(function(){
 									layer.closeAll();
 									window.location.reload();
-								},3000);
+                                },3000);
 
 							}).error(function(){
-
 							});
 						},3000);
 					});
