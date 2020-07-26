@@ -4,9 +4,9 @@ export PATH
 LANG=en_US.UTF-8
 
 echo "
-+-------------------------------------
-| SLEMP Panel Lite 1.x  Untuk CentOS 7
-+-------------------------------------
++---------------------------------+
+| CEMPe Panel 1.x  Untuk CentOS 7 |
++---------------------------------+
 "
 download_Url=https://basoro.id/downloads/slemp
 
@@ -15,7 +15,7 @@ port='12345'
 
 while [ "$go" != 'y' ] && [ "$go" != 'n' ]
 do
-	read -p "Yakin mau memasang SLEMP Panel Lite?(y/n): " go;
+	read -p "Yakin mau memasang CEMPe Panel?(y/n): " go;
 done
 
 if [ "$go" == 'n' ];then
