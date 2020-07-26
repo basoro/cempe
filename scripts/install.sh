@@ -43,7 +43,7 @@ mkdir -pv /opt/slemp/{wwwroot/default,wwwlogs,server/{data,mysql/{bin,lib},nginx
 wget -O panel.zip https://github.com/basoro/cempe/archive/master.zip
 
 unzip -o panel.zip -d $setup_path/server/ > /dev/null
-mv $setup_path/server/panel-master $setup_path/server/panel
+mv $setup_path/server/cempe-master $setup_path/server/panel
 
 python -m compileall $setup_path/server/panel
 rm -f $setup_path/server/panel/*.py
