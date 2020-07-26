@@ -170,23 +170,24 @@ http
 
         server_tokens off;
         access_log off;
-    server {
-        listen 80 default;
-        server_name _;
-        index index.html index.htm index.php;
-        root /opt/slemp/wwwroot/default;
-        include enable-php-56.conf;
-    }
-		server{
-        listen 1234;
-        server_name phpmyadmin.basoro.id;
-        index index.html index.htm index.php;
-        root  /opt/slemp/server/phpmyadmin;
-        include enable-php-56.conf;
-    }
+        server {
+            listen 80 default;
+            server_name _;
+            index index.html index.htm index.php;
+            root /opt/slemp/wwwroot/default;
+            include enable-php-56.conf;
+        }
+	server{
+            listen 1234;
+            server_name phpmyadmin.basoro.id;
+            index index.html index.htm index.php;
+            root  /opt/slemp/server/phpmyadmin;
+            include enable-php-56.conf;
+        }
     include /opt/slemp/server/nginx/conf/vhost/*.conf;
 }
 END
+
 rm -rf /etc/nginx/conf.d/*
 
 rm -f /etc/init.d/nginx
@@ -276,7 +277,6 @@ interactive-timeout
 EOF
 
 
-## Ini belum fix
 ln -sf /usr/bin/mysql /opt/slemp/server/mysql/bin/mysql
 ln -sf /usr/bin/mysqldump /opt/slemp/server/mysql/bin/mysqldump
 ln -sf /usr/bin/myisamchk /opt/slemp/server/mysql/bin/myisamchk
@@ -418,16 +418,16 @@ do
 done
 
 echo -e "=================================================================="
-echo -e "\033[32mSelamat! Pemasangan SLEMP Panel Lite berhasil!\033[0m"
+echo -e "\033[32mSelamat! Pemasangan CEMPe Panel berhasil!\033[0m"
 echo -e "=================================================================="
-echo  "SLEMP-Panel: http://$address:$port"
+echo  "CEMPe-Panel: http://$address:$port"
 echo -e "username: $username"
 echo -e "password: $password"
 echo -e "Default Site Url: http://$address"
 echo -e "MySQL Password: $mysqlpwd"
 echo -e "\033[33mPeringatan:\033[0m"
 echo -e "\033[33mJika tidak bisa mengakses panel, \033[0m"
-echo -e "\033[33msilahkan buka port berikut (12345|1234|80|22) di menu keamanan\033[0m"
+echo -e "\033[33msilahkan buka port berikut (12345|1234|80|22)\033[0m"
 echo -e "=================================================================="
 
 endTime=`date +%s`
