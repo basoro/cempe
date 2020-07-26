@@ -40,7 +40,7 @@ mkdir -p /opt/slemp/server
 
 mkdir -pv /opt/slemp/{wwwroot/default,wwwlogs,server/{data,mysql/{bin,lib},nginx/{sbin,logs,conf/{vhost,rewrite}},php/56/{etc,bin,sbin,var/run}}}
 
-wget -O panel.zip https://github.com/basoro/panel/archive/master.zip
+wget -O panel.zip https://github.com/basoro/cempe/archive/master.zip
 
 unzip -o panel.zip -d $setup_path/server/ > /dev/null
 mv $setup_path/server/panel-master $setup_path/server/panel
