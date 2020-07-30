@@ -43,9 +43,6 @@ $def with (data)
 							  </button>
 							  <ul class="dropdown-menu" role="menu" aria-labelledby="excode">
 								<li><a role="menuitem" tabindex="-1" href="javascript:;" value="toShell">Shell script</a></li>
-								<li><a role="menuitem" tabindex="-1" href="javascript:;" value="site">Backup website</a></li>
-								<li><a role="menuitem" tabindex="-1" href="javascript:;" value="database">Backup database</a></li>
-								<li><a role="menuitem" tabindex="-1" href="javascript:;" value="logs">Log cutting</a></li>
 								<li><a role="menuitem" tabindex="-1" href="javascript:;" value="rememory">Free memory</a></li>
 								<li><a role="menuitem" tabindex="-1" href="javascript:;" value="toUrl">Access URL</a></li>
 							  </ul>
@@ -372,88 +369,11 @@ $def with (data)
 			case 'rememory':
 				rememory();
 				break;
-			case 'site':
-				toBackup('sites');
-				break;
-			case 'database':
-				toBackup('databases');
-				break;
-			case 'logs':
-				toBackup('logs');
-				break;
 			case 'toUrl':
 				toUrl();
 				break;
 		}
 	})
-
-	function toBackup(type){
-		var sMsg = "";
-		switch(type){
-			case 'sites':
-				sMsg = 'Backup website';
-				sType = "sites";
-				break;
-			case 'databases':
-				sMsg = 'Backup database';
-				sType = "databases";
-				break;
-			case 'logs':
-				sMsg = 'Cutting log';
-				sType = "sites";
-				break;
-		}
-		var data='type='+sType
-		$$.post('/crontab?action=GetDataList',data,function(rdata){
-			$$(".planname input[name='name']").attr('readonly','true').css({"background-color":"#f6f6f6","color":"#666"});
-			var sOpt = "";
-			if(rdata.data.length == 0){
-				layer.msg('List is empty!',{icon:2})
-				return
-			}
-			for(var i=0;i<rdata.data.length;i++){
-				if(i==0){
-					$$(".planname input[name='name']").val(sMsg+'['+rdata.data[i].name+']');
-				}
-				sOpt += '<li><a role="menuitem" tabindex="-1" href="javascript:;" value="'+rdata.data[i].name+'">'+rdata.data[i].name+'['+rdata.data[i].ps+']</a></li>';
-			}
-
-			var orderOpt = ''
-			for (var i=0;i<rdata.orderOpt.length;i++){
-				orderOpt += '<li><a role="menuitem" tabindex="-1" href="javascript:;" value="'+rdata.orderOpt[i].value+'">'+rdata.orderOpt[i].name+'</a></li>'
-			}
-
-
-
-			var sBody = '<div class="dropdown">\
-						  <button class="btn btn-default dropdown-toggle" type="button" id="backdata" data-toggle="dropdown" style="width:auto">\
-							<b id="sName" val="'+rdata.data[0].name+'">'+rdata.data[0].name+'['+rdata.data[0].ps+']</b> <span class="caret"></span>\
-						  </button>\
-						  <ul class="dropdown-menu" role="menu" aria-labelledby="backdata">'+sOpt+'</ul>\
-						</div>\
-						<div class="textname">Backup to</div>\
-						<div class="dropdown planBackupTo">\
-						  <button class="btn btn-default dropdown-toggle" type="button" id="excode" data-toggle="dropdown" style="width:auto;">\
-							<b val="localhost">Server disk</b> <span class="caret"></span>\
-						  </button>\
-						  <ul class="dropdown-menu" role="menu" aria-labelledby="excode">\
-							<li><a role="menuitem" tabindex="-1" href="javascript:;" value="localhost">Server disk</a></li>\
-							'+ orderOpt +'\
-						  </ul>\
-						</div>\
-						<div class="textname">Keep up to date</div><div class="plan_hms">\
-						<span><input type="number" name="save" id="save" value="3" maxlength="4" max="100" min="1"></span>\
-						<span class="name">Share</span>\
-						</div>';
-			$$("#implement").html(sBody);
-			getselectname();
-			$$(".dropdown ul li a").click(function(){
-				var sName = $$("#sName").attr("val");
-				if(!sName) return;
-				$$(".planname input[name='name']").val(sMsg+'['+sName+']');
-			});
-		});
-	}
 
 	function getselectname(){
 		$$(".dropdown ul li a").click(function(){

@@ -116,26 +116,6 @@ class crontab:
         cuonConfig = "{0} {1} {2} * * ".format(param['minute'],param['hour'],param['where1'])
         return cuonConfig
 
-    def GetDataList(self,get):
-        data = {}
-        data['data'] = public.M(get['type']).field('name,ps').select()
-        data['orderOpt'] = [];
-        import json
-        tmp = public.readFile('data/libList.conf');
-        libs = json.loads(tmp)
-        import imp;
-        for lib in libs:
-            try:
-                imp.find_module(lib['module']);
-                tmp = {}
-                tmp['name'] = lib['name'];
-                tmp['value']= lib['opt']
-                data['orderOpt'].append(tmp);
-            except:
-                continue;
-
-        return data
-
     def GetLogs(self,get):
         id = get['id']
         echo = public.M('crontab').where("id=?",(id,)).field('echo').find()
