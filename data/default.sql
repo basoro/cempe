@@ -4,6 +4,16 @@ CREATE TABLE "sessions" (
 	"data" TEXT
 );
 
+CREATE TABLE IF NOT EXISTS `crontab` (
+  `id` INTEGER PRIMARY KEY AUTOINCREMENT,
+  `name` TEXT,
+  `type` TEXT,
+  `where1` TEXT,
+  `where_hour` INTEGER,
+  `where_minute` INTEGER,
+  `echo` TEXT,
+  `addtime` TEXT
+);
 
 CREATE TABLE IF NOT EXISTS `users` (
   `id` INTEGER PRIMARY KEY AUTOINCREMENT,

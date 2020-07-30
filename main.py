@@ -16,6 +16,7 @@ urls = (
     '/public'       , 'panelPublic',
     '/files'        , 'panelFiles',
     '/download'     , 'panelDownload',
+    '/crontab'      , 'panelCrontab',
 )
 
 
@@ -185,6 +186,26 @@ class panelDownload(common.panelAdmin):
         finally:
             if fp:
                 fp.close()
+
+class panelCrontab(common.panelAdmin):
+    def GET(self):
+        import crontab
+        get = web.input()
+        data = crontab.crontab().GetCrontab(get)
+        return render.crontab(data)
+
+    def POST(self):
+        get = web.input()
+
+        import crontab
+        crontabObject = crontab.crontab()
+        defs = ('GetCrontab','AddCrontab','GetDataList','GetLogs','DelLogs','DelCrontab','StartTask')
+        for key in defs:
+            if key == get.action:
+                fun = 'crontabObject.'+key+'(get)'
+                return public.getJson(eval(fun))
+
+        return public.returnJson(False,'Invalid specified parameter!')
 
 def publicObject(toObject,defs):
     get = web.input();
