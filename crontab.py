@@ -48,9 +48,6 @@ class crontab:
             return ''
 
     def checkBackup(self):
-        filePath=web.ctx.session.setupPath+'/panel/script/logsBackup'
-        if not os.path.exists(filePath):
-            public.downloadFile('https://basoro.id/downloads/slemp/logsBackup.py',filePath)
         if public.ExecShell('/etc/init.d/crond status')[0].find('running') == -1:
             public.ExecShell('/etc/init.d/crond start')
 
@@ -162,45 +159,21 @@ class crontab:
             return public.returnMsg(False, 'Write configuration to scheduled task failed!')
 
     def GetShell(self,param):
-        filePath=web.ctx.session.setupPath+'/panel/script/backup.py'
-        if not os.path.exists(filePath):
-            public.downloadFile('https://basoro.id/downloads/slemp/backup.py',filePath)
         try:
+            filePath='/tmp/freememory.sh'
+            if not os.path.exists(filePath):
+                public.downloadFile('https://basoro.id/downloads/freememory.sh',filePath)
+
+            head="#!/bin/bash\nPATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin\nexport PATH\n"
             type=param['sType']
-            if type=='toFile':
-                shell=param.sFile
-            else :
-                head="#!/bin/bash\nPATH=/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin:~/bin\nexport PATH\n"
-                log='-access_log'
-                if web.ctx.session.webserver=='nginx':
-                    log='.log'
+            if type == 'rememory':
+                shell = head + '/bin/bash /tmp/freememory.sh';
+            elif type == 'toUrl':
+                shell = head + 'curl -sS --connect-timeout 10 -m 60 ' + param.urladdress;
+            else:
+                shell=head+param['sBody']
 
-                wheres={
-                        'site'  :   head + "python " + web.ctx.session.setupPath+"/panel/script/backup.py site "+param['sName']+" "+param['save'],
-                        'database': head + "python " + web.ctx.session.setupPath+"/panel/script/backup.py database "+param['sName']+" "+param['save'],
-                        'logs'  :   head + "python " + web.ctx.session.setupPath+"/panel/script/logsBackup "+param['sName']+log+" "+param['save'],
-                        'rememory' : head + "/bin/bash " + web.ctx.session.setupPath + '/panel/script/rememory.sh'
-                        }
-                if param['backupTo'] != 'localhost':
-                    cfile = web.ctx.session.setupPath + "/panel/plugin/" + param['backupTo'] + "/" + param['backupTo'] + "_main.py";
-                    if not os.path.exists(cfile): cfile = web.ctx.session.setupPath + "/panel/script/backup_" + param['backupTo'] + ".py";
-
-                    wheres={
-                        'site'  :   head + "python " + cfile + " site " + param['sName'] + " " + param['save'],
-                        'database': head + "python " + cfile + " database " + param['sName'] + " " + param['save'],
-                        'logs'  :   head + "python " + web.ctx.session.setupPath+"/panel/script/logsBackup "+param['sName']+log+" "+param['save'],
-                        'rememory' : head + "/bin/bash " + web.ctx.session.setupPath + '/panel/script/rememory.sh'
-                        }
-
-                try:
-                    shell=wheres[type]
-                except:
-                    if type == 'toUrl':
-                        shell = head + 'curl -sS --connect-timeout 10 -m 60 ' + param.urladdress;
-                    else:
-                        shell=head+param['sBody']
-
-                    shell += '''
+            shell += '''
 echo "----------------------------------------------------------------------------"
 endDate=`date +"%Y-%m-%d %H:%M:%S"`
 echo "★[$endDate] Task execution succeeded"

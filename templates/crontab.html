@@ -447,11 +447,11 @@ $def with (data)
 	function toUrl(){
 		var tBody = "<input type='text' style='width:400px;' class='form-control' name='urladdress' id='urladdress' placeholder='URL address' value='http://' />";
 		$$("#implement").html(tBody);
-		//$$(".planname input[name='name']").removeAttr('readonly style').val("");
+		$$(".planname input[name='name']").removeAttr('readonly style').val("");
 	}
 
 	function rememory(){
-		$$(".planname input[name='name']").val('release memory');
+		$$(".planname input[name='name']").val('Release Memory');
 		$$("#implement").html('Release the memory usage of PHP, MYSQL, NGINX, it is recommended to execute in the middle of the night!');
 		return;
 	}
