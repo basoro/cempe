@@ -2196,7 +2196,7 @@ html .zun-form-new .form-control-text {
     border-radius: 4px;
     height: 140px;
     padding: 5px;
-    width: 256px;
+    width: 100%;
 }
 .bingfa{
 	padding-top: 10px;
