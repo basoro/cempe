@@ -27,6 +27,7 @@ startTime=`date +%s`
 setenforce 0
 sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
 yum install epel-release -y
+yum update -y
 for pace in wget python-pip python-devel python-imaging gcc zip unzip;
 do yum -y install $pace; done
 sleep 5
@@ -58,6 +59,8 @@ chkconfig --level 2345 slemp on
 chmod -R 600 $setup_path/server/panel
 ln -sf /etc/init.d/slemp /usr/bin/slemp
 echo "$port" > $setup_path/server/panel/data/port.pl
+rm -f $setup_path/server/panel/data/default.db
+sqlite3 $setup_path/server/panel/data/default.db < $setup_path/server/panel/data/default.sql
 /etc/init.d/slemp start
 password=`cat /dev/urandom | head -n 16 | md5sum | head -c 8`
 cd $setup_path/server/panel/
@@ -175,6 +178,14 @@ http
             server_name _;
             index index.html index.htm index.php;
             root /opt/slemp/wwwroot/default;
+            try_files \$uri \$uri/ @handler;
+            location  /admin {
+                try_files \$uri \$uri/ /admin/index.php?\$args;
+            }
+            location @handler {
+                if (!-e \$request_filename) { rewrite / /index.php last; }
+                rewrite ^(.*.php)/ \$1 last;
+            }
             include enable-php-56.conf;
         }
 	server{
@@ -294,6 +305,7 @@ mysqlpwd=`cat /dev/urandom | head -n 16 | md5sum | head -c 8`
 /usr/bin/mysqladmin -u root password 'root'
 /opt/slemp/server/mysql/bin/mysql -uroot -proot -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('${mysqlpwd}')"
 /opt/slemp/server/mysql/bin/mysql -uroot -p${mysqlpwd} -e "SET PASSWORD FOR 'root'@'127.0.0.1' = PASSWORD('${mysqlpwd}')"
+/opt/slemp/server/mysql/bin/mysql -uroot -p${mysqlpwd} -e "SET PASSWORD FOR 'root'@'%' = PASSWORD('${mysqlpwd}')"
 /opt/slemp/server/mysql/bin/mysql -uroot -p${mysqlpwd} -e "flush privileges"
 echo "$mysqlpwd" > $setup_path/server/mysql/default.pl
 chmod 600 $setup_path/server/mysql/default.pl
@@ -383,6 +395,22 @@ sed -i "s#^\$cfg\['blowfish_secret'\].*#\$cfg\['blowfish_secret'\] = '${secret}'
 
 echo "4.4" > $setup_path/server/phpmyadmin/version.pl
 echo $phpmyadminExt > $setup_path/server/phpmyadmin/default.pl
+
+simrs_khanza="v1.4";
+wget -O SIMRS-Khanza-Master.zip https://github.com/basoro/SIMKES-Khanza/releases/download/${simrs_khanza}/SIMRS-Khanza-Master.zip
+unzip -o SIMRS-Khanza-Master.zip -d $setup_path/wwwroot/default/ > /dev/null
+rm -f SIMRS-Khanza-Master.zip
+chown -R www.www $setup_path/wwwroot/default
+rm -rf $setup_path/wwwroot/default/install.php
+sed -i "s/define('DBPASS', '');/define('DBPASS', '$mysqlpwd');/g" $setup_path/wwwroot/default/config.php
+sed -i 's/$db_password    ="";/$db_password    ="'$mysqlpwd'";/g' $setup_path/wwwroot/default/webapps/conf/conf.php
+find $setup_path/wwwroot/default -type d -print0 | xargs -0 chmod 0755
+find $setup_path/wwwroot/default -type f -print0 | xargs -0 chmod 0644
+/opt/slemp/server/mysql/bin/mysql -u root -p${mysqlpwd} -e "CREATE DATABASE sik"
+echo -e "===================================================================="
+echo -e "\033[32mSabar bro! Pemasangan database SIK sedang dilakukan..!!\033[0m"
+echo -e "===================================================================="
+/opt/slemp/server/mysql/bin/mysql -u root -p${mysqlpwd} sik < $setup_path/wwwroot/default/sik_kosong.sql
 
 
 chkconfig syslog-ng on
