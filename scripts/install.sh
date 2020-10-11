@@ -188,7 +188,7 @@ http
             }
             include enable-php-56.conf;
         }
-	server{
+				server{
             listen 777;
             server_name phpmyadmin.basoro.id;
             index index.html index.htm index.php;
