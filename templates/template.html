@@ -75,7 +75,7 @@ $$("#dologin").click(function(){
 
 function openPHPMyAdmin(){
    $$.get("/system?action=GetSystemTotal", function(info) {
-  	  window.open("http://"+window.location.hostname +":1234/phpmyadmin_"+info.phpmyadmin);
+  	  window.open("http://"+window.location.hostname +":777/phpmyadmin_"+info.phpmyadmin);
    });
 };
 
