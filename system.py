@@ -113,7 +113,12 @@ class system:
 
         os.system(execStr);
         if get.type != 'reload':
-            public.writeFile(statusData,get.type)
+            status = ''
+            if get.type == 'start':
+                status = '<span style="color:green" class="glyphicon glyphicon-play"></span>'
+            if get.type == 'stop':
+                status = '<span style="color:red" class="glyphicon glyphicon-pause"></span>'
+            public.writeFile(statusData,status)
         return public.returnMsg(True,'execution succeed');
 
     def StatusNginx(self):
