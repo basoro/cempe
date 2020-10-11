@@ -305,7 +305,7 @@ mysqlpwd=`cat /dev/urandom | head -n 16 | md5sum | head -c 8`
 /usr/bin/mysqladmin -u root password 'root'
 /opt/slemp/server/mysql/bin/mysql -uroot -proot -e "SET PASSWORD FOR 'root'@'localhost' = PASSWORD('${mysqlpwd}')"
 /opt/slemp/server/mysql/bin/mysql -uroot -p${mysqlpwd} -e "SET PASSWORD FOR 'root'@'127.0.0.1' = PASSWORD('${mysqlpwd}')"
-/opt/slemp/server/mysql/bin/mysql -uroot -p${mysqlpwd} -e "SET PASSWORD FOR 'root'@'%' = PASSWORD('${mysqlpwd}')"
+/opt/slemp/server/mysql/bin/mysql -uroot -p${mysqlpwd} -e "UPDATE mysql.user SET Host = '%' WHERE user.Host = '127.0.0.1'"
 /opt/slemp/server/mysql/bin/mysql -uroot -p${mysqlpwd} -e "flush privileges"
 echo "$mysqlpwd" > $setup_path/server/mysql/default.pl
 chmod 600 $setup_path/server/mysql/default.pl
@@ -407,9 +407,10 @@ sed -i 's/$db_password    ="";/$db_password    ="'$mysqlpwd'";/g' $setup_path/ww
 find $setup_path/wwwroot/default -type d -print0 | xargs -0 chmod 0755
 find $setup_path/wwwroot/default -type f -print0 | xargs -0 chmod 0644
 /opt/slemp/server/mysql/bin/mysql -u root -p${mysqlpwd} -e "CREATE DATABASE sik"
-echo -e "===================================================================="
+echo -e "================================================================"
 echo -e "\033[32mSabar bro! Pemasangan database SIK sedang dilakukan..!!\033[0m"
-echo -e "===================================================================="
+echo -e "\033[32mKurang lebih 5 menit. Tergantung spesisifikasi server.\033[0m"
+echo -e "================================================================"
 /opt/slemp/server/mysql/bin/mysql -u root -p${mysqlpwd} sik < $setup_path/wwwroot/default/sik_kosong.sql
 
 
