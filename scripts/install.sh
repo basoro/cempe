@@ -396,24 +396,6 @@ sed -i "s#^\$cfg\['blowfish_secret'\].*#\$cfg\['blowfish_secret'\] = '${secret}'
 echo "4.4" > $setup_path/server/phpmyadmin/version.pl
 echo $phpmyadminExt > $setup_path/server/phpmyadmin/default.pl
 
-simrs_khanza="v1.4";
-wget -O SIMRS-Khanza-Master.zip https://github.com/basoro/SIMKES-Khanza/releases/download/${simrs_khanza}/SIMRS-Khanza-Master.zip
-unzip -o SIMRS-Khanza-Master.zip -d $setup_path/wwwroot/default/ > /dev/null
-rm -f SIMRS-Khanza-Master.zip
-chown -R www.www $setup_path/wwwroot/default
-rm -rf $setup_path/wwwroot/default/install.php
-sed -i "s/define('DBPASS', '');/define('DBPASS', '$mysqlpwd');/g" $setup_path/wwwroot/default/config.php
-sed -i 's/$db_password    ="";/$db_password    ="'$mysqlpwd'";/g' $setup_path/wwwroot/default/webapps/conf/conf.php
-find $setup_path/wwwroot/default -type d -print0 | xargs -0 chmod 0755
-find $setup_path/wwwroot/default -type f -print0 | xargs -0 chmod 0644
-/opt/slemp/server/mysql/bin/mysql -u root -p${mysqlpwd} -e "CREATE DATABASE sik"
-echo -e "================================================================"
-echo -e "\033[32mSabar bro! Pemasangan database SIK sedang dilakukan..!!\033[0m"
-echo -e "\033[32mKurang lebih 5 menit. Tergantung spesisifikasi server.\033[0m"
-echo -e "================================================================"
-/opt/slemp/server/mysql/bin/mysql -u root -p${mysqlpwd} sik < $setup_path/wwwroot/default/sik_kosong.sql
-
-
 chkconfig syslog-ng on
 service syslog-ng start
 chkconfig crond on
