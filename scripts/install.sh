@@ -32,8 +32,9 @@ for pace in wget python-pip python-devel python-imaging gcc zip unzip;
 do yum -y install $pace; done
 sleep 5
 
-pip install --upgrade pip
-pip install --upgrade setuptools
+#pip install --upgrade pip
+#pip install --upgrade setuptools
+pip install setuptools
 pip install wheel
 pip install psutil chardet web.py==0.51 pillow
 
