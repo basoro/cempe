@@ -34,8 +34,10 @@ sleep 5
 
 #pip install --upgrade pip
 #pip install --upgrade setuptools
-pip install setuptools
+pip install setuptools==40.6.3
 pip install wheel
+pip install more-itertools==8.0.2
+pip install jaraco.functools==3.0.0
 pip install psutil chardet web.py==0.51 pillow
 
 mkdir -p /opt/slemp/server
