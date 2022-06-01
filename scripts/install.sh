@@ -8,7 +8,7 @@ echo "
 | CEMPe Panel 1.x  Untuk CentOS 7 |
 +---------------------------------+
 "
-download_Url=https://basoro.id/downloads/slemp
+download_Url=http://basoro.id/downloads/slemp
 
 setup_path=/opt/slemp
 port='7777'
@@ -332,7 +332,7 @@ php_conf="/opt/remi/php${php_version}/root/etc"
 vphp="5.6";
 
 mkdir /usr/local/ioncube
-wget -O /usr/local/ioncube/ioncube_loader_lin_${vphp}.so https://basoro.id/downloads/ioncube_loader_lin_${vphp}.so -T 20
+wget -O /usr/local/ioncube/ioncube_loader_lin_${vphp}.so http://basoro.id/downloads/ioncube_loader_lin_${vphp}.so -T 20
 
 echo "Write Ioncube Loader to php.ini..."
 cat >> ${php_conf}/php.ini <<EOF
