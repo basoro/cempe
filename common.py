@@ -11,7 +11,7 @@ class panelAdmin(panelSetup):
         web.ctx.session.version = "1.1.3"
         web.ctx.session.rootPath = '/opt/slemp'
         web.ctx.session.webname = 'SLEMP Panel'
-        web.ctx.session.downloadUrl = 'https://basoro.id/downloads/slemp';
+        web.ctx.session.downloadUrl = 'http://basoro.id/downloads/slemp';
         web.ctx.session.setupPath = web.ctx.session.rootPath+'/server'
         web.ctx.session.configPath = web.ctx.session.rootPath+'/wwwroot'
         web.ctx.session.logsPath = web.ctx.session.rootPath+'/wwwlogs'
