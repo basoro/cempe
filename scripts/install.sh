@@ -27,7 +27,7 @@ startTime=`date +%s`
 setenforce 0
 sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
 yum install epel-release -y
-yum update -y
+#yum update -y
 for pace in wget python-pip python-devel python-imaging gcc zip unzip;
 do yum -y install $pace; done
 sleep 5
