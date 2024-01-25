@@ -32,13 +32,46 @@ for pace in wget python-pip python-devel python-imaging gcc zip unzip;
 do yum -y install $pace; done
 sleep 5
 
-#pip install --upgrade pip
-#pip install --upgrade setuptools
-pip install setuptools==40.6.3
-pip install wheel
-pip install more-itertools==8.0.2
-pip install jaraco.functools==3.0.0
-pip install psutil chardet web.py==0.51 pillow
+wget -O setuptools-33.1.1.zip https://files.pythonhosted.org/packages/dc/8c/7c9869454bdc53e72fb87ace63eac39336879eef6f2bf96e946edbf03e90/setuptools-33.1.1.zip -T 10
+unzip setuptools-33.1.1.zip
+rm -f setuptools-33.1.1.zip
+cd setuptools-33.1.1
+python setup.py install
+cd ..
+rm -rf setuptools-33.1.1
+
+wget -O psutil-5.2.2.tar.gz https://files.pythonhosted.org/packages/57/93/47a2e3befaf194ccc3d05ffbcba2cdcdd22a231100ef7e4cf63f085c900b/psutil-5.2.2.tar.gz -T 10
+tar xvf psutil-5.2.2.tar.gz
+rm -f psutil-5.2.2.tar.gz
+cd psutil-5.2.2
+python setup.py install
+cd ..
+rm -rf psutil-5.2.2
+
+wget -O MySQL-python-1.2.5.zip https://files.pythonhosted.org/packages/a5/e9/51b544da85a36a68debe7a7091f068d802fc515a3a202652828c73453cad/MySQL-python-1.2.5.zip -T 10
+unzip MySQL-python-1.2.5.zip
+rm -f MySQL-python-1.2.5.zip
+cd MySQL-python-1.2.5
+sed -i 's=www/server/mysql=usr=' site.cfg
+python setup.py install
+cd ..
+rm -rf MySQL-python-1.2.5
+
+wget -O chardet-2.3.0.tar.gz https://files.pythonhosted.org/packages/7d/87/4e3a3f38b2f5c578ce44f8dc2aa053217de9f0b6d737739b0ddac38ed237/chardet-2.3.0.tar.gz -T 10
+tar xvf chardet-2.3.0.tar.gz
+rm -f chardet-2.3.0.tar.gz
+cd chardet-2.3.0
+python setup.py install
+cd ..
+rm -rf chardet-2.3.0
+
+wget --no-check-certificate -O web.py-0.38.tar.gz https://webpy.org/static/web.py-0.38.tar.gz -T 10
+tar xvf web.py-0.38.tar.gz
+rm -f web.py-0.38.tar.gz
+cd web.py-0.38
+python setup.py install
+cd ..
+rm -rf web.py-0.38
 
 mkdir -p /opt/slemp/server
 
