@@ -44,7 +44,10 @@ if [ "${php_version}" = "73" ];then
   php_conf="/etc/opt/remi/php${php_version}" 
 fi
 
-wget -O /usr/local/ioncube/ioncube_loader_lin_${vphp}.so basoro.id/downloads/ioncube_loader_lin_${vphp}.so -T 20
+#wget -O /usr/local/ioncube/ioncube_loader_lin_${vphp}.so basoro.id/downloads/ioncube_loader_lin_${vphp}.so -T 20
+
+wget https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz
+tar -xvf ioncube_loaders_lin_x86-64.tar.gz -C /usr/local
 
 echo "Write Ioncube Loader to php.ini..."
 cat >> ${php_conf}/php.ini <<EOF
