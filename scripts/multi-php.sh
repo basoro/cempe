@@ -49,6 +49,8 @@ fi
 wget https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz
 tar -xvf ioncube_loaders_lin_x86-64.tar.gz -C /usr/local
 
+if [ "$vphp" != "80" ]
+then
 echo "Write Ioncube Loader to php.ini..."
 cat >> ${php_conf}/php.ini <<EOF
 
@@ -56,6 +58,7 @@ cat >> ${php_conf}/php.ini <<EOF
 zend_extension = /usr/local/ioncube/ioncube_loader_lin_${vphp}.so
 
 EOF
+fi
 
 sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 100M/' ${php_conf}/php.ini
 sed -i 's/post_max_size = 8M/post_max_size = 100M/' ${php_conf}/php.ini
