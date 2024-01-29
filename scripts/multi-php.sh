@@ -58,10 +58,10 @@ fi
 
 #wget -O /usr/local/ioncube/ioncube_loader_lin_${vphp}.so basoro.id/downloads/ioncube_loader_lin_${vphp}.so -T 20
 
-wget https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz
-tar -xvf ioncube_loaders_lin_x86-64.tar.gz -C /usr/local
+#wget https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz
+#tar -xvf ioncube_loaders_lin_x86-64.tar.gz -C /usr/local
 
-if [ "$vphp" != "80" ]
+if [ "$vphp" != "8.0" ]
 then
 echo "Write Ioncube Loader to php.ini..."
 cat >> ${php_conf}/php.ini <<EOF
