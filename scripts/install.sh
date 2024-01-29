@@ -364,8 +364,11 @@ ln -sf /opt/slemp/server/nginx/conf/enable-php-${php_version}.conf /etc/nginx/en
 php_conf="/opt/remi/php${php_version}/root/etc"
 vphp="5.6";
 
-mkdir /usr/local/ioncube
-wget -O /usr/local/ioncube/ioncube_loader_lin_${vphp}.so http://basoro.id/downloads/ioncube_loader_lin_${vphp}.so -T 20
+#mkdir /usr/local/ioncube
+#wget -O /usr/local/ioncube/ioncube_loader_lin_${vphp}.so http://basoro.id/downloads/ioncube_loader_lin_${vphp}.so -T 20
+
+wget https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz
+tar -xvf ioncube_loaders_lin_x86-64.tar.gz -C /usr/local
 
 echo "Write Ioncube Loader to php.ini..."
 cat >> ${php_conf}/php.ini <<EOF
