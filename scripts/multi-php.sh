@@ -43,6 +43,18 @@ fi
 if [ "${php_version}" = "73" ];then
   php_conf="/etc/opt/remi/php${php_version}" 
 fi
+if [ "${php_version}" = "74" ];then
+  php_conf="/etc/opt/remi/php${php_version}" 
+fi
+if [ "${php_version}" = "80" ];then
+  php_conf="/etc/opt/remi/php${php_version}" 
+fi
+if [ "${php_version}" = "81" ];then
+  php_conf="/etc/opt/remi/php${php_version}" 
+fi
+if [ "${php_version}" = "82" ];then
+  php_conf="/etc/opt/remi/php${php_version}" 
+fi
 
 #wget -O /usr/local/ioncube/ioncube_loader_lin_${vphp}.so basoro.id/downloads/ioncube_loader_lin_${vphp}.so -T 20
 
@@ -112,7 +124,11 @@ echo "4) PHP-7.0";
 echo "5) PHP-7.1";
 echo "6) PHP-7.2";
 echo "7) PHP-7.3";
-read -p "Plese select to add php version(1-7): " php;
+echo "8) PHP-7.4";
+echo "9) PHP-8.0";
+echo "10) PHP-8.1";
+echo "11) PHP-8.2";
+read -p "Plese select to add php version(1-11): " php;
 echo '=======================================================';
 
 case "${php}" in
@@ -143,6 +159,22 @@ case "${php}" in
   '7')
     vphp='7.3'
     php_version='73'
+    ;;
+  '8')
+    vphp='7.4'
+    php_version='74'
+    ;;
+  '9')
+    vphp='8.0'
+    php_version='80'
+    ;;
+  '10')
+    vphp='8.1'
+    php_version='81'
+    ;;
+  '11')
+    vphp='8.2'
+    php_version='82'
     ;;
 esac
 
