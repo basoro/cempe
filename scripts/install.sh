@@ -447,7 +447,7 @@ chown -R www:www /opt/slemp/server/panel/
 #Fix Sessions:
 mkdir -p /var/lib/php/session
 chmod 777 /var/lib/php/session
-rm -rf $setup_path/server/panel/scripts
+#rm -rf $setup_path/server/panel/scripts
 sleep 3
 
 cd ~
