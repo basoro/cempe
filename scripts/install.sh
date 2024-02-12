@@ -442,7 +442,17 @@ if [ ! -f /usr/local/bin/composer ];then
 	curl -sS https://getcomposer.org/installer | /opt/slemp/server/php/${php_version}/bin/php
 	mv composer.phar /usr/local/bin/composer
 fi
- 
+
+cd /opt/slemp/wwwroot/
+rm -rf /opt/slemp/wwwroot/default
+
+composer create-project basoro/mlite default
+sed -i -e "s/''/'$mysqlpwd'/g" /opt/slemp/wwwroot/default/config.php
+
+mysql -u root -p$mysqlpwd -e "CREATE DATABASE 'mlite'"
+
+mysql -u root -p$mysqlpwd mlite < /opt/slemp/wwwroot/default/mlite_db.sql
+
 chkconfig syslog-ng on
 service syslog-ng start
 chkconfig crond on
