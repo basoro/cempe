@@ -437,6 +437,12 @@ sed -i "s#^\$cfg\['blowfish_secret'\].*#\$cfg\['blowfish_secret'\] = '${secret}'
 echo "4.4" > $setup_path/server/phpmyadmin/version.pl
 echo $phpmyadminExt > $setup_path/server/phpmyadmin/default.pl
 
+if [ ! -f /usr/local/bin/composer ];then
+	cd /tmp
+	curl -sS https://getcomposer.org/installer | /opt/slemp/server/php/${php_version}/bin/php
+	mv composer.phar /usr/local/bin/composer
+fi
+ 
 chkconfig syslog-ng on
 service syslog-ng start
 chkconfig crond on
