@@ -23,8 +23,8 @@ if [ "$go" == 'n' ];then
 fi
 
 startTime=`date +%s`
-php_version="56";
-vphp="5.6";
+php_version="73";
+vphp="7.3";
 
 setenforce 0
 sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
@@ -459,8 +459,15 @@ chkconfig crond on
 service crond start
 chkconfig nginx on
 chkconfig php-fpm on
-systemctl stop mysql
+#systemctl stop mysql
 chkconfig mysqld on
+
+systemctl start nginx
+systemctl start php-fpm
+
+echo '<span style="color:green" class="glyphicon glyphicon-play"></span>' > /opt/slemp/server/panel/data/status-nginx.pl
+echo '<span style="color:green" class="glyphicon glyphicon-play"></span>' > /opt/slemp/server/panel/data/status-mysql.pl
+echo '<span style="color:green" class="glyphicon glyphicon-play"></span>' > /opt/slemp/server/panel/data/status-php-fpm.pl
 
 chown -R www:www /opt/slemp/wwwroot/default/
 chown -R www:www /opt/slemp/server/panel/
