@@ -23,6 +23,8 @@ if [ "$go" == 'n' ];then
 fi
 
 startTime=`date +%s`
+php_version="56";
+vphp="5.6";
 
 setenforce 0
 sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
@@ -75,7 +77,7 @@ rm -rf web.py-0.38
 
 mkdir -p /opt/slemp/server
 
-mkdir -pv /opt/slemp/{wwwroot/default,wwwlogs,server/{data,mysql/{bin,lib},nginx/{sbin,logs,conf/{vhost,rewrite}},php/56/{etc,bin,sbin,var/run}}}
+mkdir -pv /opt/slemp/{wwwroot/default,wwwlogs,server/{data,mysql/{bin,lib},nginx/{sbin,logs,conf/{vhost,rewrite}},php/${php_version}/{etc,bin,sbin,var/run}}}
 
 wget -O panel.zip https://github.com/basoro/cempe/archive/master.zip
 
@@ -222,14 +224,14 @@ http
                 if (!-e \$request_filename) { rewrite / /index.php last; }
                 rewrite ^(.*.php)/ \$1 last;
             }
-            include enable-php-56.conf;
+            include enable-php-${php_version}.conf;
         }
 				server{
             listen 777;
             server_name phpmyadmin.basoro.id;
             index index.html index.htm index.php;
             root  /opt/slemp/server/phpmyadmin;
-            include enable-php-56.conf;
+            include enable-php-${php_version}.conf;
         }
     include /opt/slemp/server/nginx/conf/vhost/*.conf;
 }
@@ -245,8 +247,8 @@ ln -sf /etc/nginx/nginx.conf /opt/slemp/server/nginx/conf/nginx.conf
 ln -sf /etc/nginx/mime.types /opt/slemp/server/nginx/conf/mime.types
 ln -sf /etc/nginx/fastcgi_params /opt/slemp/server/nginx/conf/fastcgi_params
 ln -sf /opt/slemp/server/nginx/conf/pathinfo.conf /etc/nginx/pathinfo.conf
-touch /opt/slemp/server/nginx/conf/enable-php-56.conf
-ln -sf /opt/slemp/server/nginx/conf/enable-php-56.conf /etc/nginx/enable-php-56.conf
+touch /opt/slemp/server/nginx/conf/enable-php${php_version}.conf
+ln -sf /opt/slemp/server/nginx/conf/enable-php-${php_version}.conf /etc/nginx/enable-php-${php_version}.conf
 ln -s /opt/slemp/server/nginx/conf/rewrite /etc/nginx/rewrite
 ln -s /opt/slemp/server/nginx/conf/key /etc/nginx/key
 
@@ -346,7 +348,7 @@ mysqlpwd=`cat /dev/urandom | head -n 16 | md5sum | head -c 8`
 echo "$mysqlpwd" > $setup_path/server/mysql/default.pl
 chmod 600 $setup_path/server/mysql/default.pl
 
-php_version="56";
+#php_version="56";
 yum -y install php${php_version}-php-common php${php_version}-php-fpm php${php_version}-php-process php${php_version}-php-mysql php${php_version}-php-pecl-memcache php${php_version}-php-pecl-memcached php${php_version}-php-gd php${php_version}-php-mbstring php${php_version}-php-mcrypt php${php_version}-php-xml php${php_version}-php-pecl-apc php${php_version}-php-cli php${php_version}-php-pear php${php_version}-php-pdo
 
 cat > /opt/slemp/server/nginx/conf/enable-php-${php_version}.conf <<END
@@ -362,7 +364,7 @@ END
 
 ln -sf /opt/slemp/server/nginx/conf/enable-php-${php_version}.conf /etc/nginx/enable-php-${php_version}.conf
 php_conf="/opt/remi/php${php_version}/root/etc"
-vphp="5.6";
+#vphp="5.6";
 
 #mkdir /usr/local/ioncube
 #wget -O /usr/local/ioncube/ioncube_loader_lin_${vphp}.so http://basoro.id/downloads/ioncube_loader_lin_${vphp}.so -T 20
@@ -410,7 +412,7 @@ ln -sf /opt/remi/php${php_version}/root/usr/bin/pear /opt/slemp/server/php/${php
 ln -sf /opt/remi/php${php_version}/root/usr/bin/pecl /opt/slemp/server/php/${php_version}/bin/pecl
 ln -sf /opt/remi/php${php_version}/root/usr/sbin/php-fpm /opt/slemp/server/php/${php_version}/sbin/php-fpm
 ln -sf /opt/remi/php${php_version}/root/etc/php.ini /etc/php.ini
-echo "5.6" > $setup_path/server/php/56/version.pl
+echo "${php_version}" > $setup_path/server/php/${php_version}/version.pl
 
 rm -f /etc/init.d/php-fpm
 mv $setup_path/server/panel/scripts/php-fpm.init /etc/init.d/php-fpm
