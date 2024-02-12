@@ -443,13 +443,18 @@ if [ ! -f /usr/local/bin/composer ];then
 	mv composer.phar /usr/local/bin/composer
 fi
 
+chmod +x /usr/local/bin/composer
+
+export COMPOSER_ALLOW_SUPERUSER=1;
+php73 /usr/local/bin/composer create-project basoro/mlite default
+
 cd /opt/slemp/wwwroot/
 rm -rf /opt/slemp/wwwroot/default
 
 composer create-project basoro/mlite default
 sed -i -e "s/''/'$mysqlpwd'/g" /opt/slemp/wwwroot/default/config.php
 
-mysql -u root -p$mysqlpwd -e "CREATE DATABASE 'mlite'"
+mysql -u root -p$mysqlpwd -e "CREATE DATABASE mlite"
 
 mysql -u root -p$mysqlpwd mlite < /opt/slemp/wwwroot/default/mlite_db.sql
 
