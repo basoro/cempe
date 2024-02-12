@@ -248,10 +248,7 @@ function GetConfigFile(type){
 		case 'php-fpm':
 			fileName = '/etc/php.ini';
 			break;
-		case 'simrs-khanza':
-			fileName = '/opt/slemp/wwwroot/default/webapps/conf/conf.php';
-			break;
-		case 'khanza-lite':
+		case 'mlite':
 			fileName = '/opt/slemp/wwwroot/default/config.php';
 			break;
 		default:
