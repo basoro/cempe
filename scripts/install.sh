@@ -499,6 +499,8 @@ do
 	fi
 done
 
+sed -i "s,localhost/mlite,${address},g" /opt/slemp/wwwroot/default/config.php
+
 echo -e "=================================================================="
 echo -e "\033[32mSelamat! Pemasangan CEMPe Panel berhasil!\033[0m"
 echo -e "=================================================================="
