@@ -472,7 +472,7 @@ chkconfig mysqld on
 systemctl start mysql
 
 echo '<span style="color:green" class="glyphicon glyphicon-play"></span>' > /opt/slemp/server/panel/data/status-nginx.pl
-echo '<span style="color:green" class="glyphicon glyphicon-play"></span>' > /opt/slemp/server/panel/data/status-mysql.pl
+echo '<span style="color:green" class="glyphicon glyphicon-play"></span>' > /opt/slemp/server/panel/data/status-mysqld.pl
 echo '<span style="color:green" class="glyphicon glyphicon-play"></span>' > /opt/slemp/server/panel/data/status-php-fpm.pl
 
 chown -R www:www /opt/slemp/wwwroot/default/
