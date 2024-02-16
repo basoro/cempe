@@ -116,12 +116,23 @@ case "$1" in
                 panel_status
                 ;;
         'default')
+		address=""
+		n=0
+		while [ "$address" == '' ]
+		do
+			address=`curl ifconfig.me`
+			let n++
+			sleep 0.1
+			if [ $n -gt 5 ];then
+				address="SERVER_IP"
+			fi
+		done
                 port=`cat /opt/slemp/server/panel/data/port.pl`
                 password=`cat /opt/slemp/server/panel/default.pl`
                 echo -e "=================================================================="
-                echo -e "\033[32mSLEMP-Panel default info!\033[0m"
+                echo -e "\033[32mCempe-Panel default info!\033[0m"
                 echo -e "=================================================================="
-                echo  "SLEMP-Panel: http://IP:$port"
+                echo  "SLEMP-Panel: http://$address:$port"
                 echo -e "password: admin"
                 echo -e "password: $password"
                 echo -e "\033[33mWarning:\033[0m"
