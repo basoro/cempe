@@ -445,13 +445,12 @@ fi
 
 chmod +x /usr/local/bin/composer
 
-export COMPOSER_ALLOW_SUPERUSER=1;
-/opt/slemp/server/php/${php_version}/bin/php /usr/local/bin/composer create-project basoro/mlite default
-
 cd /opt/slemp/wwwroot/
 rm -rf /opt/slemp/wwwroot/default
 
-composer create-project basoro/mlite default
+export COMPOSER_ALLOW_SUPERUSER=1;
+/opt/slemp/server/php/${php_version}/bin/php /usr/local/bin/composer create-project basoro/mlite default
+
 sed -i -e "s/''/'$mysqlpwd'/g" /opt/slemp/wwwroot/default/config.php
 
 mysql -u root -p$mysqlpwd -e "CREATE DATABASE mlite"
