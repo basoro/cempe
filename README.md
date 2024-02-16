@@ -8,5 +8,5 @@ Minimal Centos Engine-X (Nginx) MySQL PHP-FPM Panel
 ### How to install?
 
 ```bash
-curl -o install.sh https://raw.githubusercontent.com/basoro/cempe/master/scripts/install.sh && sh install
+curl -o install.sh https://raw.githubusercontent.com/basoro/cempe/master/scripts/install.sh && sh install.sh
 ````
