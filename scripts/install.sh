@@ -446,7 +446,7 @@ fi
 chmod +x /usr/local/bin/composer
 
 export COMPOSER_ALLOW_SUPERUSER=1;
-php73 /usr/local/bin/composer create-project basoro/mlite default
+/opt/slemp/server/php/${php_version}/bin/php /usr/local/bin/composer create-project basoro/mlite default
 
 cd /opt/slemp/wwwroot/
 rm -rf /opt/slemp/wwwroot/default
