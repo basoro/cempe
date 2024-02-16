@@ -77,7 +77,7 @@ rm -rf web.py-0.38
 
 mkdir -p /opt/slemp/server
 
-mkdir -pv /opt/slemp/{wwwroot/default,wwwlogs,server/{data,mysql/{bin,lib},nginx/{sbin,logs,conf/{vhost,rewrite}},php/${php_version}/{etc,bin,sbin,var/run}}}
+mkdir -pv /opt/slemp/{wwwroot/default,wwwlogs,server/{data,mysql/{bin,lib},nginx/{sbin,logs,conf/{vhost,rewrite}},php/$php_version/{etc,bin,sbin,var/run}}}
 
 wget -O panel.zip https://github.com/basoro/cempe/archive/master.zip
 
