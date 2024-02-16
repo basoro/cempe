@@ -419,14 +419,15 @@ rm -f /etc/init.d/php-fpm
 mv $setup_path/server/panel/scripts/php-fpm.init /etc/init.d/php-fpm
 chmod +x /etc/init.d/php-fpm
 
-wget -O phpMyAdmin.zip $download_Url/src/phpMyAdmin-4.4.zip -T20
+#wget -O phpMyAdmin.zip $download_Url/src/phpMyAdmin-4.4.zip -T20
+wget -O phpMyAdmin.zip https://files.phpmyadmin.net/phpMyAdmin/5.2.1/phpMyAdmin-5.2.1-english.zip --no-check-certificate
 
 unzip -o phpMyAdmin.zip -d $setup_path/server/phpmyadmin/ > /dev/null
 rm -f phpMyAdmin.zip
 rm -rf $setup_path/server/phpmyadmin/phpmyadmin*
 
 phpmyadminExt=`cat /dev/urandom | head -n 32 | md5sum | head -c 16`;
-mv $setup_path/server/phpmyadmin/databaseAdmin $setup_path/server/phpmyadmin/phpmyadmin_$phpmyadminExt
+mv $setup_path/server/phpmyadmin/phpMyAdmin-5.2.1-english $setup_path/server/phpmyadmin/phpmyadmin_$phpmyadminExt
 chmod -R 744 $setup_path/server/phpmyadmin/phpmyadmin_$phpmyadminExt
 chown -R www.www $setup_path/server/phpmyadmin/phpmyadmin_$phpmyadminExt
 
@@ -499,14 +500,12 @@ do
 done
 
 echo -e "=================================================================="
-echo -e "\033[32mSelamat! Pemasangan CEMPe Panel dan mLITE berhasil!\033[0m"
+echo -e "\033[32mSelamat! Pemasangan CEMPe Panel berhasil!\033[0m"
 echo -e "=================================================================="
 echo  "CEMPe-Panel: http://$address:$port"
 echo -e "username: $username"
 echo -e "password: $password"
-echo -e "Default mLITE Url: http://$address"
-echo -e "username: admin"
-echo -e "password: admin"
+echo -e "Default Site Url: http://$address"
 echo -e "MySQL Password: $mysqlpwd"
 echo -e "\033[33mPeringatan:\033[0m"
 echo -e "\033[33mJika tidak bisa mengakses panel, \033[0m"
