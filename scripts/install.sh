@@ -23,8 +23,8 @@ if [ "$go" == 'n' ];then
 fi
 
 startTime=`date +%s`
-php_version="56";
-vphp="5.6";
+php_version="81";
+vphp="8.1";
 
 setenforce 0
 sed -i 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
