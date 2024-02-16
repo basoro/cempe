@@ -371,6 +371,7 @@ php_conf="/opt/remi/php${php_version}/root/etc"
 
 wget https://downloads.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz
 tar -xvf ioncube_loaders_lin_x86-64.tar.gz -C /usr/local
+mkdir ${php_conf}
 
 echo "Write Ioncube Loader to php.ini..."
 cat >> ${php_conf}/php.ini <<EOF
