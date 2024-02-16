@@ -1,9 +1,9 @@
 # CEMPe panel
 Minimal Centos Engine-X (Nginx) MySQL PHP-FPM Panel
 - Cento 7
-- Nginx 1.8
+- Nginx 1.24
 - MySQL 5.6
-- PHP-FPM 5.6
+- PHP 8.1
 
 ### How to install?
 
