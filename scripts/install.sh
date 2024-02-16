@@ -464,11 +464,12 @@ chkconfig crond on
 service crond start
 chkconfig nginx on
 chkconfig php-fpm on
-#systemctl stop mysql
+systemctl stop mysql
 chkconfig mysqld on
 
 systemctl start nginx
 systemctl start php-fpm
+systemctl start mysql
 
 echo '<span style="color:green" class="glyphicon glyphicon-play"></span>' > /opt/slemp/server/panel/data/status-nginx.pl
 echo '<span style="color:green" class="glyphicon glyphicon-play"></span>' > /opt/slemp/server/panel/data/status-mysql.pl
