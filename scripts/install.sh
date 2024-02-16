@@ -467,8 +467,8 @@ chkconfig php-fpm on
 systemctl stop mysql
 chkconfig mysqld on
 
-systemctl start nginx
-systemctl start php-fpm
+/etc/init.d/nginx start
+/etc/init.d/php-fpm start
 systemctl start mysql
 
 echo '<span style="color:green" class="glyphicon glyphicon-play"></span>' > /opt/slemp/server/panel/data/status-nginx.pl
