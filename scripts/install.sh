@@ -363,7 +363,7 @@ location ~ [^/]\.php(/|$)
 END
 
 ln -sf /opt/slemp/server/nginx/conf/enable-php-${php_version}.conf /etc/nginx/enable-php-${php_version}.conf
-php_conf="/opt/remi/php${php_version}/root/etc"
+php_conf="/etc/opt/remi/php${php_version}"
 #vphp="5.6";
 
 #mkdir /usr/local/ioncube
