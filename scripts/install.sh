@@ -499,12 +499,14 @@ do
 done
 
 echo -e "=================================================================="
-echo -e "\033[32mSelamat! Pemasangan CEMPe Panel berhasil!\033[0m"
+echo -e "\033[32mSelamat! Pemasangan CEMPe Panel dan mLITE berhasil!\033[0m"
 echo -e "=================================================================="
 echo  "CEMPe-Panel: http://$address:$port"
 echo -e "username: $username"
 echo -e "password: $password"
-echo -e "Default Site Url: http://$address"
+echo -e "Default mLITE Url: http://$address"
+echo -e "username: admin"
+echo -e "password: admin"
 echo -e "MySQL Password: $mysqlpwd"
 echo -e "\033[33mPeringatan:\033[0m"
 echo -e "\033[33mJika tidak bisa mengakses panel, \033[0m"
