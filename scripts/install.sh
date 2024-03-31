@@ -381,6 +381,16 @@ zend_extension = /usr/local/ioncube/ioncube_loader_lin_${vphp}.so
 
 EOF
 
+yum -y install php81-php-pecl-zip
+
+echo "Write Zip Extension to php.ini..."
+cat >> ${php_conf}/php.ini <<EOF
+
+;Zip
+extension=/opt/remi/php${php_version}/root/usr/lib64/php/modules/zip.so
+
+EOF
+
 sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 100M/' ${php_conf}/php.ini
 sed -i 's/post_max_size = 8M/post_max_size = 100M/' ${php_conf}/php.ini
 ln -s ${php_conf}/php.ini /opt/slemp/server/php/${php_version}/etc/php.ini
