@@ -9,6 +9,12 @@ Minimal Centos Engine-X (Nginx) MySQL PHP-FPM Panel for mLITE (Medic LITE Indone
 
 ### How to install?
 
+#### Dengan MySQL
 ```bash
 curl -o install.sh https://raw.githubusercontent.com/basoro/cempe/master/scripts/install.sh && sh install.sh
+````
+
+#### Tanpa MySQL
+```bash
+curl -o install.sh https://raw.githubusercontent.com/basoro/cempe/master/scripts/install-no-mysql.sh && sh install.sh
 ````
